@@ -1,0 +1,15 @@
+
+Create under src 
+- assets/
+-components
+-pages
+ - DashBoard
+   -Dashboard Features
+ - ModeratorDashboard
+-Utility 
+-context
+-hooks
+-layouts
+-menu
+ - moderator , Ordinary pepoeple
+			

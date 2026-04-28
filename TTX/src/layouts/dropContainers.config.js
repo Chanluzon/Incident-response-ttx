@@ -1,0 +1,42 @@
+export const dropContainers = [
+  {
+    id: 1,
+    category: "safeguard",
+    title: "SAFEGUARDS / CONTROLS",
+    bg: "bg-[#fadb4b]",
+    text: "text-yellow-1000",
+    border: "border-yellow-500",
+  },
+  {
+    id: 2,
+    category: "vulnerability",
+    title: "VULNERABILITIES",
+    bg: "bg-[#576bb2]",
+    text: "text-blue-100",
+    border: "border-blue-700",
+  },
+  {
+    id: 3,
+    category: "threat agents",
+    title: "THREAT AGENTS",
+    bg: "bg-[#fba01e]",
+    text: "text-white",
+    border: "border-orange-600",
+  },
+  {
+    id: 4,
+    category: "risk",
+    title: "RISKS",
+    bg: "bg-[#eb3326]",
+    text: "text-red-100",
+    border: "border-red-600",
+  },
+  {
+    id: 5,
+    category: "infosec pillars",
+    title: "INFOSEC PILLARS",
+    bg: "bg-purple-700",
+    text: "text-purple-100",
+    border: "border-purple-800",
+  },
+];
