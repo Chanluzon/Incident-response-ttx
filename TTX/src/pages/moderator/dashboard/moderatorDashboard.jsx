@@ -28,11 +28,11 @@ export default function ModeratorDashboard() {
   });
 
   const CARD_TABS = [
-    { label: "Safeguards", value: "Safeguards / Controls" },
-    { label: "Vulnerabilities", value: "Vulnerabilities" },
-    { label: "Threat Agents", value: "Threat Agents" },
-    { label: "Risks", value: "Risks" },
-    { label: "InfoSec Pillars", value: "InfoSec Pillars" },
+    { label: "Prepare", value: "Safeguards / Controls" },
+    { label: "Detect", value: "Vulnerabilities" },
+    { label: "Respond", value: "Threat Agents" },
+    { label: "Recover", value: "Risks" },
+    { label: "Lessons Learned", value: "InfoSec Pillars" },
   ];
 
   const CATEGORY_DESCRIPTIONS = {
@@ -62,15 +62,15 @@ export default function ModeratorDashboard() {
   const getCategoryColorClass = (cat) => {
     switch (cat) {
       case "safeguard":
-        return "bg-yellow-100 text-yellow-700";
+        return "bg-[#67C2C9]/20 text-[#4DA8AF]";
       case "vulnerability":
-        return "bg-blue-100 text-blue-700";
+        return "bg-[#FDEE00]/20 text-yellow-700";
       case "threat agents":
-        return "bg-orange-100 text-orange-700";
+        return "bg-[#FF9EBD]/20 text-pink-700";
       case "risk":
-        return "bg-red-100 text-red-700";
+        return "bg-[#32CD32]/20 text-green-700";
       case "infosec pillars":
-        return "bg-purple-100 text-purple-700";
+        return "bg-[#FFB347]/20 text-orange-700";
       default:
         return "bg-gray-100 text-gray-700";
     }
@@ -218,15 +218,15 @@ export default function ModeratorDashboard() {
                 pendingCategory: updatedCard.category,
                 color:
                   updatedCard.category === "safeguard"
-                    ? "bg-yellow-100 text-yellow-700"
+                    ? "bg-[#67C2C9]/20 text-[#4DA8AF]"
                     : updatedCard.category === "vulnerability"
-                      ? "bg-blue-100 text-blue-700"
+                      ? "bg-[#FDEE00]/20 text-yellow-700"
                       : updatedCard.category === "threat agents"
-                        ? "bg-orange-100 text-orange-700"
+                        ? "bg-[#FF9EBD]/20 text-pink-700"
                         : updatedCard.category === "risk"
-                          ? "bg-red-100 text-red-700"
+                          ? "bg-[#32CD32]/20 text-green-700"
                           : updatedCard.category === "infosec pillars"
-                            ? "bg-purple-100 text-purple-700"
+                            ? "bg-[#FFB347]/20 text-orange-700"
                             : "bg-gray-100 text-gray-700",
                 isEditing: false,
               }
@@ -286,15 +286,15 @@ export default function ModeratorDashboard() {
           pendingCategory: c.category,
           color:
             c.category === "safeguard"
-              ? "bg-yellow-100 text-yellow-700"
+              ? "bg-[#67C2C9]/20 text-[#4DA8AF]"
               : c.category === "vulnerability"
-                ? "bg-blue-100 text-blue-700"
+                ? "bg-[#FDEE00]/20 text-yellow-700"
                 : c.category === "threat agents"
-                  ? "bg-orange-100 text-orange-700"
+                  ? "bg-[#FF9EBD]/20 text-pink-700"
                   : c.category === "risk"
-                    ? "bg-red-100 text-red-700"
+                    ? "bg-[#32CD32]/20 text-green-700"
                     : c.category === "infosec pillars"
-                      ? "bg-purple-100 text-purple-700"
+                      ? "bg-[#FFB347]/20 text-orange-700"
                       : "bg-gray-100 text-gray-700",
           isEditing: false,
         })),
@@ -468,11 +468,11 @@ export default function ModeratorDashboard() {
   };
 
   const tabColors = {
-    "Safeguards / Controls": "border-[#fade56]",
-    Vulnerabilities: "border-[#566ab1]",
-    "Threat Agents": "border-[#fba01e]",
-    Risks: "border-[#e53935]",
-    "InfoSec Pillars": "border-[#9810fa]",
+    "Safeguards / Controls": "border-[#67C2C9]",
+    Vulnerabilities: "border-[#FDEE00]",
+    "Threat Agents": "border-[#FF9EBD]",
+    Risks: "border-[#32CD32]",
+    "InfoSec Pillars": "border-[#FFB347]",
   };
 
   const categoryUnderline = {
@@ -851,15 +851,15 @@ export default function ModeratorDashboard() {
                 className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#2EE58A]"
               >
                 <option value="">--Select Category--</option>
-                <option value="safeguard">Safeguards / Controls</option>
-                <option value="vulnerability">Vulnerabilities</option>
-                <option value="threat agents">Threat Agents</option>
-                <option value="risk">Risks</option>
+                <option value="safeguard">Prepare</option>
+                <option value="vulnerability">Detect</option>
+                <option value="threat agents">Respond</option>
+                <option value="risk">Recover</option>
                 <option
                   value="infosec pillars"
                   disabled={infosecCount >= INFOSEC_LIMIT}
                 >
-                  InfoSec Pillars
+                  Lessons Learned
                 </option>
               </select>
 
@@ -925,15 +925,15 @@ export default function ModeratorDashboard() {
                         description: newCard.description,
                         color:
                           newCard.category === "safeguard"
-                            ? "bg-yellow-100 text-yellow-700"
+                            ? "bg-[#67C2C9]/20 text-[#4DA8AF]"
                             : newCard.category === "vulnerability"
-                              ? "bg-blue-100 text-blue-700"
+                              ? "bg-[#FDEE00]/20 text-yellow-700"
                               : newCard.category === "threat agents"
-                                ? "bg-orange-100 text-orange-700"
+                                ? "bg-[#FF9EBD]/20 text-pink-700"
                                 : newCard.category === "risk"
-                                  ? "bg-red-100 text-red-700"
+                                  ? "bg-[#32CD32]/20 text-green-700"
                                   : newCard.category === "infosec pillars"
-                                    ? "bg-purple-100 text-purple-700"
+                                    ? "bg-[#FFB347]/20 text-orange-700"
                                     : "bg-gray-100 text-gray-700",
                         isEditing: false,
                       },
@@ -1243,11 +1243,11 @@ export default function ModeratorDashboard() {
                 }
                 className="w-full border border-black/10 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-black/20 transition bg-white/60 cursor-pointer"
               >
-                <option value="safeguard">Safeguards / Controls</option>
-                <option value="vulnerability">Vulnerabilities</option>
-                <option value="threat agents">Threat Agents</option>
-                <option value="risk">Risks</option>
-                <option value="infosec pillars">InfoSec Pillars</option>
+                <option value="safeguard">Prepare</option>
+                <option value="vulnerability">Detect</option>
+                <option value="threat agents">Respond</option>
+                <option value="risk">Recover</option>
+                <option value="infosec pillars">Lessons Learned</option>
               </select>
 
               <div className="mt-3 p-3 bg-white/40 border-l-4 border-black/20 rounded-r-lg">
@@ -1317,16 +1317,16 @@ export default function ModeratorDashboard() {
                             pendingCategory: updatedCard.category,
                             color:
                               updatedCard.category === "safeguard"
-                                ? "bg-yellow-100 text-yellow-700"
+                                ? "bg-[#67C2C9]/20 text-[#4DA8AF]"
                                 : updatedCard.category === "vulnerability"
-                                  ? "bg-blue-100 text-blue-700"
+                                  ? "bg-[#FDEE00]/20 text-yellow-700"
                                   : updatedCard.category === "threat agents"
-                                    ? "bg-orange-100 text-orange-700"
+                                    ? "bg-[#FF9EBD]/20 text-pink-700"
                                     : updatedCard.category === "risk"
-                                      ? "bg-red-100 text-red-700"
+                                      ? "bg-[#32CD32]/20 text-green-700"
                                       : updatedCard.category ===
                                           "infosec pillars"
-                                        ? "bg-purple-100 text-purple-700"
+                                        ? "bg-[#FFB347]/20 text-orange-700"
                                         : "bg-gray-100 text-gray-700",
                             isEditing: false,
                           }

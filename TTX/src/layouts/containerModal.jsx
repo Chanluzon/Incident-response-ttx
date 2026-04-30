@@ -70,19 +70,20 @@ function MiniCardItem({ card, locked, onRemoveCard }) {
 const getCardColor = (cat) => {
   switch (cat) {
     case "safeguard":
-      return "bg-linear-to-br from-[#FFEC5C] via-[#FFDE21] to-[#E5C71E] text-white border-white/20 shadow-yellow-500/20";
+      return "bg-[#67C2C9] text-white border-white/20 shadow-cyan-500/20";
     case "vulnerability":
-      return "bg-linear-to-br from-[#3A7BD5] via-[#295794] to-[#1B3B66] text-white border-white/20 shadow-blue-500/20";
+      return "bg-[#FDEE00] text-yellow-900 border-white/20 shadow-yellow-500/20";
     case "threat agents":
-      return "bg-linear-to-br from-[#FFB84D] via-[#FBA01E] to-[#D68619] text-white border-white/20 shadow-orange-500/20";
+      return "bg-[#FF9EBD] text-white border-white/20 shadow-pink-500/20";
     case "risk":
-      return "bg-linear-to-br from-[#E53935] via-[#B71C1C] to-[#8E1616] text-white border-white/20 shadow-red-500/20";
+      return "bg-[#32CD32] text-white border-white/20 shadow-green-500/20";
     case "infosec pillars":
-      return "bg-linear-to-br from-[#7E57C2] via-[#5E35B1] to-[#4527A0] text-white border-white/20 shadow-purple-500/20";
+      return "bg-[#FFB347] text-white border-white/20 shadow-orange-500/20";
     default:
       return "bg-gray-100 text-gray-700 border-gray-300";
   }
 };
+
 
 export default function ContainerModal({
   container,
@@ -117,10 +118,13 @@ export default function ContainerModal({
       : answerCards.slice(0, MAX_CARDS_PER_CONTAINER);
 
   return (
-    <div className="fixed inset-0 bg-gray/50 backdrop-blur-sm z-50 flex items-center justify-center"
+    <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[100] flex items-center justify-center p-4"
       onMouseDown={onClose}>
-      <div className="bg-white rounded-2xl shadow-2xl w-[700px] h-[500px] p-6 relative flex flex-col"
+      <div className="bg-white/80 backdrop-blur-2xl border border-white/40 rounded-3xl shadow-2xl w-full max-w-2xl h-[500px] p-6 sm:p-8 relative flex flex-col overflow-hidden"
         onMouseDown={(e) => e.stopPropagation()}>
+        
+        {/* Decorative background glow */}
+        <div className="absolute -top-24 -right-24 w-48 h-48 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
 
         {/* Close */}
         <button
@@ -131,10 +135,14 @@ export default function ContainerModal({
         </button>
 
         {/* Header */}
-        <h2 className="text-2xl font-bold mb-1 text-left">{container.title}</h2>
-        <p className="text-gray-500 text-sm mb-6 text-left">
-          Cards assigned to this container
-        </p>
+        <div className="relative z-10 mb-6">
+          <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight leading-none mb-2 uppercase">
+            {container.title}
+          </h2>
+          <p className="text-slate-600 text-sm font-medium">
+            Assigned Phase Cards
+          </p>
+        </div>
 
         {isInfosecFull && (
           <p className="text-sm text-purple-600 mb-3 text-left">

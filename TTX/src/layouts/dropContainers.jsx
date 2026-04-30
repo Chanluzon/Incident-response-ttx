@@ -1,5 +1,17 @@
-import React from "react";
 import { dropContainers } from "./dropContainers.config";
+import prepareImg from "../images/prepare.png";
+import detectImg from "../images/detect.png";
+import respondImg from "../images/respond.png";
+import recoverImg from "../images/recover.png";
+import lessonsImg from "../images/lesson learned.png";
+
+const CATEGORY_ICONS = {
+  safeguard: prepareImg,
+  vulnerability: detectImg,
+  "threat agents": respondImg,
+  risk: recoverImg,
+  "infosec pillars": lessonsImg,
+};
 
 const CONTAINER_LIMITS = {
   "infosec pillars": 1,
@@ -10,12 +22,13 @@ const CONTAINER_LIMITS = {
 };
 
 const LIMIT_BADGE_COLORS = {
-  safeguard: "bg-yellow-200 text-yellow-900",
-  vulnerability: "bg-blue-200 text-blue-900",
-  "threat agents": "bg-orange-200 text-orange-900",
-  risk: "bg-red-200 text-red-900",
-  "infosec pillars": "bg-purple-200 text-purple-800",
+  safeguard: "bg-[#4DA8AF] text-white",
+  vulnerability: "bg-[#D4C800] text-yellow-900",
+  "threat agents": "bg-[#E87EA1] text-white",
+  risk: "bg-[#28A428] text-white",
+  "infosec pillars": "bg-[#E6952D] text-white",
 };
+
 
 export default function DropContainers({
   side = "left",
@@ -112,10 +125,17 @@ export default function DropContainers({
                 }
               `}
               >
-              {/* Title */}
-            <span className="font-semibold text-xs sm:text-sm md:text-base lg:text-lg px-2 sm:px-3 leading-tight">
-              {container.title}
-            </span>
+              {/* Icon and Title */}
+              <div className="flex flex-col items-center justify-center p-2">
+                <span className="font-semibold text-xs sm:text-sm md:text-base leading-tight">
+                  {container.title}
+                </span>
+                <img 
+                  src={CATEGORY_ICONS[container.category]} 
+                  alt={container.title}
+                  className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 mt-1 object-contain"
+                />
+              </div>
 
             {/* Count badge */}
             <div

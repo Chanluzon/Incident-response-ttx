@@ -4,13 +4,14 @@ import { apiUrl } from "../config/api";
 
 // category config
 const CATEGORIES = [
-  { key: "all", label: "All", color: "bg-gray-400" },
-  { key: "safeguard", label: "Safeguards", color: "bg-yellow-400" },
-  { key: "vulnerability", label: "Vulnerabilities", color: "bg-blue-400" },
-  { key: "threat agents", label: "Threat Agents", color: "bg-orange-400" },
-  { key: "risk", label: "Risks", color: "bg-red-400" },
-  { key: "infosec pillars", label: "InfoSec Pillars", color: "bg-purple-400" },
+  { key: "all", label: "All", style: "bg-[#5C8AD1] text-white border-[#4A71B0]" },
+  { key: "safeguard", label: "Prepare", style: "bg-[#67C2C9] text-slate-900 border-[#4DA8AF]" },
+  { key: "vulnerability", label: "Detect", style: "bg-[#FDEE00] text-yellow-900 border-[#D4C800]" },
+  { key: "threat agents", label: "Respond", style: "bg-[#FF9EBD] text-pink-900 border-[#E87EA1]" },
+  { key: "risk", label: "Recover", style: "bg-[#32CD32] text-green-900 border-[#28A428]" },
+  { key: "infosec pillars", label: "Lessons Learned", style: "bg-[#FFB347] text-orange-900 border-[#E6952D]" },
 ];
+
 
 const CATEGORY_DESCRIPTIONS = {
   safeguard:
@@ -24,7 +25,7 @@ const CATEGORY_DESCRIPTIONS = {
     "The core principles of information security, commonly known as the CIA Triad: Confidentiality, Integrity, and Availability.",
 };
 
-function CardItem({ card, preview, onTouchStart }) {
+function CardItem({ card, preview, onTouchStart, onDragStartCallback }) {
   const [isFlipped, setIsFlipped] = useState(false);
   const id = preview ? card.id : card.card_id;
   const title = preview ? card.title : card.card_name;
@@ -33,17 +34,19 @@ function CardItem({ card, preview, onTouchStart }) {
 
   return (
     <div
-      className={`card-flip-container ${isFlipped ? "is-flipped" : ""}
-        w-[130px] sm:w-[140px] md:w-[150px] lg:w-[160px]
-        h-[145px] sm:h-[160px] md:h-[170px] lg:h-[180px]
-        hover:-translate-y-2 transition-transform duration-300 ease-out`}
+      className={`card-flip-container flex-shrink-0 ${isFlipped ? "is-flipped" : ""}
+        w-[140px] sm:w-[150px] md:w-[160px]
+        h-[190px] sm:h-[210px] md:h-[230px]
+        hover:-translate-y-4 transition-transform duration-300 ease-out`}
       onClick={() => setIsFlipped(!isFlipped)}
     >
+
+
       <div className="card-flip-inner shadow-md hover:shadow-xl">
         {/* Front */}
         <div
           draggable={!isFlipped}
-            onDragStart={(e) => {
+          onDragStart={(e) => {
               if (isFlipped) return;
               e.dataTransfer.setData(
                 "application/json",
@@ -54,15 +57,24 @@ function CardItem({ card, preview, onTouchStart }) {
                   description: description,
                 }),
               );
+              
+              // Close the drawer immediately after the drag begins
+              if (onDragStartCallback) {
+                setTimeout(() => {
+                  onDragStartCallback();
+                }, 10); // Small delay ensures the browser registers the drag before unmounting
+              }
             }}
+
           onTouchStart={(e) => !isFlipped && onTouchStart(e, card)}
           className={`card-flip-front border p-3 sm:p-4 text-xs sm:text-sm select-none ${getCardColor(
             card.category,
           )}`}
         >
-          <h3 className="font-semibold text-sm leading-tight text-center">
+          <h3 className="font-bold text-sm sm:text-base leading-snug text-center mt-2">
             {title}
           </h3>
+
         </div>
 
         {/* Back */}
@@ -71,7 +83,7 @@ function CardItem({ card, preview, onTouchStart }) {
             card.category,
           )}`}
         >
-          <p className="italic">{description}</p>
+          <p className="italic font-medium text-xs sm:text-sm">{description}</p>
         </div>
       </div>
     </div>
@@ -81,17 +93,17 @@ function CardItem({ card, preview, onTouchStart }) {
 const getCardColor = (cat) => {
   switch (cat) {
     case "safeguard":
-      return "border-3 bg-linear-to-br from-[#FFEC5C] via-[#FFDE21] to-[#E5C71E] text-green border-[#C9AA12] shadow-black-500/20";
+      return "border-2 bg-[#67C2C9]/80 backdrop-blur-sm text-slate-900 border-[#4DA8AF]/50 shadow-lg shadow-cyan-500/20";
     case "vulnerability":
-      return "border-3 bg-linear-to-br from-[#3A7BD5] via-[#295794] to-[#1B3B66] text-white border-[#244E85] shadow-blue-500/20";
+      return "border-2 bg-[#FDEE00]/80 backdrop-blur-sm text-yellow-900 border-[#D4C800]/50 shadow-lg shadow-yellow-500/20";
     case "threat agents":
-      return "border-3 bg-linear-to-br from-[#FFB84D] via-[#FBA01E] to-[#D68619] text-white border-[#C87412] shadow-orange-500/20";
+      return "border-2 bg-[#FF9EBD]/80 backdrop-blur-sm text-pink-900 border-[#E87EA1]/50 shadow-lg shadow-pink-500/20";
     case "risk":
-      return "border-3 bg-linear-to-br from-[#E53935] via-[#B71C1C] to-[#8E1616] text-white border-[#7A1212] shadow-red-500/20";
+      return "border-2 bg-[#32CD32]/80 backdrop-blur-sm text-green-900 border-[#28A428]/50 shadow-lg shadow-green-500/20";
     case "infosec pillars":
-      return "border-3 bg-linear-to-br from-[#7E57C2] via-[#5E35B1] to-[#4527A0] text-white border-[#512DA8] shadow-purple-500/20";
+      return "border-2 bg-[#FFB347]/80 backdrop-blur-sm text-orange-900 border-[#E6952D]/50 shadow-lg shadow-orange-500/20";
     default:
-      return "border-3 bg-gray-200 text-gray-700 border-gray-300";
+      return "border-2 bg-gray-200/80 backdrop-blur-sm text-gray-700 border-gray-300/50";
   }
 };
 
@@ -105,6 +117,17 @@ export default function CardContainer({
   const [hiddenCards, setHiddenCards] = useState([]);
   const [activeCategory, setActiveCategory] = useState("all");
   const [search, setSearch] = useState("");
+
+  const [isRendered, setIsRendered] = useState(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      setIsRendered(true);
+    } else if (isRendered) {
+      const timer = setTimeout(() => setIsRendered(false), 280);
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen, isRendered]);
 
   // drag container
   const [position, setPosition] = useState(() => ({
@@ -315,97 +338,97 @@ export default function CardContainer({
     document.addEventListener("touchend", onTouchEnd);
   };
 
-  if (!isOpen) return null;
+  if (!isRendered) return null;
 
   return (
     <div
-      className="fixed z-50 cursor-grab active:cursor-grabbing select-none"
-      onMouseDown={handleDragStart}
-      onTouchStart={handleDragStart}
-      style={{ left: position.x, top: position.y }}
+      className={`fixed inset-0 z-[100] flex items-end justify-center bg-slate-900/40 backdrop-blur-sm select-none transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0'}`}
+      onMouseDown={toggleOpen}
     >
       <div
-        className="bg-white rounded-xl shadow-xl flex flex-col pointer-events-auto
-                  w-[calc(100vw-20px)] sm:w-[500px] md:w-[600px] lg:w-[800px] xl:w-[900px]
-                  h-[calc(100vh-60px)] sm:h-[450px] md:h-[500px] lg:h-[550px] xl:h-[600px]
-                  min-w-[280px] min-h-[300px]"
+        className="bg-white/85 backdrop-blur-2xl border-t border-x border-white/40 rounded-t-3xl shadow-[0_-20px_50px_rgba(0,0,0,0.3)] flex flex-col pointer-events-auto
+                  w-full max-w-4xl
+                  h-[450px] md:h-[500px]"
+        onMouseDown={(e) => e.stopPropagation()}
+        style={{ animation: isOpen ? "slideUp 0.3s ease-out forwards" : "slideDown 0.3s ease-in forwards" }}
       >
+
+
+
+        {/* Decorative background glow */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-32 bg-blue-400/20 rounded-full blur-3xl pointer-events-none" />
+
         {/* Header */}
-        <div className="px-4 sm:px-6 md:px-8 pt-3 sm:pt-4 md:pt-6 pb-2 sm:pb-3 md:pb-4 relative select-none pointer-events-none">
+        <div className="px-6 sm:px-10 pt-4 sm:pt-6 pb-2 relative select-none pointer-events-none">
           {/* Close button */}
           <button
             onClick={toggleOpen}
-            className="absolute top-2 sm:top-3 md:top-4 right-2 sm:right-3 md:right-4 text-gray-400 hover:text-gray-600 z-10 pointer-events-auto"
+            className="absolute top-4 sm:top-6 right-6 sm:right-10 text-slate-500 hover:text-slate-800 z-10 pointer-events-auto bg-white/50 hover:bg-white rounded-full p-2 transition-colors"
           >
-            <X size={18} className="sm:w-5 sm:h-5" />
+            <X size={20} />
           </button>
 
           {/* Title, subtitle */}
-          <h2 className="text-lg sm:text-xl md:text-2xl font-bold mb-0.5 sm:mb-1 text-left text-black/70">
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-black mb-1 text-left text-slate-900 tracking-tight">
             Your Cards
           </h2>
-          <p className="text-gray-500 text-xs sm:text-sm text-left">
+          <p className="text-slate-600 text-xs sm:text-sm text-left font-medium">
             Drag from anywhere to move, search and add cards into the board.
           </p>
         </div>
 
+
+
         {/* Tabs */}
-        <div className="border-b border-gray-200 px-3 sm:px-6 pointer-events-auto overflow-x-auto">
-          <div className="flex justify-center gap-0.5 sm:gap-1 flex-nowrap">
+        <div className="px-3 sm:px-6 pointer-events-auto overflow-x-auto mt-2">
+          <div className="flex justify-start sm:justify-center gap-2 pb-2 flex-nowrap">
             {CATEGORIES.map((cat) => {
               const active = activeCategory === cat.key;
-
               return (
                 <button
                   key={cat.key}
                   onClick={() => setActiveCategory(cat.key)}
-                  className={`pb-2 sm:pb-3 px-2 sm:px-3 text-xs sm:text-sm font-medium relative whitespace-nowrap ${
-                    active
-                      ? "text-gray-900 font-semibold"
-                      : "text-gray-500 hover:text-gray-700"
-                  }`}
+                  className={`px-4 py-2 rounded-md font-semibold text-xs sm:text-sm whitespace-nowrap border-2 shadow-sm transition-all
+                    ${cat.style}
+                    ${active ? "scale-105 shadow-md ring-2 ring-offset-1 ring-blue-400 opacity-100" : "opacity-70 hover:opacity-100"}
+                  `}
                 >
                   {cat.label}
-                  {active && (
-                    <span
-                      className={`absolute left-0 right-0 -bottom-[2px] h-[2px] rounded-full ${cat.color}`}
-                    />
-                  )}
                 </button>
               );
             })}
           </div>
         </div>
 
+
         {/* Search */}
         <div className="px-3 sm:px-6 pt-2 sm:pt-4 pointer-events-auto">
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search cards"
-            className="w-full border border-gray-300 rounded-md px-3 sm:px-4 py-2 text-xs sm:text-sm
-              focus:outline-none focus:ring-2 focus:ring-[#2EE58A] pointer-events-auto"
+            placeholder="Search cards..."
+            className="w-full bg-white/90 text-slate-900 placeholder-slate-500 border border-white/60 shadow-inner rounded-xl px-4 py-2.5 text-sm font-medium
+              focus:outline-none focus:ring-2 focus:ring-blue-400 focus:bg-white transition-all pointer-events-auto"
           />
         </div>
 
-        {/* Cards */}
-        <div className="p-4 sm:p-5 md:p-8 overflow-y-auto flex-1 pointer-events-auto">
-          <div
-            className="grid gap-4 sm:gap-5 md:gap-6 justify-start"
-            style={{
-              gridTemplateColumns: "repeat(auto-fill, minmax(130px, 1fr))",
-            }}
-          >
+        {/* Cards Slider */}
+        <div className="px-4 sm:px-6 py-4 overflow-x-auto overflow-y-hidden flex-1 pointer-events-auto hide-scrollbar scroll-smooth">
+          <div className="flex gap-4 sm:gap-6 pt-6 pb-8 w-max min-w-full items-start justify-start px-2">
             {visibleCards.map((card) => (
+
               <CardItem
                 key={preview ? card.id : card.card_id}
                 card={card}
                 preview={preview}
                 onTouchStart={handleCardTouchStart}
+                onDragStartCallback={toggleOpen}
               />
+
             ))}
           </div>
         </div>
+
       </div>
     </div>
   );

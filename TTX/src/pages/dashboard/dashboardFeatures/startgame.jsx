@@ -3,14 +3,18 @@ import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Trophy } from "lucide-react";
 import confetti from "canvas-confetti";
 
+import CircularDropContainers from "../../../layouts/CircularDropContainers";
 import DropContainers from "../../../layouts/dropContainers";
 import CardContainer from "../../../layouts/cardcontainers";
 import ContainerModal from "../../../layouts/containerModal.jsx";
 import Leaderboard from "./leaderboard";
 import { apiUrl } from "../../../config/api";
 
-import Board from "../../../images/Middle Board 1.png";
+import Board from "../../../images/lock.png";
+import WorldtechLogo from "../../../images/Worldtech 2.png";
 import GameBG from "../../../images/board-background.png";
+import AnimatedLogoBackground from "../../../layouts/AnimatedLogoBackground";
+
 
 export default function StartGame() {
   const navigate = useNavigate();
@@ -238,20 +242,21 @@ export default function StartGame() {
 
   return (
     <div className="relative w-screen min-h-screen overflow-hidden">
-      {/* Background */}
-      <div
-        className="absolute inset-0 bg-cover bg-center blur-sm scale-105 z-0"
-        style={{ backgroundImage: `url(${GameBG})` }}
-      />
-      <div
-        className="absolute inset-0 z-0 pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse at center, rgba(0,0,0,0) 40%, rgba(0,0,0,0.45) 100%)",
-        }}
-      />
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-950 z-0" />
+      
+      {/* Animated Logo Background */}
+      
+      {/* Animated Blobs */}
+      <div className="absolute inset-0 overflow-hidden z-0 opacity-40">
+        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-blue-600/30 rounded-full blur-[120px] animate-float" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-indigo-600/20 rounded-full blur-[150px] animate-morph" />
+        <div className="absolute top-[20%] right-[10%] w-[30%] h-[30%] bg-cyan-600/20 rounded-full blur-[100px] animate-float [animation-delay:2s]" />
+      </div>
 
-      <div className="relative z-10 bg-gray-100/20 min-h-screen">
+      <div className="relative z-10 bg-white/10 backdrop-blur-md min-h-screen">
+        {/* Animated Logo Background — above blur layers */}
+        <AnimatedLogoBackground />
+
         {/* Top Action Buttons */}
         <div className="fixed top-4 md:top-6 left-4 md:left-6 right-4 md:right-6 z-[70] flex justify-between gap-3">
           {roundEnded && (
@@ -282,147 +287,108 @@ export default function StartGame() {
         </div>
 
         {/* Header Section */}
-        <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 px-4 md:px-8 pt-6 pb-4">
-          {/* Active Round */}
-          {activeRoundNumber != null && (
-            <div
-              className="text-slate-800 font-bold lg:text-lg md:text-md
-                  bg-white/60 backdrop-blur-xl
-                   border border-white/40
-                   lg:rounded-2xl md:rounded-xl px-4 py-2 "
-            >
-              Round {activeRoundNumber}
-            </div>
-          )}
-
-          {/* Team Name */}
-          <h1
-            className="text-2xl md:text-xl lg:text-3xl font-bold tracking-tight
-                  text-slate-800
-                  bg-white/60 backdrop-blur-xl
-                  border border-white/40
-                  px-6 lg:py-3 md:px-8 md:py-1   lg:rounded-2xl md:rounded-xl
-                  shadow-[0_10px_30px_rgba(0,0,0,0.15)] text-center md:text-left"
-          >
-            {group ? `Team ${group.group_name}` : "Loading team..."}
-          </h1>
-
-          {/* Round Timer */}
-          <div
-            className="  text-slate-800
-                  bg-white/60 backdrop-blur-xl
-                  border border-white/40
-                   lg:rounded-2xl md:rounded-xl "
-          >
-            <div
-              className={`px-4 py-2 text-slate-800 font-mono font-bold lg:text-lg md:text-lg rounded-xl ${
-                remainingSeconds != null && remainingSeconds <= 10
-                  ? "text-red-600 animate-pulse shadow-[0_0_30px_rgba(255,0,0,0.8)] bg-red-50"
-                  : "text-red-600"
-              }`}
-            >
-              {formatTime(remainingSeconds)}
-            </div>
+        <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 px-4 md:px-8 pt-2 pb-2">
+          {/* Logo Section */}
+          <div className="flex items-center">
+            <img src={WorldtechLogo} alt="Worldtech" className="h-8 md:h-12 lg:h-16 object-contain hover:scale-110 hover:-rotate-2 transition-all duration-300 cursor-pointer hover:drop-shadow-[0_0_15px_rgba(255,255,255,0.4)]" />
           </div>
-        </div>
 
-        {/* Threat Section */}
-        <div className="mb-6 px-4 flex justify-center">
-          <p className="font-semibold text-base md:text-lg lg:text-xl bg-green-800 text-white px-4 py-1 max-w-7xl w-full rounded-lg">
-            <span className={!stopThreatAnim ? "threat-zoom" : ""}>
-              {activeThreat?.description ?? "Waiting for threat…"}
-            </span>
-          </p>
-        </div>
+          {/* Round, Submit & Timer Section */}
+          <div className="flex items-center gap-3 md:gap-4">
+            {/* Submit Button in Header */}
+            <button
+              onClick={() => {
+                setStopThreatAnim(true);
+                setShowSubmitConfirm(true);
+              }}
+              disabled={isSubmitted || roundEnded}
+              className={`px-4 py-2 rounded-xl font-bold text-sm md:text-base shadow-xl transition-all duration-300 z-20
+              ${isSubmitted || roundEnded 
+                ? "bg-white/10 border-white/5 cursor-not-allowed text-white/30" 
+                : "bg-emerald-500 hover:bg-emerald-600 text-white shadow-[0_0_15px_rgba(16,185,129,0.4)] hover:scale-105 active:scale-95"}`}
+            >
+              {isSubmitted ? "Submitted" : "Submit"}
+            </button>
 
-        <div className="relative px-4 md:px-6">
-          {/* Gameplay grid - Responsive Layout */}
-          <div
-            className={`grid grid-cols-1 md:grid-cols-[200px_1fr_200px] lg:grid-cols-[260px_1fr_260px] gap-6 md:gap-8 lg:gap-12 items-start
-            ${boardLocked ? "pointer-events-none opacity-60" : ""}`}
-          >
-            {/* Left - Hidden on mobile, shown on md+ */}
-            <div className="hidden md:flex justify-end">
-              <DropContainers
-                side="left"
-                droppedCards={droppedCards}
-                setDroppedCards={setDroppedCards}
-                onOpenContainer={setOpenContainer}
-                locked={isSubmitted}
-                onCardPlaced={placeCardBackend}
-              />
-            </div>
+            {activeRoundNumber != null && (
+              <div className="text-slate-800 font-bold lg:text-lg md:text-md bg-white border border-white/40 lg:rounded-2xl md:rounded-xl px-4 py-2 shadow-2xl z-20">
+                Round {activeRoundNumber}
+              </div>
+            )}
 
-            {/* Center Board */}
-            <div className="relative flex flex-col items-center">
-              <img
-                src={Board}
-                alt="Board"
-                className="w-full max-w-2xl md:max-w-4xl lg:max-w-5xl rounded-lg md:rounded-xl shadow-lg md:shadow-xl bg-white/10"
-              />
-
-              {/* Action Buttons */}
-              <div className="flex flex-col sm:flex-row gap-3 md:gap-6 mt-6 md:mt-10 w-full md:w-auto mb-4">
-                <button
-                  onClick={() => setIsCardPanelOpen(true)}
-                  className="px-4 py-2 md:px-5 md:py-3 flex-1 md:w-40 rounded-full
-                          bg-blue-700 hover:bg-blue-800 active:bg-blue-900
-                          text-white font-semibold text-sm md:text-base transition"
-                >
-                  Add Card
-                </button>
-
-                <button
-                  onClick={() => {
-                    setStopThreatAnim(true); // stop zoom animation
-                    setShowSubmitConfirm(true); // keep your existing behavior
-                  }}
-                  disabled={isSubmitted || roundEnded}
-                  className={`px-4 py-2 md:px-5 md:py-3 flex-1 md:w-40 rounded-full font-semibold text-sm md:text-base transition
-                  ${isSubmitted || roundEnded ? "bg-gray-400 cursor-not-allowed text-gray-600" : "bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-700 text-white"}`}
-                >
-                  {isSubmitted ? "Submitted" : "Submit"}
-                </button>
+            {/* Round Timer */}
+            <div className="text-slate-800 bg-white border border-white/40 lg:rounded-2xl md:rounded-xl shadow-2xl z-20">
+              <div
+                className={`px-4 py-2 text-slate-800 font-mono font-bold lg:text-lg md:text-lg rounded-xl ${
+                  remainingSeconds != null && remainingSeconds <= 10
+                    ? "text-red-600 animate-pulse shadow-[0_0_30px_rgba(255,0,0,0.8)] bg-red-50"
+                    : "text-red-600"
+                }`}
+              >
+                {formatTime(remainingSeconds)}
               </div>
             </div>
-
-            {/* Right - Hidden on mobile, shown on md+ */}
-            <div className="hidden md:flex flex-col items-start gap-6">
-              <DropContainers
-                side="right"
-                droppedCards={droppedCards}
-                setDroppedCards={setDroppedCards}
-                onOpenContainer={setOpenContainer}
-                locked={isSubmitted}
-                onCardPlaced={placeCardBackend}
-              />
-            </div>
           </div>
 
-          {/* Mobile Bottom Containers - Show on mobile, hidden on md+ */}
-          <div className="grid grid-cols-2 gap-4 mt-6 md:hidden">
-            <div className="col-span-1">
-              <DropContainers
-                side="left"
-                droppedCards={droppedCards}
-                setDroppedCards={setDroppedCards}
-                onOpenContainer={setOpenContainer}
-                locked={isSubmitted}
-                onCardPlaced={placeCardBackend}
-              />
-            </div>
-            <div className="col-span-1">
-              <DropContainers
-                side="right"
-                droppedCards={droppedCards}
-                setDroppedCards={setDroppedCards}
-                onOpenContainer={setOpenContainer}
-                locked={isSubmitted}
-                onCardPlaced={placeCardBackend}
-              />
-            </div>
+        </div>
+
+        <div className="mb-2 mt-0 px-4 flex flex-col items-center">
+          <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl p-2 md:p-3 max-w-lg w-full text-center relative overflow-hidden group">
+            {/* Animated accent border */}
+            <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-yellow-400 to-transparent opacity-30" />
+            
+            <h3 className="text-yellow-400 font-bold text-xs uppercase tracking-[0.2em] mb-1.5 drop-shadow-md">
+              Target Scenario
+            </h3>
+            <p className="text-white font-bold text-sm md:text-base lg:text-lg leading-relaxed drop-shadow-sm">
+              <span className={!stopThreatAnim ? "threat-zoom" : ""}>
+                {activeThreat?.description ?? "Waiting for threat…"}
+              </span>
+            </p>
           </div>
         </div>
+
+
+          <div className={`mt-[-50px] md:mt-[-60px] ${boardLocked ? "pointer-events-none opacity-60" : ""}`}>
+            <CircularDropContainers
+              droppedCards={droppedCards}
+              setDroppedCards={setDroppedCards}
+              onOpenContainer={setOpenContainer}
+              locked={isSubmitted}
+              onCardPlaced={placeCardBackend}
+              showToast={(msg, type) => {}} // This should be handled by a proper toast system if needed
+              centerElement={
+                <img
+                  src={Board}
+                  alt="Board"
+                  className="w-full max-w-[50px] sm:max-w-[70px] md:max-w-[90px] lg:max-w-[110px] opacity-80 animate-breath"
+                />
+              }
+            />
+
+            {/* Drawer Handle */}
+            {!isCardPanelOpen && (
+              <div className="fixed bottom-0 left-1/2 -translate-x-1/2 z-[60]">
+                <button
+                  onClick={() => setIsCardPanelOpen(true)}
+                  className="group flex flex-col items-center justify-center px-12 py-3 md:px-20 md:py-4
+                          bg-white/10 backdrop-blur-2xl border border-white/20 border-b-0 rounded-t-3xl
+                          shadow-[0_-10px_40px_rgba(0,0,0,0.3)]
+                          hover:bg-white/20 hover:-translate-y-2 transition-all duration-300 cursor-pointer"
+                >
+                  <div className="w-16 h-1.5 bg-white/40 rounded-full mb-2 group-hover:bg-yellow-400 group-hover:shadow-[0_0_10px_rgba(250,204,21,0.5)] transition-all duration-300" />
+                  <span className="text-white font-bold text-xs md:text-sm tracking-[0.2em] uppercase opacity-80 group-hover:opacity-100 transition-opacity">
+                    Your Cards
+                  </span>
+                </button>
+              </div>
+            )}
+          </div>
+
+
+
+
+
 
         {/* Blocker Modal */}
         {showBlocker && (

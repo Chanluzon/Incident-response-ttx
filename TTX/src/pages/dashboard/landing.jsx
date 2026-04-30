@@ -21,17 +21,17 @@ export default function Landing() {
       {/* Title Container */}
       <div className="absolute top-[15%] sm:top-[18%] md:top-[20%] left-[5%] sm:left-[6%] md:left-[8%] z-10 text-left">
         <h1 className="text-black text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight">
-          Risk
+          I
         </h1>
         <h1 className="text-black text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold -mt-2 sm:-mt-3 md:-mt-4">
-          Management
+          Love
         </h1>
         <h2 className="text-gray-400 text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mt-2 sm:mt-3 md:mt-4">
-          Awareness TTX
+          YOU
         </h2>
       </div>
 
-    
+
       {/* Overlay Container */}
       <div className="absolute bottom-[10%] sm:bottom-[12%] md:bottom-[15%] left-[5%] sm:left-[6%] md:left-[8%] z-10">
         <button
