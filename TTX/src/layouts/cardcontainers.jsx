@@ -5,28 +5,28 @@ import { apiUrl } from "../config/api";
 // category config
 const CATEGORIES = [
   { key: "all", label: "All", style: "bg-[#5C8AD1] text-white border-[#4A71B0]" },
-  { key: "safeguard", label: "Prepare", style: "bg-[#67C2C9] text-slate-900 border-[#4DA8AF]" },
-  { key: "vulnerability", label: "Detect", style: "bg-[#FDEE00] text-yellow-900 border-[#D4C800]" },
-  { key: "threat agents", label: "Respond", style: "bg-[#FF9EBD] text-pink-900 border-[#E87EA1]" },
-  { key: "risk", label: "Recover", style: "bg-[#32CD32] text-green-900 border-[#28A428]" },
-  { key: "infosec pillars", label: "Lessons Learned", style: "bg-[#FFB347] text-orange-900 border-[#E6952D]" },
+  { key: "prepare", label: "Prepare", style: "bg-[#67C2C9] text-slate-900 border-[#4DA8AF]" },
+  { key: "detect", label: "Detect", style: "bg-[#FDEE00] text-yellow-900 border-[#D4C800]" },
+  { key: "respond", label: "Respond", style: "bg-[#FF9EBD] text-pink-900 border-[#E87EA1]" },
+  { key: "recover", label: "Recover", style: "bg-[#32CD32] text-green-900 border-[#28A428]" },
+  { key: "lessons learned", label: "Lessons Learned", style: "bg-[#FFB347] text-orange-900 border-[#E6952D]" },
 ];
 
 
 const CATEGORY_DESCRIPTIONS = {
-  safeguard:
+  prepare:
     "Protective measures (policies, procedures, or technologies) implemented to prevent, detect, or mitigate security risks and protect assets.",
-  vulnerability:
+  detect:
     "Weaknesses, flaws, or gaps in an information system, security procedures, internal controls, or implementation that could be exploited by a threat.",
-  "threat agents":
+  "respond":
     "Individuals, groups, or entities (internal or external) that have the potential to exploit a vulnerability and cause harm to an organization's assets.",
-  risk: "The potential for loss, damage, or destruction of an asset as a result of a threat exploiting a vulnerability; often measured as Impact × Likelihood.",
-  "infosec pillars":
+  recover: "The potential for loss, damage, or destruction of an asset as a result of a threat exploiting a vulnerability; often measured as Impact × Likelihood.",
+  "lessons learned":
     "The core principles of information security, commonly known as the CIA Triad: Confidentiality, Integrity, and Availability.",
 };
 
-function CardItem({ card, preview, onTouchStart, onDragStartCallback }) {
-  const [isFlipped, setIsFlipped] = useState(false);
+
+function CardItem({ card, preview, onTouchStart, onDragStartCallback, onClick }) {
   const id = preview ? card.id : card.card_id;
   const title = preview ? card.title : card.card_name;
   const description =
@@ -34,73 +34,57 @@ function CardItem({ card, preview, onTouchStart, onDragStartCallback }) {
 
   return (
     <div
-      className={`card-flip-container flex-shrink-0 ${isFlipped ? "is-flipped" : ""}
+      className={`flex-shrink-0 cursor-pointer rounded-xl
         w-[140px] sm:w-[150px] md:w-[160px]
         h-[190px] sm:h-[210px] md:h-[230px]
-        hover:-translate-y-4 transition-transform duration-300 ease-out`}
-      onClick={() => setIsFlipped(!isFlipped)}
+        hover:-translate-y-4 transition-transform duration-300 ease-out shadow-md hover:shadow-xl border p-3 sm:p-4 text-xs sm:text-sm select-none ${getCardColor(card.category)}`}
+      onClick={() => onClick(card)}
+      draggable={true}
+      onDragStart={(e) => {
+        e.dataTransfer.setData(
+          "application/json",
+          JSON.stringify({
+            id,
+            title,
+            category: card.category,
+            description: description,
+            image: card.image,
+          }),
+        );
+        if (onDragStartCallback) {
+          setTimeout(() => {
+            onDragStartCallback();
+          }, 10);
+        }
+      }}
+      onTouchStart={(e) => onTouchStart(e, card)}
     >
-
-
-      <div className="card-flip-inner shadow-md hover:shadow-xl">
-        {/* Front */}
-        <div
-          draggable={!isFlipped}
-          onDragStart={(e) => {
-              if (isFlipped) return;
-              e.dataTransfer.setData(
-                "application/json",
-                JSON.stringify({
-                  id,
-                  title,
-                  category: card.category,
-                  description: description,
-                }),
-              );
-              
-              // Close the drawer immediately after the drag begins
-              if (onDragStartCallback) {
-                setTimeout(() => {
-                  onDragStartCallback();
-                }, 10); // Small delay ensures the browser registers the drag before unmounting
-              }
-            }}
-
-          onTouchStart={(e) => !isFlipped && onTouchStart(e, card)}
-          className={`card-flip-front border p-3 sm:p-4 text-xs sm:text-sm select-none ${getCardColor(
-            card.category,
-          )}`}
-        >
-          <h3 className="font-bold text-sm sm:text-base leading-snug text-center mt-2">
-            {title}
-          </h3>
-
+      {card.image && (
+        <div className="w-full h-[40px] sm:h-[50px] mb-2 flex justify-center items-center overflow-hidden rounded">
+          <img src={card.image} alt={title} className="max-w-full max-h-full object-contain" />
         </div>
-
-        {/* Back */}
-        <div
-          className={`card-flip-back border text-[10px] leading-tight select-none ${getCardColor(
-            card.category,
-          )}`}
-        >
-          <p className="italic font-medium text-xs sm:text-sm">{description}</p>
-        </div>
-      </div>
+      )}
+      <h3 className="font-bold text-sm sm:text-base leading-snug text-center mt-2 line-clamp-1">
+        {title}
+      </h3>
+      <p className="text-[10px] sm:text-[11px] text-center mt-1 opacity-80 line-clamp-2 leading-tight font-medium">
+        {description}
+      </p>
     </div>
   );
 }
 
 const getCardColor = (cat) => {
   switch (cat) {
-    case "safeguard":
+    case "prepare":
       return "border-2 bg-[#67C2C9]/80 backdrop-blur-sm text-slate-900 border-[#4DA8AF]/50 shadow-lg shadow-cyan-500/20";
-    case "vulnerability":
+    case "detect":
       return "border-2 bg-[#FDEE00]/80 backdrop-blur-sm text-yellow-900 border-[#D4C800]/50 shadow-lg shadow-yellow-500/20";
-    case "threat agents":
+    case "respond":
       return "border-2 bg-[#FF9EBD]/80 backdrop-blur-sm text-pink-900 border-[#E87EA1]/50 shadow-lg shadow-pink-500/20";
-    case "risk":
+    case "recover":
       return "border-2 bg-[#32CD32]/80 backdrop-blur-sm text-green-900 border-[#28A428]/50 shadow-lg shadow-green-500/20";
-    case "infosec pillars":
+    case "lessons learned":
       return "border-2 bg-[#FFB347]/80 backdrop-blur-sm text-orange-900 border-[#E6952D]/50 shadow-lg shadow-orange-500/20";
     default:
       return "border-2 bg-gray-200/80 backdrop-blur-sm text-gray-700 border-gray-300/50";
@@ -114,6 +98,8 @@ export default function CardContainer({
   previewCards = [],
 }) {
   const [cards, setCards] = useState([]);
+  const [selectedCard, setSelectedCard] = useState(null);
+  const [usedCards, setUsedCards] = useState([]);
   const [hiddenCards, setHiddenCards] = useState([]);
   const [activeCategory, setActiveCategory] = useState("all");
   const [search, setSearch] = useState("");
@@ -147,14 +133,26 @@ export default function CardContainer({
   const [touchDragging, setTouchDragging] = useState(false);
   const [draggedCardData, setDraggedCardData] = useState(null);
 
-  // fetch cards
+  // fetch cards and used cards
   useEffect(() => {
     if (!isOpen || preview) return;
 
+    // Fetch all cards
     fetch(apiUrl("/card"))
       .then((r) => r.json())
       .then(setCards)
       .catch(console.error);
+
+    // Fetch used cards
+    const joinedGame = JSON.parse(localStorage.getItem("joinedGame"));
+    const storedGroup = JSON.parse(localStorage.getItem("currentGroup"));
+    
+    if (joinedGame && storedGroup) {
+      fetch(apiUrl(`/games/${joinedGame.game_id}/groups/${storedGroup.group.group_id}/used-cards`))
+        .then((r) => r.json())
+        .then((data) => setUsedCards(data || []))
+        .catch(console.error);
+    }
   }, [isOpen, preview]);
 
   // hide
@@ -239,6 +237,7 @@ export default function CardContainer({
   const visibleCards = sourceCards.filter(
     (c) =>
       !hiddenCards.includes(preview ? c.id : c.card_id) &&
+      !usedCards.includes(preview ? c.id : c.card_id) &&
       (activeCategory === "all" || c.category === activeCategory) &&
       (preview
         ? c.title.toLowerCase().includes(search.toLowerCase())
@@ -256,6 +255,7 @@ export default function CardContainer({
       category: card.category,
       description:
         card.description || CATEGORY_DESCRIPTIONS[card.category] || "",
+      image: card.image,
     };
 
     setTouchDragging(true);
@@ -423,6 +423,7 @@ export default function CardContainer({
                 preview={preview}
                 onTouchStart={handleCardTouchStart}
                 onDragStartCallback={toggleOpen}
+                onClick={setSelectedCard}
               />
 
             ))}
@@ -430,6 +431,42 @@ export default function CardContainer({
         </div>
 
       </div>
+
+      {selectedCard && (
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-md flex items-center justify-center z-[200] transition-opacity duration-200" onClick={() => setSelectedCard(null)}>
+          <div 
+            className={`rounded-2xl shadow-2xl w-[320px] sm:w-[400px] min-h-[450px] p-6 sm:p-8 relative transform transition-all duration-300 scale-95 opacity-0 animate-[fadeIn_0.25s_ease-out_forwards] text-center flex flex-col justify-center items-center border-4 ${getCardColor(selectedCard.category)}`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setSelectedCard(null)}
+              className="absolute top-4 right-4 text-black/50 hover:text-black"
+            >
+              <X size={24} />
+            </button>
+            
+            {selectedCard.image && (
+              <div className="w-[calc(100%+3rem)] sm:w-[calc(100%+4rem)] h-[80px] sm:h-[100px] -mt-6 sm:-mt-8 -mx-6 sm:-mx-8 mb-6 flex justify-center items-center overflow-hidden rounded-t-2xl bg-black/5">
+                <img src={selectedCard.image} alt={preview ? selectedCard.title : selectedCard.card_name} className="max-w-full max-h-full object-contain" />
+              </div>
+            )}
+
+            <div className="inline-block px-4 py-1 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider mb-4 bg-white/30 border border-black/10">
+              {selectedCard.category}
+            </div>
+
+            <h2 className="text-xl sm:text-2xl font-black mb-3 leading-tight drop-shadow-sm">
+              {preview ? selectedCard.title : selectedCard.card_name}
+            </h2>
+            
+            <div className="mt-auto w-full p-4 bg-white/20 backdrop-blur-sm border border-black/10 rounded-xl">
+              <p className="text-sm sm:text-base font-semibold italic leading-relaxed drop-shadow-sm">
+                {selectedCard.description || CATEGORY_DESCRIPTIONS[selectedCard.category]}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

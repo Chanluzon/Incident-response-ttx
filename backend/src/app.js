@@ -23,7 +23,8 @@ const roundCardSelection = require("./routes/roundCardSelectionRoutes");
 const scoreRoutes = require("./routes/scoreRoutes");
 
 const app = express();
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 require("dotenv").config();
 
 app.use(cors());

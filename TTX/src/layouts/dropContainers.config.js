@@ -1,7 +1,7 @@
 export const dropContainers = [
   {
     id: 1,
-    category: "safeguard",
+    category: "prepare",
     title: "PREPARE",
     bg: "bg-[#67C2C9]",
     text: "text-slate-800",
@@ -9,7 +9,7 @@ export const dropContainers = [
   },
   {
     id: 2,
-    category: "vulnerability",
+    category: "detect",
     title: "DETECT",
     bg: "bg-[#FDEE00]",
     text: "text-yellow-900",
@@ -17,7 +17,7 @@ export const dropContainers = [
   },
   {
     id: 3,
-    category: "threat agents",
+    category: "respond",
     title: "RESPOND",
     bg: "bg-[#FF9EBD]",
     text: "text-pink-900",
@@ -25,7 +25,7 @@ export const dropContainers = [
   },
   {
     id: 4,
-    category: "risk",
+    category: "recover",
     title: "RECOVER",
     bg: "bg-[#32CD32]",
     text: "text-green-900",
@@ -33,7 +33,7 @@ export const dropContainers = [
   },
   {
     id: 5,
-    category: "infosec pillars",
+    category: "lessons learned",
     title: "LESSONS LEARNED",
     bg: "bg-[#FFB347]",
     text: "text-orange-900",

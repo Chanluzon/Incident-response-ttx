@@ -18,31 +18,31 @@ const PREVIEW_CARDS = [
   {
     id: "preview-1",
     title: "Security Policy",
-    category: "safeguard",
+    category: "prepare",
     description: "Example of a company security policy",
   },
   {
     id: "preview-2",
     title: "Phishing and Spear-phishing",
-    category: "risk",
+    category: "recover",
     description: "Allow HTTPS outbound traffic",
   },
   {
     id: "preview-3",
     title: "Technology",
-    category: "infosec pillars",
+    category: "lessons learned",
     description: "Steps to respond to a breach",
   },
   {
     id: "preview-4",
     title: "Weak Passwords",
-    category: "vulnerability",
+    category: "detect",
     description: "Steps to respond to a breach",
   },
   {
     id: "preview-5",
     title: "Hacktivists",
-    category: "threat agents",
+    category: "respond",
     description: "Steps to respond to a breach",
   },
 ];

@@ -6,27 +6,27 @@ import recoverImg from "../images/recover.png";
 import lessonsImg from "../images/lesson learned.png";
 
 const CATEGORY_ICONS = {
-  safeguard: prepareImg,
-  vulnerability: detectImg,
-  "threat agents": respondImg,
-  risk: recoverImg,
-  "infosec pillars": lessonsImg,
+  prepare: prepareImg,
+  detect: detectImg,
+  "respond": respondImg,
+  recover: recoverImg,
+  "lessons learned": lessonsImg,
 };
 
 const CONTAINER_LIMITS = {
-  "infosec pillars": 1,
-  safeguard: 4,
-  vulnerability: 3,
-  "threat agents": 4,
-  risk: 4,
+  "lessons learned": 1,
+  prepare: 4,
+  detect: 3,
+  "respond": 4,
+  recover: 4,
 };
 
 const LIMIT_BADGE_COLORS = {
-  safeguard: "bg-[#4DA8AF] text-white",
-  vulnerability: "bg-[#D4C800] text-yellow-900",
-  "threat agents": "bg-[#E87EA1] text-white",
-  risk: "bg-[#28A428] text-white",
-  "infosec pillars": "bg-[#E6952D] text-white",
+  prepare: "bg-[#4DA8AF] text-white",
+  detect: "bg-[#D4C800] text-yellow-900",
+  "respond": "bg-[#E87EA1] text-white",
+  recover: "bg-[#28A428] text-white",
+  "lessons learned": "bg-[#E6952D] text-white",
 };
 
 
@@ -67,7 +67,7 @@ export default function DropContainers({
 
     if (existingCards.length >= limit) {
       showToast(
-        container.category === "infosec pillars"
+        container.category === "lessons learned"
           ? "Only one InfoSec Pillar card is allowed in this container."
           : `You’ve reached the limit (${limit} cards).`,
         "warning"
@@ -164,7 +164,7 @@ export default function DropContainers({
                           "bg-gray-200 text-gray-800"
                     }`}
                 >
-                  {container.category === "infosec pillars"
+                  {container.category === "lessons learned"
                     ? "Only one allowed"
                     : `Limit reached (${limit})`}
                 </p>

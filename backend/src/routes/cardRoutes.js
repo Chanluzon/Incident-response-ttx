@@ -112,6 +112,7 @@ router.get("/", cardController.getAllCards);
 
 router.put("/:id", cardController.updateCard);
 router.delete("/:id", cardController.deleteCard);
+router.post("/bulk-delete", cardController.bulkDeleteCards);
 
 /**
  * @swagger

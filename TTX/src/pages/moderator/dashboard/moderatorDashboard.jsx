@@ -28,24 +28,14 @@ export default function ModeratorDashboard() {
   });
 
   const CARD_TABS = [
-    { label: "Prepare", value: "Safeguards / Controls" },
-    { label: "Detect", value: "Vulnerabilities" },
-    { label: "Respond", value: "Threat Agents" },
-    { label: "Recover", value: "Risks" },
-    { label: "Lessons Learned", value: "InfoSec Pillars" },
+    { label: "Prepare", value: "prepare" },
+    { label: "Detect", value: "detect" },
+    { label: "Respond", value: "respond" },
+    { label: "Recover", value: "recover" },
+    { label: "Lessons Learned", value: "lessons learned" },
   ];
 
-  const CATEGORY_DESCRIPTIONS = {
-    safeguard:
-      "Protective measures (policies, procedures, or technologies) implemented to prevent, detect, or mitigate security risks and protect assets.",
-    vulnerability:
-      "Weaknesses, flaws, or gaps in an information system, security procedures, internal controls, or implementation that could be exploited by a threat.",
-    "threat agents":
-      "Individuals, groups, or entities (internal or external) that have the potential to exploit a vulnerability and cause harm to an organization's assets.",
-    risk: "The potential for loss, damage, or destruction of an asset as a result of a threat exploiting a vulnerability; often measured as Impact × Likelihood.",
-    "infosec pillars":
-      "The core principles of information security, commonly known as the CIA Triad: Confidentiality, Integrity, and Availability.",
-  };
+
 
   const moderator = JSON.parse(localStorage.getItem("moderator"));
 
@@ -56,30 +46,29 @@ export default function ModeratorDashboard() {
   const [showManageThreats, setShowManageThreats] = useState(false);
   const [categories, setCategories] = useState([]);
 
-  const [activeTab, setActiveTab] = useState("Safeguards / Controls");
+  const [activeTab, setActiveTab] = useState("prepare");
   const [cards, setCards] = useState([]);
+  const [selectedCardIds, setSelectedCardIds] = useState([]);
 
   const getCategoryColorClass = (cat) => {
     switch (cat) {
-      case "safeguard":
+      case "prepare":
         return "bg-[#67C2C9]/20 text-[#4DA8AF]";
-      case "vulnerability":
+      case "detect":
         return "bg-[#FDEE00]/20 text-yellow-700";
-      case "threat agents":
+      case "respond":
         return "bg-[#FF9EBD]/20 text-pink-700";
-      case "risk":
+      case "recover":
         return "bg-[#32CD32]/20 text-green-700";
-      case "infosec pillars":
+      case "lessons learned":
         return "bg-[#FFB347]/20 text-orange-700";
       default:
         return "bg-gray-100 text-gray-700";
     }
   };
   const [teams, setTeams] = useState([]);
-  const INFOSEC_LIMIT = 3;
-
   const infosecCount = cards.filter(
-    (c) => c.category === "infosec pillars",
+    (c) => c.category === "lessons learned",
   ).length;
 
   const [showGameSettings, setShowGameSettings] = useState(false);
@@ -89,8 +78,21 @@ export default function ModeratorDashboard() {
   const [toasts, setToasts] = useState([]);
 
   const [newCardTitle, setNewCardTitle] = useState("");
+  const [newCardDescription, setNewCardDescription] = useState("");
+  const [newCardImage, setNewCardImage] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [editingCard, setEditingCard] = useState(null);
+
+  const handleImageUpload = (e, setBase64Str) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setBase64Str(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const showToast = (message, type = "info") => {
     const id = Date.now();
@@ -186,8 +188,8 @@ export default function ModeratorDashboard() {
     try {
       const finalCategory = cardToUpdate.pendingCategory;
       if (
-        cardToUpdate.pendingCategory === "infosec pillars" &&
-        cardToUpdate.category !== "infosec pillars" &&
+        cardToUpdate.pendingCategory === "lessons learned" &&
+        cardToUpdate.category !== "lessons learned" &&
         infosecCount >= INFOSEC_LIMIT
       ) {
         showToast("Only 3 InfoSec Pillars cards are allowed.", "warning");
@@ -217,15 +219,15 @@ export default function ModeratorDashboard() {
                 description: updatedCard.description,
                 pendingCategory: updatedCard.category,
                 color:
-                  updatedCard.category === "safeguard"
+                  updatedCard.category === "prepare"
                     ? "bg-[#67C2C9]/20 text-[#4DA8AF]"
-                    : updatedCard.category === "vulnerability"
+                    : updatedCard.category === "detect"
                       ? "bg-[#FDEE00]/20 text-yellow-700"
-                      : updatedCard.category === "threat agents"
+                      : updatedCard.category === "respond"
                         ? "bg-[#FF9EBD]/20 text-pink-700"
-                        : updatedCard.category === "risk"
+                        : updatedCard.category === "recover"
                           ? "bg-[#32CD32]/20 text-green-700"
-                          : updatedCard.category === "infosec pillars"
+                          : updatedCard.category === "lessons learned"
                             ? "bg-[#FFB347]/20 text-orange-700"
                             : "bg-gray-100 text-gray-700",
                 isEditing: false,
@@ -257,6 +259,7 @@ export default function ModeratorDashboard() {
 
       setCards((prev) => prev.filter((c) => c.id !== id));
       setStats((prev) => ({ ...prev, totalCards: prev.totalCards - 1 }));
+      setSelectedCardIds((prev) => prev.filter((selectedId) => selectedId !== id));
 
       showToast("Card deleted successfully!", "success");
       logActivity(`Deleted a card`, "delete");
@@ -264,6 +267,46 @@ export default function ModeratorDashboard() {
       console.error("Error deleting card:", err);
       showToast("Failed to delete card.", "error");
     }
+  };
+
+  const handleBulkDelete = async () => {
+    if (selectedCardIds.length === 0) return;
+
+    const confirmed = await confirmToast(
+      `Are you sure you want to delete ${selectedCardIds.length} selected cards?`,
+    );
+    if (!confirmed) return;
+
+    try {
+      const res = await fetch(apiUrl("/card/bulk-delete"), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ids: selectedCardIds }),
+      });
+
+      if (!res.ok) throw new Error("Failed to delete cards");
+
+      const data = await res.json();
+
+      setCards((prev) => prev.filter((c) => !selectedCardIds.includes(c.id)));
+      setStats((prev) => ({
+        ...prev,
+        totalCards: prev.totalCards - selectedCardIds.length,
+      }));
+      setSelectedCardIds([]);
+
+      showToast(data.message, "success");
+      logActivity(`Deleted ${selectedCardIds.length} cards`, "delete");
+    } catch (err) {
+      console.error("Error bulk deleting cards:", err);
+      showToast("Failed to delete selected cards.", "error");
+    }
+  };
+
+  const toggleCardSelection = (id) => {
+    setSelectedCardIds((prev) =>
+      prev.includes(id) ? prev.filter((sid) => sid !== id) : [...prev, id],
+    );
   };
 
   const fetchCards = async () => {
@@ -283,17 +326,18 @@ export default function ModeratorDashboard() {
           title: c.card_name,
           category: c.category,
           description: c.description,
+          image: c.image,
           pendingCategory: c.category,
           color:
-            c.category === "safeguard"
+            c.category === "prepare"
               ? "bg-[#67C2C9]/20 text-[#4DA8AF]"
-              : c.category === "vulnerability"
+              : c.category === "detect"
                 ? "bg-[#FDEE00]/20 text-yellow-700"
-                : c.category === "threat agents"
+                : c.category === "respond"
                   ? "bg-[#FF9EBD]/20 text-pink-700"
-                  : c.category === "risk"
+                  : c.category === "recover"
                     ? "bg-[#32CD32]/20 text-green-700"
-                    : c.category === "infosec pillars"
+                    : c.category === "lessons learned"
                       ? "bg-[#FFB347]/20 text-orange-700"
                       : "bg-gray-100 text-gray-700",
           isEditing: false,
@@ -468,19 +512,19 @@ export default function ModeratorDashboard() {
   };
 
   const tabColors = {
-    "Safeguards / Controls": "border-[#67C2C9]",
-    Vulnerabilities: "border-[#FDEE00]",
-    "Threat Agents": "border-[#FF9EBD]",
-    Risks: "border-[#32CD32]",
-    "InfoSec Pillars": "border-[#FFB347]",
+    prepare: "border-[#67C2C9]",
+    detect: "border-[#FDEE00]",
+    respond: "border-[#FF9EBD]",
+    recover: "border-[#32CD32]",
+    "lessons learned": "border-[#FFB347]",
   };
 
   const categoryUnderline = {
-    safeguard: "border-yellow-700",
-    vulnerability: "border-blue-700",
-    "threat agents": "border-orange-700",
-    risk: "border-red-700",
-    "infosec pillars": "border-pink-700",
+    prepare: "border-yellow-700",
+    detect: "border-blue-700",
+    "respond": "border-orange-700",
+    recover: "border-red-700",
+    "lessons learned": "border-pink-700",
   };
 
   const refreshDashboard = useCallback(async () => {
@@ -812,7 +856,7 @@ export default function ModeratorDashboard() {
       {/* Add Card Modal */}
       {showAddCard && (
         <div className="fixed inset-0 bg-white/30 backdrop-blur-md flex items-center justify-center z-50 transition-opacity duration-200">
-          <div className="bg-white rounded-2xl shadow-2xl w-[420px] p-6 relative transform transition-all duration-300 scale-95 opacity-0 animate-[fadeIn_0.25s_ease-out_forwards] text-left">
+          <div className={`rounded-2xl shadow-2xl w-[420px] p-6 relative transform transition-all duration-300 scale-95 opacity-0 animate-[fadeIn_0.25s_ease-out_forwards] text-left border border-white/50 transition-colors duration-500 ${getCategoryColorClass(selectedCategory)}`}>
             {/* Close Button */}
             <button
               onClick={() => setShowAddCard(false)}
@@ -821,14 +865,14 @@ export default function ModeratorDashboard() {
               <X size={20} />
             </button>
 
-            <h2 className="text-xl font-bold mb-2">Add New Card</h2>
-            <p className="text-gray-500 text-sm mb-4">
-              Create a new card with a title and category
+            <h2 className="text-xl font-black mb-1">Add New Card</h2>
+            <p className="text-[11px] font-bold opacity-60 uppercase tracking-wider mb-6">
+              Create a new scenario asset
             </p>
 
             {/* Title Input */}
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+            <div className="mb-5">
+              <label className="block text-xs font-black opacity-80 uppercase tracking-tighter mb-2">
                 Title
               </label>
               <input
@@ -836,40 +880,83 @@ export default function ModeratorDashboard() {
                 placeholder="Enter card title"
                 value={newCardTitle}
                 onChange={(e) => setNewCardTitle(e.target.value)}
-                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#2EE58A]"
+                className="w-full border border-black/10 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-black/20 transition bg-white/60 placeholder-gray-500 text-sm"
               />
             </div>
 
+            {/* Image Input */}
+            <div className="mb-5">
+              <label className="block text-xs font-black opacity-80 uppercase tracking-tighter mb-2">
+                Card Image
+              </label>
+              <div 
+                onClick={() => document.getElementById('new-card-image-input').click()}
+                className="relative group cursor-pointer"
+              >
+                <div className="w-full border-2 border-dashed border-black/10 rounded-xl p-2 transition bg-white/40 hover:bg-white/60 hover:border-black/20 flex flex-col items-center justify-center gap-1 group-active:scale-[0.98]">
+                  {newCardImage ? (
+                    <div className="relative w-full h-16">
+                      <img src={newCardImage} alt="Preview" className="w-full h-full object-contain rounded-lg" />
+                      <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-lg">
+                        <p className="text-[9px] text-white font-bold uppercase">Change</p>
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="p-1.5 rounded-full bg-white/50 text-slate-500 group-hover:text-slate-800 transition-colors">
+                        <Plus size={16} />
+                      </div>
+                      <p className="text-[9px] font-black opacity-40 uppercase tracking-widest">Upload image</p>
+                    </>
+                  )}
+                </div>
+                <input
+                  id="new-card-image-input"
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => handleImageUpload(e, setNewCardImage)}
+                  className="hidden"
+                />
+              </div>
+            </div>
+
             {/* Category Select */}
-            <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+            <div className="mb-8">
+              <label className="block text-xs font-black opacity-80 uppercase tracking-tighter mb-2">
                 Category
               </label>
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#2EE58A]"
+                className="w-full border border-black/10 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-black/20 transition bg-white/60 text-sm cursor-pointer"
               >
                 <option value="">--Select Category--</option>
-                <option value="safeguard">Prepare</option>
-                <option value="vulnerability">Detect</option>
-                <option value="threat agents">Respond</option>
-                <option value="risk">Recover</option>
+                <option value="prepare">Prepare</option>
+                <option value="detect">Detect</option>
+                <option value="respond">Respond</option>
+                <option value="recover">Recover</option>
                 <option
-                  value="infosec pillars"
-                  disabled={infosecCount >= INFOSEC_LIMIT}
+                  value="lessons learned"
                 >
                   Lessons Learned
                 </option>
               </select>
 
-              {selectedCategory && (
-                <div className="mt-4 p-3 bg-blue-50 border-l-4 border-blue-400 rounded-r-lg animate-fadeIn">
-                  <p className="text-xs text-blue-800 leading-relaxed italic">
-                    {CATEGORY_DESCRIPTIONS[selectedCategory]}
-                  </p>
-                </div>
-              )}
+
+            </div>
+
+            {/* Description Input */}
+            <div className="mb-8">
+              <label className="block text-xs font-black opacity-80 uppercase tracking-tighter mb-2">
+                Card Description
+              </label>
+              <textarea
+                placeholder="Enter card description..."
+                value={newCardDescription}
+                onChange={(e) => setNewCardDescription(e.target.value)}
+                rows={3}
+                className="w-full border border-black/10 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-black/20 transition resize-none leading-relaxed text-sm bg-white/60 placeholder-gray-500"
+              />
             </div>
 
             {/* Action Buttons */}
@@ -878,24 +965,13 @@ export default function ModeratorDashboard() {
                 onClick={async () => {
                   const title = newCardTitle;
                   const category = selectedCategory;
-                  const description = CATEGORY_DESCRIPTIONS[category];
+                  const description = newCardDescription;
                   const moderator = JSON.parse(
                     localStorage.getItem("moderator"),
                   );
 
                   if (!title || !category) {
                     showToast("Please fill in all fields");
-                    return;
-                  }
-
-                  if (
-                    category === "infosec pillars" &&
-                    infosecCount >= INFOSEC_LIMIT
-                  ) {
-                    showToast(
-                      "Only 3 InfoSec Pillars cards are allowed.",
-                      "warning",
-                    );
                     return;
                   }
 
@@ -908,6 +984,7 @@ export default function ModeratorDashboard() {
                         category: category,
                         description: description,
                         moderator_id: moderator.moderator_id,
+                        image: newCardImage,
                       }),
                     });
 
@@ -923,16 +1000,17 @@ export default function ModeratorDashboard() {
                         title: newCard.card_name,
                         category: newCard.category,
                         description: newCard.description,
+                        image: newCard.image,
                         color:
-                          newCard.category === "safeguard"
+                          newCard.category === "prepare"
                             ? "bg-[#67C2C9]/20 text-[#4DA8AF]"
-                            : newCard.category === "vulnerability"
+                            : newCard.category === "detect"
                               ? "bg-[#FDEE00]/20 text-yellow-700"
-                              : newCard.category === "threat agents"
+                              : newCard.category === "respond"
                                 ? "bg-[#FF9EBD]/20 text-pink-700"
-                                : newCard.category === "risk"
+                                : newCard.category === "recover"
                                   ? "bg-[#32CD32]/20 text-green-700"
-                                  : newCard.category === "infosec pillars"
+                                  : newCard.category === "lessons learned"
                                     ? "bg-[#FFB347]/20 text-orange-700"
                                     : "bg-gray-100 text-gray-700",
                         isEditing: false,
@@ -947,6 +1025,8 @@ export default function ModeratorDashboard() {
 
                     setShowAddCard(false);
                     setNewCardTitle("");
+                    setNewCardDescription("");
+                    setNewCardImage("");
                     setSelectedCategory("");
                     showToast("Card added successfully!");
                     logActivity(
@@ -958,9 +1038,9 @@ export default function ModeratorDashboard() {
                     showToast("Failed to add card.");
                   }
                 }}
-                className="px-4 py-2 rounded-full bg-[#2EE58A] hover:bg-[#23c877] text-white font-semibold"
+                className="w-full bg-[#2EE58A] hover:bg-[#23c877] text-white py-4 rounded-xl font-black shadow-lg transition-all active:scale-95 text-sm uppercase tracking-widest"
               >
-                Add Card
+                Create Card
               </button>
             </div>
           </div>
@@ -977,26 +1057,44 @@ export default function ModeratorDashboard() {
             {/* Header */}
             <div className="sticky top-0 bg-white z-20 px-6 pt-6 border-b border-gray-200">
               <button
-                onClick={() => setShowManageCards(false)}
+                onClick={() => {
+                  setShowManageCards(false);
+                  setSelectedCardIds([]);
+                }}
                 className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-lg"
               >
                 <X size={20} />
               </button>
-              <h2 className="text-2xl font-bold mb-2">Manage Cards</h2>
-              <p className="text-gray-500 text-sm mb-6">
-                Edit or delete existing cards by category
-              </p>
-
-              {/* Tabs */}
-              <div className="flex gap-4 border-b border-gray-200">
+              <div className="flex justify-between items-center mb-4">
+                <div>
+                  <h2 className="text-2xl font-black text-slate-800 tracking-tight">Manage Cards</h2>
+                  <p className="text-slate-500 text-xs font-medium mt-1">
+                    Organize, edit, or remove your scenario assets
+                  </p>
+                </div>
+                {selectedCardIds.length > 0 && (
+                  <button
+                    onClick={handleBulkDelete}
+                    className="bg-red-500 hover:bg-red-600 text-white px-5 py-2.5 rounded-full text-xs font-black flex items-center gap-2 animate-bounceIn shadow-[0_0_20px_rgba(239,68,68,0.4)] transition-all active:scale-95 mr-10 group"
+                  >
+                    <Trash2 size={16} className="group-hover:rotate-12 transition-transform" />
+                    Delete {selectedCardIds.length} {selectedCardIds.length === 1 ? 'Card' : 'Cards'}
+                  </button>
+                )}
+              </div>
+              {/* Tabs */}
+              <div className="flex gap-2 border-b border-gray-200 overflow-x-auto hide-scrollbar">
                 {CARD_TABS.map(({ label, value }) => (
                   <button
                     key={value}
-                    onClick={() => setActiveTab(value)}
+                    onClick={() => {
+                      setActiveTab(value);
+                      setSelectedCardIds([]);
+                    }}
                     className={`
                       flex items-center justify-center
-                      w-44 pb-2 font-semibold transition-all
-                      border-b-2
+                      min-w-[120px] px-4 pb-2 font-semibold transition-all
+                      border-b-2 whitespace-nowrap
                       ${
                         activeTab === value
                           ? tabColors[value]
@@ -1010,63 +1108,119 @@ export default function ModeratorDashboard() {
               </div>
             </div>
 
+            {/* Card Grid Header (Select All) */}
+            <div className="px-8 py-3 bg-slate-50/80 backdrop-blur-sm border-b border-slate-100 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="relative flex items-center">
+                  <input
+                    type="checkbox"
+                    id="select-all"
+                    checked={
+                      cards.filter((c) => c.category === activeTab).length > 0 &&
+                      cards
+                        .filter((c) => c.category === activeTab)
+                        .every((c) => selectedCardIds.includes(c.id))
+                    }
+                    onChange={(e) => {
+                      const currentCategoryCards = cards.filter(
+                        (c) => c.category === activeTab,
+                      );
+                      const currentIds = currentCategoryCards.map((c) => c.id);
+
+                      if (e.target.checked) {
+                        setSelectedCardIds((prev) => [
+                          ...new Set([...prev, ...currentIds]),
+                        ]);
+                      } else {
+                        setSelectedCardIds((prev) =>
+                          prev.filter((id) => !currentIds.includes(id)),
+                        );
+                      }
+                    }}
+                    className="w-5 h-5 rounded-md border-slate-300 text-indigo-600 focus:ring-indigo-500 cursor-pointer transition-all"
+                  />
+                </div>
+                <label
+                  htmlFor="select-all"
+                  className="text-xs font-black text-slate-600 cursor-pointer select-none uppercase tracking-widest"
+                >
+                  Select All
+                </label>
+              </div>
+              
+              <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest bg-slate-200/50 px-2 py-1 rounded-md">
+                Selected: {selectedCardIds.length}
+              </div>
+            </div>
+
             {/* Card Grid */}
-            <div className="mt-6 flex-1 overflow-y-auto hide-scrollbar px-8 pt-6 pb-8">
-              <div className="grid grid-cols-2 lg:grid-cols-4 md:grid-cols-3 gap-5">
+            <div className="flex-1 overflow-y-auto hide-scrollbar px-8 pt-6 pb-8 bg-slate-50/30">
+              <div className="grid grid-cols-2 lg:grid-cols-4 md:grid-cols-3 gap-6">
                 {cards
-                  .filter((c) => {
-                    const map = {
-                      "Safeguards / Controls": "safeguard",
-                      Vulnerabilities: "vulnerability",
-                      "Threat Agents": "threat agents",
-                      Risks: "risk",
-                      "InfoSec Pillars": "infosec pillars",
-                    };
-                    return c.category === map[activeTab];
-                  })
-                  .map((card) => (
-                    <div
-                      key={card.id}
-                      className={`flex flex-col justify-between 
-                                  border rounded-2xl shadow-sm p-4
-                                  transition transform hover:scale-[1.02] hover:shadow-md
-                                  ${card.color}
-                                  w-[180px] h-[220px]`}
-                    >
-                      {/* Title and Category */}
-                      <div>
-                        <div className="flex justify-between items-center mb-3">
-                          <h3 className="font-bold text-gray-800 truncate text-sm">
-                            {card.title}
-                          </h3>
+                  .filter((c) => c.category === activeTab)
+                  .map((card) => {
+                    const isSelected = selectedCardIds.includes(card.id);
+                    return (
+                      <div
+                        key={card.id}
+                        onClick={() => toggleCardSelection(card.id)}
+                        className={`flex flex-col justify-between 
+                                    border-2 rounded-2xl shadow-sm p-4
+                                    transition-all duration-300 cursor-pointer group relative
+                                    ${isSelected ? 'ring-2 ring-indigo-500/50 border-indigo-500 scale-[1.03] shadow-lg ' + card.color : 'hover:scale-[1.02] hover:shadow-md border-transparent ' + card.color}
+                                    w-full h-[240px]`}
+                      >
+                        {/* Custom Selection Indicator */}
+                        {isSelected && (
+                          <div className="absolute -top-2 -right-2 bg-indigo-500 text-white rounded-full p-1 shadow-lg animate-bounceIn z-10">
+                            <Plus size={12} className="rotate-45" />
+                          </div>
+                        )}
+
+                        {/* Title and Category */}
+                        <div className="relative">
+                          <div className="flex justify-between items-start mb-3">
+                            <div className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-colors ${isSelected ? 'bg-indigo-500 border-indigo-500' : 'bg-white/50 border-slate-300'}`}>
+                              {isSelected && <div className="w-2 h-2 bg-white rounded-sm" />}
+                            </div>
+                            <h3 className="font-black text-slate-800 truncate text-xs flex-1 ml-3 tracking-tight">
+                              {card.title}
+                            </h3>
+                          </div>
+
+                          <div className="inline-block px-2 py-0.5 rounded-full bg-black/5 text-[9px] uppercase font-black tracking-tighter opacity-60 mb-3">
+                            {card.category}
+                          </div>
+
+                          <p className="text-[11px] text-slate-600 line-clamp-4 leading-relaxed font-medium">
+                            {card.description || "No description provided"}
+                          </p>
                         </div>
 
-                        <p className="text-[10px] uppercase tracking-wider font-semibold opacity-70 mb-2">
-                          {card.category}
-                        </p>
-
-                        <p className="text-[11px] text-gray-600 line-clamp-4 leading-tight">
-                          {card.description || "No description provided"}
-                        </p>
+                        {/* Action Buttons */}
+                        <div className="flex justify-end gap-2 mt-auto pt-4 border-t border-black/5">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setEditingCard({ ...card });
+                            }}
+                            className="p-2 rounded-xl bg-white/80 text-blue-600 hover:bg-blue-600 hover:text-white transition-all shadow-sm flex items-center justify-center active:scale-90"
+                          >
+                            <Pencil size={14} />
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDelete(card.id);
+                            }}
+                            className="p-2 rounded-xl bg-white/80 text-red-600 hover:bg-red-600 hover:text-white transition-all shadow-sm flex items-center justify-center active:scale-90"
+                          >
+                            <Trash2 size={14} />
+                          </button>
+                        </div>
                       </div>
-
-                      {/* Action Buttons */}
-                      <div className="flex justify-end gap-2 mt-auto">
-                        <button
-                          onClick={() => setEditingCard({ ...card })}
-                          className="p-2 rounded-lg bg-blue-100 text-blue-600 hover:bg-blue-200 transition flex items-center justify-center"
-                        >
-                          <Pencil size={16} />
-                        </button>
-                        <button
-                          onClick={() => handleDelete(card.id)}
-                          className="p-2 rounded-lg bg-red-100 text-red-600 hover:bg-red-200 transition flex items-center justify-center"
-                        >
-                          <Trash2 size={16} />
-                        </button>
-                      </div>
-                    </div>
-                  ))}
+                    );
+                  })}
               </div>
             </div>
           </div>
@@ -1228,6 +1382,46 @@ export default function ModeratorDashboard() {
               />
             </div>
 
+            {/* Image Input */}
+            <div className="mb-5">
+              <label className="block text-xs font-black opacity-80 uppercase tracking-tighter mb-2">
+                Card Image
+              </label>
+              <div 
+                onClick={() => document.getElementById('edit-card-image-input').click()}
+                className="relative group cursor-pointer"
+              >
+                <div className="w-full border-2 border-dashed border-black/10 rounded-xl p-2 transition bg-white/40 hover:bg-white/60 hover:border-black/20 flex flex-col items-center justify-center gap-1 group-active:scale-[0.98]">
+                  {editingCard.image ? (
+                    <div className="relative w-full h-16">
+                      <img src={editingCard.image} alt="Preview" className="w-full h-full object-contain rounded-lg" />
+                      <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-lg">
+                        <p className="text-[9px] text-white font-bold uppercase">Change</p>
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="p-1.5 rounded-full bg-white/50 text-slate-500 group-hover:text-slate-800 transition-colors">
+                        <Plus size={16} />
+                      </div>
+                      <p className="text-[9px] font-black opacity-40 uppercase tracking-widest">Upload image</p>
+                    </>
+                  )}
+                </div>
+                <input
+                  id="edit-card-image-input"
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) =>
+                    handleImageUpload(e, (base64) =>
+                      setEditingCard({ ...editingCard, image: base64 }),
+                    )
+                  }
+                  className="hidden"
+                />
+              </div>
+            </div>
+
             {/* Category */}
             <div className="mb-5">
               <label className="block text-sm font-semibold opacity-80 mb-2">
@@ -1243,24 +1437,18 @@ export default function ModeratorDashboard() {
                 }
                 className="w-full border border-black/10 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-black/20 transition bg-white/60 cursor-pointer"
               >
-                <option value="safeguard">Prepare</option>
-                <option value="vulnerability">Detect</option>
-                <option value="threat agents">Respond</option>
-                <option value="risk">Recover</option>
-                <option value="infosec pillars">Lessons Learned</option>
+                <option value="prepare">Prepare</option>
+                <option value="detect">Detect</option>
+                <option value="respond">Respond</option>
+                <option value="recover">Recover</option>
+                <option value="lessons learned">Lessons Learned</option>
               </select>
-
-              <div className="mt-3 p-3 bg-white/40 border-l-4 border-black/20 rounded-r-lg">
-                <p className="text-[11px] font-medium leading-relaxed italic">
-                  {CATEGORY_DESCRIPTIONS[editingCard.pendingCategory]}
-                </p>
-              </div>
             </div>
 
             {/* Description */}
             <div className="mb-8">
-              <label className="block text-sm font-semibold opacity-80 mb-2">
-                Back Description
+              <label className="block text-xs font-black opacity-80 uppercase tracking-tighter mb-2">
+                Card Description
               </label>
               <textarea
                 value={editingCard.description || ""}
@@ -1272,7 +1460,7 @@ export default function ModeratorDashboard() {
                 }
                 rows={4}
                 className="w-full border border-black/10 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-black/20 transition resize-none leading-relaxed text-sm bg-white/60 placeholder-gray-500"
-                placeholder="Description shown on the back of the card"
+                placeholder="Enter card description..."
               />
             </div>
 
@@ -1281,17 +1469,6 @@ export default function ModeratorDashboard() {
               onClick={async () => {
                 try {
                   const finalCategory = editingCard.pendingCategory;
-                  if (
-                    editingCard.pendingCategory === "infosec pillars" &&
-                    editingCard.category !== "infosec pillars" &&
-                    infosecCount >= INFOSEC_LIMIT
-                  ) {
-                    showToast(
-                      "Only 3 InfoSec Pillars cards are allowed.",
-                      "warning",
-                    );
-                    return;
-                  }
                   const res = await fetch(apiUrl(`/card/${editingCard.id}`), {
                     method: "PUT",
                     headers: { "Content-Type": "application/json" },
@@ -1299,6 +1476,7 @@ export default function ModeratorDashboard() {
                       card_name: editingCard.title,
                       category: finalCategory,
                       description: editingCard.description,
+                      image: editingCard.image,
                     }),
                   });
 
@@ -1314,18 +1492,19 @@ export default function ModeratorDashboard() {
                             title: updatedCard.card_name,
                             category: updatedCard.category,
                             description: updatedCard.description,
+                            image: updatedCard.image,
                             pendingCategory: updatedCard.category,
                             color:
-                              updatedCard.category === "safeguard"
+                              updatedCard.category === "prepare"
                                 ? "bg-[#67C2C9]/20 text-[#4DA8AF]"
-                                : updatedCard.category === "vulnerability"
+                                : updatedCard.category === "detect"
                                   ? "bg-[#FDEE00]/20 text-yellow-700"
-                                  : updatedCard.category === "threat agents"
+                                  : updatedCard.category === "respond"
                                     ? "bg-[#FF9EBD]/20 text-pink-700"
-                                    : updatedCard.category === "risk"
+                                    : updatedCard.category === "recover"
                                       ? "bg-[#32CD32]/20 text-green-700"
                                       : updatedCard.category ===
-                                          "infosec pillars"
+                                          "lessons learned"
                                         ? "bg-[#FFB347]/20 text-orange-700"
                                         : "bg-gray-100 text-gray-700",
                             isEditing: false,

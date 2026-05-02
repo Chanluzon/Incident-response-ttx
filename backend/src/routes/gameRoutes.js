@@ -93,5 +93,6 @@ router.post("/", gameController.createGame);
 router.get("/:id/rounds", gameController.getRoundsByGame);
 router.post("/:id/rounds", gameController.addRound);
 router.delete("/:id", gameController.deleteGame);
+router.get("/:id/groups/:groupId/used-cards", gameController.getUsedCardsByGroup);
 
 module.exports = router;

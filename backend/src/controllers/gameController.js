@@ -119,3 +119,21 @@ exports.deleteGame = async (req, res) => {
   }
 };
 
+
+exports.getUsedCardsByGroup = async (req, res) => {
+  try {
+    const { id, groupId } = req.params;
+    const result = await pool.query(`
+      SELECT DISTINCT rcs.card_id 
+      FROM round_card_selection rcs
+      JOIN round r ON rcs.round_id = r.round_id
+      WHERE r.game_id = $1 AND rcs.group_id = $2
+    `, [id, groupId]);
+
+    const usedCardIds = result.rows.map(row => row.card_id);
+    res.json(usedCardIds);
+  } catch (err) {
+    console.error("Get Used Cards Error:", err);
+    res.status(500).send("Error fetching used cards");
+  }
+};

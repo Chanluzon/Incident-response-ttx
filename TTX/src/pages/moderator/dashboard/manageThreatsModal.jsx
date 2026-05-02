@@ -640,9 +640,9 @@ function ThreatAnswerRow({ threat, categories, showToast }) {
         setAssigned((prev) => prev.filter((a) => a.card_id !== card.card_id));
       } else {
         if (
-          card.category === "infosec pillars" &&
+          card.category === "lessons learned" &&
           assigned.some((a) =>
-            groupedCards["infosec pillars"]?.some(
+            groupedCards["lessons learned"]?.some(
               (c) => c.card_id === a.card_id,
             ),
           )
@@ -751,7 +751,7 @@ function AssignAnswersModal({
   const [activeCategory, setActiveCategory] = useState(null);
   const [editingCard, setEditingCard] = useState(null);
 
-  const INFOSEC_CATEGORY = "infosec pillars";
+  const INFOSEC_CATEGORY = "lessons learned";
   const infosecAssigned = assigned.some((a) =>
     groupedCards[INFOSEC_CATEGORY]?.some((c) => c.card_id === a.card_id),
   );
@@ -783,15 +783,15 @@ function AssignAnswersModal({
 
   const getCardColor = (cat) => {
     switch (cat?.toLowerCase()) {
-      case "safeguard":
+      case "prepare":
         return "bg-[#67C2C9]/20 text-[#4DA8AF] border-[#4DA8AF]";
-      case "vulnerability":
+      case "detect":
         return "bg-[#FDEE00]/20 text-yellow-700 border-[#D4C800]";
-      case "threat agents":
+      case "respond":
         return "bg-[#FF9EBD]/20 text-pink-700 border-[#E87EA1]";
-      case "risk":
+      case "recover":
         return "bg-[#32CD32]/20 text-green-700 border-[#28A428]";
-      case "infosec pillars":
+      case "lessons learned":
         return "bg-[#FFB347]/20 text-orange-700 border-[#E6952D]";
       default:
         return "bg-gray-100 text-gray-700 border-gray-300";
@@ -816,33 +816,30 @@ function AssignAnswersModal({
           <div className="border-b border-gray-200 pb-0 mb-2">
             <div className="flex justify-center gap-10">
               {[
-                "safeguard",
-                "vulnerability",
-                "threat agents",
-                "risk",
-                "infosec pillars",
+                "prepare",
+                "detect",
+                "respond",
+                "recover",
+                "lessons learned",
               ].map((cat) => {
                 if (!groupedCards[cat]) return null;
 
                 const active = activeCategory === cat;
 
                 const underlineColor =
-                  cat === "safeguard"
+                  cat === "prepare"
                     ? "bg-yellow-400"
-                    : cat === "vulnerability"
+                    : cat === "detect"
                       ? "bg-blue-400"
-                      : cat === "threat agents"
+                      : cat === "respond"
                         ? "bg-orange-400"
-                        : cat === "risk"
+                        : cat === "recover"
                           ? "bg-red-400"
-                          : cat === "infosec pillars"
+                          : cat === "lessons learned"
                             ? "bg-purple-400"
                             : "bg-gray-400";
 
-                const prettyLabel =
-                  cat === "safeguard"
-                    ? "Safeguards"
-                    : cat.replace(/\b\w/g, (c) => c.toUpperCase());
+                const prettyLabel = cat.replace(/\b\w/g, (c) => c.toUpperCase());
 
                 return (
                   <button
@@ -897,7 +894,7 @@ function AssignAnswersModal({
                           type="checkbox"
                           checked={isAssigned}
                           disabled={
-                            card.category === "infosec pillars" &&
+                            card.category === "lessons learned" &&
                             infosecAssigned &&
                             !isAssigned
                           }

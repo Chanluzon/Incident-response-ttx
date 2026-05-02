@@ -2,8 +2,8 @@ const Card = require("../models/Card");
 
 exports.createCard = async (req, res) => {
   try {
-    const { card_name, category, description, moderator_id } = req.body;
-    const card = await Card.create({ card_name, category, description, moderator_id });
+    const { card_name, category, description, moderator_id, image } = req.body;
+    const card = await Card.create({ card_name, category, description, moderator_id, image });
     res.status(201).json(card);
   } catch (err) {
     console.error(err);
@@ -34,8 +34,8 @@ exports.getAllCards = async (req, res) => {
 
 exports.updateCard = async (req, res) => {
   try {
-    const { card_name, category, description } = req.body;
-    const updatedCard = await Card.update(req.params.id, { card_name, category, description });
+    const { card_name, category, description, image } = req.body;
+    const updatedCard = await Card.update(req.params.id, { card_name, category, description, image });
 
     if (!updatedCard) {
       return res.status(404).json({ error: "Card not found" });
@@ -58,6 +58,21 @@ exports.deleteCard = async (req, res) => {
   } catch (err) {
     console.error("Error deleting card:", err);
     res.status(500).json({ error: "Error deleting card" });
+  }
+};
+
+exports.bulkDeleteCards = async (req, res) => {
+  try {
+    const { ids } = req.body;
+    if (!ids || !Array.isArray(ids)) {
+      return res.status(400).json({ error: "Invalid card IDs" });
+    }
+
+    const count = await Card.bulkDelete(ids);
+    res.json({ message: `${count} cards deleted successfully`, count });
+  } catch (err) {
+    console.error("Error bulk deleting cards:", err);
+    res.status(500).json({ error: "Error bulk deleting cards" });
   }
 };
 
