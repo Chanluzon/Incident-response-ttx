@@ -98,7 +98,7 @@ export default function Landing() {
             <div className={`absolute inset-0 bg-gradient-to-r from-transparent to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out ${isLightMode ? 'via-white/50' : 'via-white/30'}`} />
 
             <div className="w-2 h-2 rounded-full bg-white animate-pulse shadow-[0_0_10px_rgba(255,255,255,1)]" />
-            <span className="mt-[2px] ml-2"></span>
+            <span className="mt-[2px] ml-2">PLAY</span>
             <ChevronRight size={24} className="group-hover:translate-x-2 transition-transform duration-300 opacity-70 group-hover:opacity-100" />
           </button>
         </div>
