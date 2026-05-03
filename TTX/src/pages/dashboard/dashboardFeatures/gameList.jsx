@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, X } from "lucide-react";
-import BG from "../../../images/auth-background.png";
 import { apiUrl } from "../../../config/api";
+import { useTheme } from "../../../context/ThemeContext";
 
 export default function GameList({ showToast }) {
   const navigate = useNavigate();
+  const { isLightMode } = useTheme();
 
   const [games, setGames] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -93,92 +94,89 @@ export default function GameList({ showToast }) {
 
 
   return (
-    <div
-      className="relative w-screen min-h-screen bg-cover bg-center"
-      style={{ backgroundImage: `url(${BG})` }}
-    >
-      <div className="absolute inset-0 bg-white/10 backdrop-blur-sm" />
+    <div className={`relative w-screen min-h-screen overflow-hidden transition-colors duration-1000 ${isLightMode ? 'bg-slate-50' : 'bg-slate-950'}`}>
+      {/* Background to match startgame */}
+      <div className={`absolute inset-0 z-0 transition-all duration-1000 bg-gradient-to-br ${isLightMode ? 'from-slate-100 via-blue-50 to-slate-200' : 'from-slate-900 via-blue-900 to-indigo-950'}`} />
+      
+      {/* Animated Blobs */}
+      <div className="absolute inset-0 overflow-hidden z-0 opacity-40 pointer-events-none">
+        <div className={`absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full blur-[120px] animate-float transition-colors duration-1000 ${isLightMode ? 'bg-blue-300/40' : 'bg-blue-600/30'}`} />
+        <div className={`absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] rounded-full blur-[150px] animate-morph transition-colors duration-1000 ${isLightMode ? 'bg-indigo-300/30' : 'bg-indigo-600/20'}`} />
+        <div className={`absolute top-[20%] right-[10%] w-[30%] h-[30%] rounded-full blur-[100px] animate-float [animation-delay:2s] transition-colors duration-1000 ${isLightMode ? 'bg-cyan-300/20' : 'bg-cyan-600/20'}`} />
+      </div>
 
       <div 
-        className="relative z-10 min-h-screen p-4 sm:p-6 md:p-8 lg:p-10 bg-white/20 backdrop-blur-lg"
-        style={{
-          background: "radial-gradient(ellipse at center, rgba(0,0,0,0) 40%, rgba(0,0,0,0.45) 100%)",
-        }}
+        className={`relative z-10 min-h-screen p-4 sm:p-6 md:p-8 lg:p-10 backdrop-blur-md transition-colors duration-1000 ${isLightMode ? 'bg-white/30 text-slate-800' : 'bg-white/10 text-white'}`}
       >
         {/* Back Button */}
         <button
           onClick={() => navigate("/Dashboard")}
-          className="
-            absolute top-3 sm:top-4 md:top-6 left-3 sm:left-4 md:left-6
-            flex items-center gap-1 sm:gap-2
-            px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 rounded-full
-            bg-white/70 backdrop-blur-xl
-            text-slate-700 font-medium text-xs sm:text-sm md:text-base
-            shadow-md
-            hover:bg-white transition
-            z-10
-          "
+          className={`absolute top-4 sm:top-6 lg:top-8 left-4 sm:left-6 lg:left-8
+            flex items-center gap-2
+            px-4 lg:px-5 py-2 lg:py-2.5 rounded-full
+            backdrop-blur-xl border transition-all duration-300 group z-10 shadow-lg
+            font-medium text-sm md:text-base hover:-translate-x-1
+            ${isLightMode 
+              ? 'bg-white/50 hover:bg-white/80 border-slate-300 text-slate-600 hover:text-slate-900 shadow-[0_0_20px_rgba(0,0,0,0.05)]' 
+              : 'bg-white/5 hover:bg-white/15 border-white/10 hover:border-white/30 text-white/80 hover:text-white hover:shadow-[0_0_20px_rgba(255,255,255,0.1)]'
+            }`}
         >
-          <ArrowLeft size={14} className="sm:w-4 sm:h-4 md:w-[18px] md:h-[18px]" />
-          <span className="hidden xs:inline sm:inline">Back</span>
+          <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform duration-300" />
+          <span className="hidden sm:inline tracking-wide">Back</span>
         </button>
 
         {/* Preview Board Button */}
         <button
           onClick={() => navigate("/PreviewBoard")}
-          className="
-            absolute top-3 sm:top-4 md:top-6 right-3 sm:right-4 md:right-6
-            px-2 sm:px-3 md:px-5 py-1 sm:py-1.5 md:py-2 rounded-full
-            bg-white/70 backdrop-blur-xl
-            text-slate-700 font-medium text-xs sm:text-sm md:text-base
-            shadow-md
-            hover:bg-white transition
-            z-10
-          "
+          className={`absolute top-4 sm:top-6 lg:top-8 right-4 sm:right-6 lg:right-8
+            px-4 lg:px-5 py-2 lg:py-2.5 rounded-full
+            backdrop-blur-xl border transition-all duration-300 z-10 shadow-lg
+            font-medium text-sm md:text-base
+            ${isLightMode 
+              ? 'bg-white/50 hover:bg-white/80 border-slate-300 text-slate-600 hover:text-slate-900 shadow-[0_0_20px_rgba(0,0,0,0.05)]' 
+              : 'bg-white/5 hover:bg-white/15 border-white/10 hover:border-white/30 text-white/80 hover:text-white hover:shadow-[0_0_20px_rgba(255,255,255,0.1)]'
+            }`}
         >
-          <span className="hidden xs:inline sm:inline">Preview Board</span>
-          <span className="xs:hidden sm:hidden">Preview</span>
+          <span className="hidden sm:inline tracking-wide">Preview Board</span>
+          <span className="sm:hidden tracking-wide">Preview</span>
         </button>
 
         {/* Header */}
-        <div className="flex justify-center mt-8 sm:mt-10 md:mt-12 lg:mt-14 mb-6 sm:mb-8 md:mb-10 lg:mb-14">
-          <h1 className="
-            text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight
-            text-slate-800
-            bg-white/60 backdrop-blur-xl
-            border border-white/40
-            px-4 sm:px-5 md:px-6 lg:px-8 
-            py-2 sm:py-3 md:py-3 lg:py-4 
-            rounded-xl sm:rounded-2xl md:rounded-2xl lg:rounded-3xl
-            shadow-[0_10px_30px_rgba(0,0,0,0.15)]
-          ">
+        <div className="flex justify-center mt-16 sm:mt-20 md:mt-12 lg:mt-14 mb-8 sm:mb-12">
+          <h1 className={`
+            text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight
+            text-transparent bg-clip-text bg-gradient-to-br
+            px-6 py-4 transition-colors duration-1000
+            ${isLightMode ? 'from-slate-800 to-slate-500 drop-shadow-sm' : 'from-white to-white/70 drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]'}
+          `}>
             Available Games
           </h1>
         </div>
 
         {/* Game list */}
         {loading ? (
-          <p className="text-center text-slate-600 text-sm sm:text-base">Loading games…</p>
+          <p className={`text-center text-sm sm:text-base font-medium transition-colors duration-1000 ${isLightMode ? 'text-slate-500' : 'text-white/60'}`}>Loading games…</p>
         ) : (
-          <div className="space-y-3 sm:space-y-4 md:space-y-5 lg:space-y-6 max-w-3xl mx-auto px-2 sm:px-4 md:px-0">
+          <div className="space-y-4 sm:space-y-6 max-w-3xl mx-auto px-2 sm:px-4 md:px-0 relative z-20">
             {games.map((game) => (
               <div
                 key={game.game_id}
-                className="
-                  bg-white/70 backdrop-blur-xl
-                  rounded-xl sm:rounded-2xl md:rounded-3xl 
-                  p-3 sm:p-4 md:p-5 lg:p-6
-                  shadow-lg
+                className={`
+                  backdrop-blur-2xl border
+                  rounded-2xl sm:rounded-3xl 
+                  p-5 sm:p-6 lg:p-8
+                  shadow-xl
                   flex flex-col sm:flex-row justify-between items-start sm:items-center
-                  gap-3 sm:gap-4
-                  hover:shadow-2xl transition
-                "
+                  gap-4 sm:gap-6
+                  hover:-translate-y-1 hover:shadow-2xl transition-all duration-300
+                  ${isLightMode ? 'bg-white/60 hover:bg-white/80 border-slate-300' : 'bg-white/5 hover:bg-white/10 border-white/10'}
+                `}
               >
                 <div className="w-full sm:w-auto">
-                  <h2 className="text-left text-base sm:text-lg md:text-xl font-semibold text-slate-900">
+                  <h2 className={`text-left text-lg sm:text-xl lg:text-2xl font-bold mb-1 transition-colors duration-1000 ${isLightMode ? 'text-slate-800' : 'text-white'}`}>
                     {game.game_name}
                   </h2>
-                  <p className="text-left text-xs sm:text-sm text-slate-700 capitalize">
+                  <p className={`text-left text-xs sm:text-sm capitalize tracking-wider font-medium transition-colors duration-1000 ${isLightMode ? 'text-slate-500' : 'text-white/50'}`}>
                     {game.game_type}
                   </p>
                 </div>
@@ -190,16 +188,16 @@ export default function GameList({ showToast }) {
                   }}
                   className="
                     w-full sm:w-auto
-                    px-4 sm:px-5 md:px-6 
-                    py-1.5 sm:py-2
+                    px-6 lg:px-8 
+                    py-2.5 sm:py-3
                     rounded-full
-                    bg-emerald-500 hover:bg-emerald-600
-                    text-white font-semibold text-sm sm:text-base
-                    shadow-md hover:shadow-lg
-                    transition
+                    bg-emerald-500 hover:bg-emerald-400
+                    text-white font-bold text-sm sm:text-base
+                    shadow-[0_0_15px_rgba(16,185,129,0.3)] hover:shadow-[0_0_25px_rgba(16,185,129,0.5)] hover:scale-105 active:scale-95
+                    transition-all duration-300
                   "
                 >
-                  Join
+                  Join Game
                 </button>
               </div>
             ))}
@@ -209,49 +207,55 @@ export default function GameList({ showToast }) {
 
       {/* Join modal */}
       {showJoinModal && (
-        <div className="fixed inset-0 z-[1000] bg-black/50 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="bg-white/95 p-5 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl shadow-2xl w-full max-w-[320px] sm:max-w-[350px] md:max-w-[380px] relative">
+        <div className={`fixed inset-0 z-[1000] backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-300 ${isLightMode ? 'bg-slate-100/60' : 'bg-slate-950/80'}`}>
+          <div className={`backdrop-blur-2xl border p-6 sm:p-8 md:p-10 rounded-3xl shadow-2xl w-full max-w-[320px] sm:max-w-[350px] md:max-w-[400px] relative overflow-hidden transition-colors duration-1000 ${isLightMode ? 'bg-white/70 border-white/60' : 'bg-slate-900/60 border-white/10'}`}>
             <button
               onClick={() => setShowJoinModal(false)}
-              className="absolute top-3 sm:top-4 right-3 sm:right-4 text-slate-400 hover:text-slate-600"
+              className={`absolute top-4 sm:top-6 right-4 sm:right-6 transition-colors ${isLightMode ? 'text-slate-400 hover:text-slate-800' : 'text-white/40 hover:text-white'}`}
             >
-              <X size={16} className="sm:w-[18px] sm:h-[18px]" />
+              <X size={20} className="sm:w-[24px] sm:h-[24px]" />
             </button>
 
-            <h2 className="text-left text-xl sm:text-2xl font-bold text-slate-800 mb-1">
+            <h2 className={`text-left text-2xl sm:text-3xl font-bold mb-2 tracking-tight transition-colors duration-1000 ${isLightMode ? 'text-slate-800' : 'text-white'}`}>
               Join Game
             </h2>
-            <p className="text-left text-xs sm:text-sm text-slate-500 mb-4 sm:mb-6">
+            <p className={`text-left text-sm sm:text-base mb-6 sm:mb-8 font-medium transition-colors duration-1000 ${isLightMode ? 'text-slate-500' : 'text-white/50'}`}>
               Enter the game code provided by the moderator
             </p>
 
-            <input
-              value={gameCode}
-              onChange={(e) => setGameCode(e.target.value)}
-              placeholder="GAME CODE"
-              className="
-                w-full text-center
-                border border-slate-300
-                rounded-lg sm:rounded-xl 
-                px-3 sm:px-4 
-                py-2 sm:py-3 
-                mb-4 sm:mb-6
-                text-sm sm:text-base
-                text-slate-700 tracking-widest
-                focus:outline-none focus:ring-2 focus:ring-emerald-400
-              "
-            />
+            <div className="relative group">
+              <input
+                value={gameCode}
+                onChange={(e) => setGameCode(e.target.value)}
+                placeholder="GAME CODE"
+                className={`
+                  w-full text-center
+                  border-2
+                  rounded-2xl 
+                  px-4 sm:px-5 
+                  py-3 sm:py-4 
+                  mb-6 sm:mb-8
+                  text-lg sm:text-xl font-bold
+                  tracking-[0.2em]
+                  focus:outline-none focus:border-emerald-400 focus:ring-4 focus:ring-emerald-400/20
+                  transition-all shadow-inner
+                  ${isLightMode ? 'bg-white/50 border-slate-300 text-slate-800 placeholder-slate-400' : 'bg-white/5 border-white/10 text-white placeholder-white/20'}
+                `}
+              />
+            </div>
 
             <button
               onClick={joinGame}
               disabled={joining}
               className="
                 w-full 
-                py-2 sm:py-3
-                rounded-full
-                bg-emerald-500 hover:bg-emerald-600
-                text-white font-semibold text-sm sm:text-base
-                disabled:opacity-50
+                py-3 sm:py-4
+                rounded-2xl
+                bg-emerald-500 hover:bg-emerald-400
+                text-white font-bold text-base sm:text-lg
+                disabled:opacity-50 disabled:hover:scale-100 disabled:cursor-not-allowed
+                shadow-[0_0_15px_rgba(16,185,129,0.3)] hover:shadow-[0_0_25px_rgba(16,185,129,0.5)] hover:scale-[1.02] active:scale-95
+                transition-all duration-300
               "
             >
               {joining ? "Joining…" : "Join Game"}

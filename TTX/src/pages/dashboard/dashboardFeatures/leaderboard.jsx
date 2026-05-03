@@ -76,7 +76,7 @@ export default function Leaderboard({ isOpen, onClose, gameId }) {
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-xl shadow-xl w-[92%] max-w-3xl max-h-[92vh] overflow-y-auto overflow-x-hidden relative flex flex-col cursor-default"
+        className="bg-white/80 backdrop-blur-2xl rounded-2xl shadow-2xl w-[92%] max-w-3xl max-h-[92vh] overflow-y-auto overflow-x-hidden relative flex flex-col cursor-default border border-white/40"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Banner Section - Now at the absolute top */}
@@ -131,8 +131,8 @@ export default function Leaderboard({ isOpen, onClose, gameId }) {
                         flex items-center justify-between p-2 sm:p-4 rounded-xl sm:rounded-2xl transition-all duration-300
                         ${
                           isUserTeam
-                            ? "bg-emerald-50 border-2 border-emerald-500 shadow-md ring-2 ring-emerald-100"
-                            : "bg-white border-2 border-gray-100 hover:border-gray-300 shadow-sm"
+                            ? "bg-emerald-500/10 border-2 border-emerald-500/50 shadow-md ring-2 ring-emerald-500/20"
+                            : "bg-white/60 border-2 border-white/40 hover:border-white/80 hover:bg-white/80 shadow-sm"
                         }
                       `}
                     >
@@ -210,9 +210,9 @@ export default function Leaderboard({ isOpen, onClose, gameId }) {
                   .map(([round, rows]) => (
                     <div
                       key={round}
-                      className="bg-white rounded-2xl border-2 border-gray-100 overflow-hidden shadow-sm"
+                      className="bg-white/40 backdrop-blur-md rounded-2xl border border-white/40 overflow-hidden shadow-sm"
                     >
-                      <div className="bg-gray-50 px-4 py-2 border-b-2 border-gray-100 flex justify-between items-center">
+                      <div className="bg-white/50 px-4 py-2 border-b border-white/40 flex justify-between items-center">
                         <h3 className="text-lg font-black text-gray-800 uppercase tracking-wider">
                           Round {round}
                         </h3>
@@ -229,7 +229,7 @@ export default function Leaderboard({ isOpen, onClose, gameId }) {
                               key={i}
                               className={`
                               flex justify-between items-center p-2 sm:p-3 rounded-xl transition-colors
-                              ${isUserTeam ? "bg-emerald-50 border border-emerald-200" : "hover:bg-gray-50"}
+                              ${isUserTeam ? "bg-emerald-500/10 border border-emerald-500/30" : "hover:bg-white/60"}
                             `}
                             >
                               <span

@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useTheme } from "../../../context/ThemeContext";
 
 // Icons
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons/faChevronLeft";
@@ -11,6 +12,7 @@ import People from "../../../images/people.png";
 
 export default function GameInstructions() {
   const navigate = useNavigate();
+  const { isLightMode } = useTheme();
 
   // Navigation Handler
   const backToDashboard = () => {
@@ -18,81 +20,100 @@ export default function GameInstructions() {
   };
 
   return (
-    <div className="bg-white text-black w-screen min-h-screen overflow-auto p-4 sm:p-6 md:p-8 lg:p-10">
+    <div className={`relative w-screen min-h-screen overflow-hidden transition-colors duration-1000 ${isLightMode ? 'bg-slate-50' : 'bg-slate-950'}`}>
+      {/* Background to match startgame */}
+      <div className={`absolute inset-0 z-0 transition-all duration-1000 bg-gradient-to-br ${isLightMode ? 'from-slate-100 via-blue-50 to-slate-200' : 'from-slate-900 via-blue-900 to-indigo-950'}`} />
+      
+      {/* Animated Blobs */}
+      <div className="absolute inset-0 overflow-hidden z-0 opacity-40 pointer-events-none">
+        <div className={`absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full blur-[120px] animate-float transition-colors duration-1000 ${isLightMode ? 'bg-blue-300/40' : 'bg-blue-600/30'}`} />
+        <div className={`absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] rounded-full blur-[150px] animate-morph transition-colors duration-1000 ${isLightMode ? 'bg-indigo-300/30' : 'bg-indigo-600/20'}`} />
+        <div className={`absolute top-[20%] right-[10%] w-[30%] h-[30%] rounded-full blur-[100px] animate-float [animation-delay:2s] transition-colors duration-1000 ${isLightMode ? 'bg-cyan-300/20' : 'bg-cyan-600/20'}`} />
+      </div>
+
+      <div className={`relative z-10 w-full min-h-screen overflow-auto p-4 sm:p-6 md:p-8 lg:p-10 backdrop-blur-md flex flex-col items-center transition-colors duration-1000 ${isLightMode ? 'bg-white/30' : 'bg-white/10'}`}>
       {/* Back Button */}
-      <div className="pt-2 sm:pt-3 md:pt-4 lg:pt-5">
+      <div className="w-full max-w-5xl relative z-20">
         <button
           onClick={backToDashboard}
-          className="text-base sm:text-lg md:text-xl lg:text-2xl text-black cursor-pointer flex items-center gap-1 sm:gap-2"
+          className={`flex items-center gap-2
+            px-4 lg:px-5 py-2 lg:py-2.5 rounded-full
+            backdrop-blur-xl border transition-all duration-300 group w-fit shadow-lg
+            font-medium text-sm md:text-base hover:-translate-x-1
+            ${isLightMode 
+              ? 'bg-white/50 hover:bg-white/80 border-slate-300 text-slate-600 hover:text-slate-900 shadow-[0_0_20px_rgba(0,0,0,0.05)]' 
+              : 'bg-white/5 hover:bg-white/15 border-white/10 hover:border-white/30 text-white/80 hover:text-white hover:shadow-[0_0_20px_rgba(255,255,255,0.1)]'
+            }`}
         >
           <FontAwesomeIcon
             icon={faChevronLeft}
-            className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5"
+            className="group-hover:-translate-x-1 transition-transform duration-300"
           />
-          <span>Back to Game Menu</span>
+          <span className="tracking-wide">Back to Dashboard</span>
         </button>
       </div>
 
       {/* Header */}
-      <div className="text-center pt-3 sm:pt-4 md:pt-5 lg:pt-5 pb-4 sm:pb-6 md:pb-8 lg:pb-10 font-medium">
-        <p className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl text-green-900">
+      <div className="text-center pt-8 sm:pt-10 md:pt-12 pb-8 sm:pb-10 font-medium w-full max-w-5xl">
+        <p className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-br tracking-tight transition-colors duration-1000 mb-3 ${isLightMode ? 'from-slate-800 to-slate-500 drop-shadow-sm' : 'from-white to-white/70 drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]'}`}>
           Game Instructions
         </p>
-        <h3 className="text-gray-400 text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl mt-1 sm:mt-2">
+        <h3 className={`text-base sm:text-lg md:text-xl lg:text-2xl font-medium tracking-wide transition-colors duration-1000 ${isLightMode ? 'text-slate-500' : 'text-white/50'}`}>
           Learn how to play and master the game
         </h3>
 
         {/* Content - Responsive padding */}
-        <div className="px-4 sm:px-8 md:px-16 lg:px-24 xl:px-40 pt-4 sm:pt-8 md:pt-12 lg:pt-16 xl:pt-20">
-          {/* Game Overview */}
-          <div className="flex flex-row items-center">
+        <div className="w-full pt-4 sm:pt-8 flex flex-col gap-6 sm:gap-8">
+          {/* Game Overview Card */}
+          <div className={`backdrop-blur-2xl border rounded-3xl p-6 sm:p-8 lg:p-10 shadow-2xl flex flex-col sm:flex-row items-start sm:items-center gap-6 sm:gap-8 transition-colors duration-500 text-left ${isLightMode ? 'bg-white/60 hover:bg-white/80 border-slate-300' : 'bg-white/5 hover:bg-white/10 border-white/10'}`}>
             <div
-              className="flex justify-center items-center bg-green-300 rounded-xl 
-                w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 xl:w-17 xl:h-17"
+              className="bg-emerald-500/20 border border-emerald-500/50 flex justify-center items-center rounded-2xl 
+                w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 flex-shrink-0"
             >
               <img
                 src={Book}
                 alt="Book"
-                className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 lg:w-10 lg:h-10 xl:w-12 xl:h-12"
+                className={`w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 drop-shadow-[0_0_8px_rgba(16,185,129,0.5)] ${isLightMode ? 'filter-none drop-shadow-md' : 'brightness-0 invert'}`}
               />
             </div>
-            <p className="pl-2 sm:pl-3 md:pl-4 lg:pl-5 text-green text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl">
-              Game Overview
-            </p>
+            
+            <div className="flex flex-col">
+              <p className={`text-xl sm:text-2xl lg:text-3xl font-bold mb-2 sm:mb-3 transition-colors duration-1000 ${isLightMode ? 'text-slate-800' : 'text-white'}`}>
+                Game Overview
+              </p>
+              <p className={`text-sm sm:text-base lg:text-lg font-medium leading-relaxed max-w-3xl transition-colors duration-1000 ${isLightMode ? 'text-slate-600' : 'text-white/70'}`}>
+                Put the correct cards to each category. Drag and drop each correct
+                cards to the container that matches the color. Some of the
+                instructions will be demoed by the game master.
+              </p>
+            </div>
           </div>
 
-          <div className="px-2 sm:px-4 md:px-8 lg:px-12 xl:px-25 font-medium text-left pt-2 sm:pt-3 md:pt-4 lg:pt-5">
-            <p className="text-xs text-green-700 sm:text-sm md:text-base lg:text-lg xl:text-2xl text-justify">
-              Put the correct cards to each category. Drag and drop each correct
-              cards to the container that matches the color. Some of the
-              instructions will be demo by the game master.
-            </p>
-          </div>
-
-          {/* Group Setup */}
-          <div className="flex flex-row items-center pt-4 sm:pt-6 md:pt-8 lg:pt-10">
+          {/* Group Setup Card */}
+          <div className={`backdrop-blur-2xl border rounded-3xl p-6 sm:p-8 lg:p-10 shadow-2xl flex flex-col sm:flex-row items-start sm:items-center gap-6 sm:gap-8 transition-colors duration-500 text-left ${isLightMode ? 'bg-white/60 hover:bg-white/80 border-slate-300' : 'bg-white/5 hover:bg-white/10 border-white/10'}`}>
             <div
-              className="flex justify-center items-center bg-green-300 rounded-xl 
-                w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 xl:w-17 xl:h-17"
+              className="bg-blue-500/20 border border-blue-500/50 flex justify-center items-center rounded-2xl 
+                w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 flex-shrink-0"
             >
               <img
                 src={People}
                 alt="People"
-                className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 lg:w-10 lg:h-10 xl:w-12 xl:h-12"
+                className={`w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 drop-shadow-[0_0_8px_rgba(59,130,246,0.5)] ${isLightMode ? 'filter-none drop-shadow-md' : 'brightness-0 invert'}`}
               />
             </div>
-            <p className="pl-2 sm:pl-3 md:pl-4 lg:pl-5 text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl">
-              Group Set Up
-            </p>
-          </div>
-
-          <div className="px-2 sm:px-4 md:px-8 lg:px-12 xl:px-25 font-medium text-left pt-2 sm:pt-3 md:pt-4 lg:pt-5">
-            <p className="text-xs sm:text-sm md:text-base text-green-700 text-justify lg:text-lg xl:text-2xl">
-              Choose the leader that you think has more knowledge on how to
-              assess, defend and indentify threat.
-            </p>
+            
+            <div className="flex flex-col">
+              <p className={`text-xl sm:text-2xl lg:text-3xl font-bold mb-2 sm:mb-3 transition-colors duration-1000 ${isLightMode ? 'text-slate-800' : 'text-white'}`}>
+                Group Set Up
+              </p>
+              <p className={`text-sm sm:text-base lg:text-lg font-medium leading-relaxed max-w-3xl transition-colors duration-1000 ${isLightMode ? 'text-slate-600' : 'text-white/70'}`}>
+                Choose the leader that you think has more knowledge on how to
+                assess, defend and identify threats.
+              </p>
+            </div>
           </div>
         </div>
+      </div>
       </div>
     </div>
   );

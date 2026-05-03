@@ -15,6 +15,9 @@ import ModeratorDashboard from "./pages/moderator/dashboard/moderatorDashboard";
 import GameList from "./pages/dashboard/dashboardFeatures/gameList";
 import PreviewBoard from "./pages/dashboard/dashboardFeatures/previewBoard";
 
+import { ThemeProvider } from "./context/ThemeContext";
+import ThemeToggle from "./components/ThemeToggle";
+
 function App() {
   const audioRef = useRef(null);
 
@@ -36,31 +39,33 @@ function App() {
   }, []);
 
   return (
-    <BrowserRouter>
-      {/* Background Music */}
-      <audio ref={audioRef} src={bgMusic} loop autoPlay />
+    <ThemeProvider>
+      <BrowserRouter>
+        {/* Background Music */}
+        <audio ref={audioRef} src={bgMusic} loop autoPlay />
+        
+        {/* Global Theme Toggle */}
+        <ThemeToggle />
 
-      <Routes>
-        {/* Landing Page */}
-        <Route path="/" element={<Landing />} />
-        <Route path="/SetUp" element={<SetUp />} />
+        <Routes>
+          {/* Landing Page */}
+          <Route path="/" element={<Landing />} />
+          <Route path="/SetUp" element={<SetUp />} />
 
-        {/* Moderator */}
-        <Route path="/moderator/register" element={<RegisterPage />} />
-        <Route path="/moderator" element={<LoginPage />} />
-        <Route path="/moderator/dashboard" element={<ModeratorDashboard />} />
+          {/* Moderator */}
+          <Route path="/moderator/register" element={<RegisterPage />} />
+          <Route path="/moderator" element={<LoginPage />} />
+          <Route path="/moderator/dashboard" element={<ModeratorDashboard />} />
 
-        {/* Dashboard Page */}
-        <Route path="/Dashboard">
-          <Route index element={<Dashboard />} />
-          <Route path="GameInstructions" element={<GameInstructions />} />
-        </Route>
-
-        <Route path="/GameList" element={<GameList />} />
-        <Route path="/PreviewBoard" element={<PreviewBoard />} />
-        <Route path="/TTXGame" element={<TTXGame />} />
-      </Routes>
-    </BrowserRouter>
+          {/* Player/Game Routes */}
+          <Route path="/Dashboard" element={<Dashboard />} />
+          <Route path="/Dashboard/GameInstructions" element={<GameInstructions />} />
+          <Route path="/GameList" element={<GameList />} />
+          <Route path="/TTXGame" element={<TTXGame />} />
+          <Route path="/PreviewBoard" element={<PreviewBoard />} />
+        </Routes>
+      </BrowserRouter>
+    </ThemeProvider>
   );
 }
 
