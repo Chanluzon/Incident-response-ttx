@@ -870,18 +870,25 @@ export default function ModeratorDashboard() {
               Create a new scenario asset
             </p>
 
-            {/* Title Input */}
+
+
+            {/* Category Select */}
             <div className="mb-5">
               <label className="block text-xs font-black opacity-80 uppercase tracking-tighter mb-2">
-                Title
+                Category
               </label>
-              <input
-                type="text"
-                placeholder="Enter card title"
-                value={newCardTitle}
-                onChange={(e) => setNewCardTitle(e.target.value)}
-                className="w-full border border-black/10 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-black/20 transition bg-white/60 placeholder-gray-500 text-sm"
-              />
+              <select
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+                className="w-full border border-black/10 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-black/20 transition bg-white/60 text-sm cursor-pointer"
+              >
+                <option value="">--Select Category--</option>
+                <option value="prepare">Prepare</option>
+                <option value="detect">Detect</option>
+                <option value="respond">Respond</option>
+                <option value="recover">Recover</option>
+                <option value="lessons learned">Lessons Learned</option>
+              </select>
             </div>
 
             {/* Image Input */}
@@ -920,31 +927,6 @@ export default function ModeratorDashboard() {
               </div>
             </div>
 
-            {/* Category Select */}
-            <div className="mb-8">
-              <label className="block text-xs font-black opacity-80 uppercase tracking-tighter mb-2">
-                Category
-              </label>
-              <select
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-                className="w-full border border-black/10 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-black/20 transition bg-white/60 text-sm cursor-pointer"
-              >
-                <option value="">--Select Category--</option>
-                <option value="prepare">Prepare</option>
-                <option value="detect">Detect</option>
-                <option value="respond">Respond</option>
-                <option value="recover">Recover</option>
-                <option
-                  value="lessons learned"
-                >
-                  Lessons Learned
-                </option>
-              </select>
-
-
-            </div>
-
             {/* Description Input */}
             <div className="mb-8">
               <label className="block text-xs font-black opacity-80 uppercase tracking-tighter mb-2">
@@ -963,17 +945,19 @@ export default function ModeratorDashboard() {
             <div className="flex justify-end gap-3">
               <button
                 onClick={async () => {
-                  const title = newCardTitle;
                   const category = selectedCategory;
                   const description = newCardDescription;
                   const moderator = JSON.parse(
                     localStorage.getItem("moderator"),
                   );
 
-                  if (!title || !category) {
+                  if (!category || !description) {
                     showToast("Please fill in all fields");
                     return;
                   }
+
+                  // Use description as title for DB
+                  const title = description.substring(0, 50) || "New Card";
 
                   try {
                     const res = await fetch(apiUrl("/card"), {
@@ -1179,20 +1163,28 @@ export default function ModeratorDashboard() {
 
                         {/* Title and Category */}
                         <div className="relative">
-                          <div className="flex justify-between items-start mb-3">
+                          <div className="flex justify-between items-start mb-2">
                             <div className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-colors ${isSelected ? 'bg-indigo-500 border-indigo-500' : 'bg-white/50 border-slate-300'}`}>
                               {isSelected && <div className="w-2 h-2 bg-white rounded-sm" />}
                             </div>
-                            <h3 className="font-black text-slate-800 truncate text-xs flex-1 ml-3 tracking-tight">
-                              {card.title}
-                            </h3>
                           </div>
 
-                          <div className="inline-block px-2 py-0.5 rounded-full bg-black/5 text-[9px] uppercase font-black tracking-tighter opacity-60 mb-3">
+                          {/* Card Image */}
+                          {card.image ? (
+                            <div className="w-[60%] h-[40px] -mt-6 mx-auto mb-2 flex justify-center items-center overflow-hidden rounded-xl">
+                              <img src={card.image} alt="card" className="max-w-full max-h-full object-contain" />
+                            </div>
+                          ) : (
+                            <div className="w-[60%] h-[40px] -mt-6 mx-auto mb-2 flex justify-center items-center rounded-xl bg-black/5 border border-dashed border-black/10">
+                              <span className="text-[8px] font-bold uppercase tracking-widest opacity-30 text-center leading-tight">No<br/>Image</span>
+                            </div>
+                          )}
+
+                          <div className="px-2 py-0.5 rounded-md bg-black/5 border border-black/10 text-[8px] uppercase font-black tracking-widest opacity-70 mb-2 mx-auto w-fit">
                             {card.category}
                           </div>
 
-                          <p className="text-[11px] text-slate-600 line-clamp-4 leading-relaxed font-medium">
+                          <p className="text-[11px] text-slate-600 line-clamp-3 leading-relaxed font-medium">
                             {card.description || "No description provided"}
                           </p>
                         </div>
@@ -1366,20 +1358,29 @@ export default function ModeratorDashboard() {
 
             <h2 className="text-2xl font-bold mb-6">Edit Card</h2>
 
-            {/* Title */}
+
+
+            {/* Category */}
             <div className="mb-5">
               <label className="block text-sm font-semibold opacity-80 mb-2">
-                Card Title
+                Category
               </label>
-              <input
-                type="text"
-                value={editingCard.title}
+              <select
+                value={editingCard.pendingCategory}
                 onChange={(e) =>
-                  setEditingCard({ ...editingCard, title: e.target.value })
+                  setEditingCard({
+                    ...editingCard,
+                    pendingCategory: e.target.value,
+                  })
                 }
-                className="w-full border border-black/10 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-black/20 transition bg-white/60 placeholder-gray-500"
-                placeholder="Enter card title"
-              />
+                className="w-full border border-black/10 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-black/20 transition bg-white/60 cursor-pointer"
+              >
+                <option value="prepare">Prepare</option>
+                <option value="detect">Detect</option>
+                <option value="respond">Respond</option>
+                <option value="recover">Recover</option>
+                <option value="lessons learned">Lessons Learned</option>
+              </select>
             </div>
 
             {/* Image Input */}
@@ -1422,29 +1423,6 @@ export default function ModeratorDashboard() {
               </div>
             </div>
 
-            {/* Category */}
-            <div className="mb-5">
-              <label className="block text-sm font-semibold opacity-80 mb-2">
-                Category
-              </label>
-              <select
-                value={editingCard.pendingCategory}
-                onChange={(e) =>
-                  setEditingCard({
-                    ...editingCard,
-                    pendingCategory: e.target.value,
-                  })
-                }
-                className="w-full border border-black/10 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-black/20 transition bg-white/60 cursor-pointer"
-              >
-                <option value="prepare">Prepare</option>
-                <option value="detect">Detect</option>
-                <option value="respond">Respond</option>
-                <option value="recover">Recover</option>
-                <option value="lessons learned">Lessons Learned</option>
-              </select>
-            </div>
-
             {/* Description */}
             <div className="mb-8">
               <label className="block text-xs font-black opacity-80 uppercase tracking-tighter mb-2">
@@ -1473,7 +1451,7 @@ export default function ModeratorDashboard() {
                     method: "PUT",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
-                      card_name: editingCard.title,
+                      card_name: editingCard.description.substring(0, 50) || "Updated Card",
                       category: finalCategory,
                       description: editingCard.description,
                       image: editingCard.image,

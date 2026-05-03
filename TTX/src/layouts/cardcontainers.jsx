@@ -13,24 +13,13 @@ const CATEGORIES = [
 ];
 
 
-const CATEGORY_DESCRIPTIONS = {
-  prepare:
-    "Protective measures (policies, procedures, or technologies) implemented to prevent, detect, or mitigate security risks and protect assets.",
-  detect:
-    "Weaknesses, flaws, or gaps in an information system, security procedures, internal controls, or implementation that could be exploited by a threat.",
-  "respond":
-    "Individuals, groups, or entities (internal or external) that have the potential to exploit a vulnerability and cause harm to an organization's assets.",
-  recover: "The potential for loss, damage, or destruction of an asset as a result of a threat exploiting a vulnerability; often measured as Impact × Likelihood.",
-  "lessons learned":
-    "The core principles of information security, commonly known as the CIA Triad: Confidentiality, Integrity, and Availability.",
-};
+
 
 
 function CardItem({ card, preview, onTouchStart, onDragStartCallback, onClick }) {
   const id = preview ? card.id : card.card_id;
   const title = preview ? card.title : card.card_name;
-  const description =
-    card.description || CATEGORY_DESCRIPTIONS[card.category] || "";
+  const description = card.description || "";
 
   return (
     <div
@@ -60,13 +49,14 @@ function CardItem({ card, preview, onTouchStart, onDragStartCallback, onClick })
       onTouchStart={(e) => onTouchStart(e, card)}
     >
       {card.image && (
-        <div className="w-full h-[40px] sm:h-[50px] mb-2 flex justify-center items-center overflow-hidden rounded">
+        <div className="w-[100%] h-[35px] sm:h-[45px] -mt-2 mb-1 mx-auto flex justify-center items-center overflow-hidden">
           <img src={card.image} alt={title} className="max-w-full max-h-full object-contain" />
         </div>
       )}
-      <h3 className="font-bold text-sm sm:text-base leading-snug text-center mt-2 line-clamp-1">
-        {title}
-      </h3>
+      <div className="px-1.5 py-0.5 rounded-md bg-white/20 border border-white/30 text-[8px] font-black uppercase tracking-widest opacity-70 mb-1 mx-auto w-fit">
+        {card.category}
+      </div>
+
       <p className="text-[10px] sm:text-[11px] text-center mt-1 opacity-80 line-clamp-2 leading-tight font-medium">
         {description}
       </p>
@@ -146,7 +136,7 @@ export default function CardContainer({
     // Fetch used cards
     const joinedGame = JSON.parse(localStorage.getItem("joinedGame"));
     const storedGroup = JSON.parse(localStorage.getItem("currentGroup"));
-    
+
     if (joinedGame && storedGroup) {
       fetch(apiUrl(`/games/${joinedGame.game_id}/groups/${storedGroup.group.group_id}/used-cards`))
         .then((r) => r.json())
@@ -433,8 +423,15 @@ export default function CardContainer({
       </div>
 
       {selectedCard && (
-        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-md flex items-center justify-center z-[200] transition-opacity duration-200" onClick={() => setSelectedCard(null)}>
-          <div 
+        <div
+          className="fixed inset-0 bg-slate-900/60 backdrop-blur-md flex items-center justify-center z-[200] transition-opacity duration-200"
+          onMouseDown={(e) => e.stopPropagation()}
+          onClick={(e) => {
+            e.stopPropagation();
+            setSelectedCard(null);
+          }}
+        >
+          <div
             className={`rounded-2xl shadow-2xl w-[320px] sm:w-[400px] min-h-[450px] p-6 sm:p-8 relative transform transition-all duration-300 scale-95 opacity-0 animate-[fadeIn_0.25s_ease-out_forwards] text-center flex flex-col justify-center items-center border-4 ${getCardColor(selectedCard.category)}`}
             onClick={(e) => e.stopPropagation()}
           >
@@ -444,9 +441,9 @@ export default function CardContainer({
             >
               <X size={24} />
             </button>
-            
+
             {selectedCard.image && (
-              <div className="w-[calc(100%+3rem)] sm:w-[calc(100%+4rem)] h-[80px] sm:h-[100px] -mt-6 sm:-mt-8 -mx-6 sm:-mx-8 mb-6 flex justify-center items-center overflow-hidden rounded-t-2xl bg-black/5">
+              <div className="w-[calc(100%+3rem)] sm:w-[calc(100%+4rem)] h-[80px] sm:h-[100px] -mt-6 sm:-mt-8 -mx-6 sm:-mx-8 mb-6 flex justify-center items-center overflow-hidden rounded-t-2xl">
                 <img src={selectedCard.image} alt={preview ? selectedCard.title : selectedCard.card_name} className="max-w-full max-h-full object-contain" />
               </div>
             )}
@@ -455,13 +452,11 @@ export default function CardContainer({
               {selectedCard.category}
             </div>
 
-            <h2 className="text-xl sm:text-2xl font-black mb-3 leading-tight drop-shadow-sm">
-              {preview ? selectedCard.title : selectedCard.card_name}
-            </h2>
-            
+
+
             <div className="mt-auto w-full p-4 bg-white/20 backdrop-blur-sm border border-black/10 rounded-xl">
               <p className="text-sm sm:text-base font-semibold italic leading-relaxed drop-shadow-sm">
-                {selectedCard.description || CATEGORY_DESCRIPTIONS[selectedCard.category]}
+                {selectedCard.description || ""}
               </p>
             </div>
           </div>

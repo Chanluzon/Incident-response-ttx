@@ -57,6 +57,7 @@ export default function DropContainers({
       card_name: rawCard.card_name ?? rawCard.title,
       category: rawCard.category,
       description: rawCard.description,
+      image: rawCard.image,
     };
 
     // category must match

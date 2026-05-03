@@ -1,23 +1,12 @@
 import React from "react";
 import { X, Trash2 } from "lucide-react";
 
-const CATEGORY_DESCRIPTIONS = {
-  prepare:
-    "Protective measures (policies, procedures, or technologies) implemented to prevent, detect, or mitigate security risks and protect assets.",
-  detect:
-    "Weaknesses, flaws, or gaps in an information system, security procedures, internal controls, or implementation that could be exploited by a threat.",
-  "respond":
-    "Individuals, groups, or entities (internal or external) that have the potential to exploit a vulnerability and cause harm to an organization's assets.",
-  recover: "The potential for loss, damage, or destruction of an asset as a result of a threat exploiting a vulnerability; often measured as Impact × Likelihood.",
-  "lessons learned":
-    "The core principles of information security, commonly known as the CIA Triad: Confidentiality, Integrity, and Availability.",
-};
+
 
 const INFOSEC_LIMIT = 1;
 
 function MiniCardItem({ card, locked, onRemoveCard, onClick }) {
-  const description =
-    card.description || CATEGORY_DESCRIPTIONS[card.category] || "";
+  const description = card.description || "";
 
   return (
     <div
@@ -26,13 +15,14 @@ function MiniCardItem({ card, locked, onRemoveCard, onClick }) {
       onClick={() => onClick(card)}
     >
       {card.image && (
-        <div className="w-full h-[35px] mb-2 flex justify-center items-center overflow-hidden rounded">
+        <div className="w-[60%] h-[30px] -mt-1 mb-1 mx-auto flex justify-center items-center overflow-hidden">
           <img src={card.image} alt={card.card_name} className="max-w-full max-h-full object-contain" />
         </div>
       )}
-      <h3 className="font-semibold text-sm text-center leading-tight line-clamp-1">
-        {card.card_name}
-      </h3>
+      <div className="px-1.5 py-0.5 rounded-md bg-white/20 border border-white/30 text-[8px] font-black uppercase tracking-widest opacity-70 mb-1 mx-auto w-fit">
+        {card.category}
+      </div>
+
       <p className="text-[10px] text-center mt-1 opacity-80 line-clamp-2 leading-tight">
         {description}
       </p>
@@ -179,7 +169,7 @@ export default function ContainerModal({
             </button>
             
             {selectedCard.image && (
-              <div className="w-[calc(100%+3rem)] sm:w-[calc(100%+4rem)] h-[80px] sm:h-[100px] -mt-6 sm:-mt-8 -mx-6 sm:-mx-8 mb-6 flex justify-center items-center overflow-hidden rounded-t-2xl bg-black/5">
+              <div className="w-[calc(100%+3rem)] sm:w-[calc(100%+4rem)] h-[80px] sm:h-[100px] -mt-6 sm:-mt-8 -mx-6 sm:-mx-8 mb-6 flex justify-center items-center overflow-hidden rounded-t-2xl">
                 <img src={selectedCard.image} alt={selectedCard.card_name} className="max-w-full max-h-full object-contain" />
               </div>
             )}
@@ -188,13 +178,11 @@ export default function ContainerModal({
               {selectedCard.category}
             </div>
 
-            <h2 className="text-xl sm:text-2xl font-black mb-3 leading-tight drop-shadow-sm">
-              {selectedCard.card_name}
-            </h2>
+
             
             <div className="mt-auto w-full p-4 bg-white/20 backdrop-blur-sm border border-white/20 rounded-xl">
               <p className="text-sm sm:text-base font-semibold italic leading-relaxed drop-shadow-sm">
-                {selectedCard.description || CATEGORY_DESCRIPTIONS[selectedCard.category]}
+                {selectedCard.description || ""}
               </p>
             </div>
           </div>

@@ -29,3 +29,25 @@ exports.getSelectionsForRound = async (req, res) => {
     res.status(500).send("Error fetching selections");
   }
 };
+
+exports.getSelectionsForRoundAndGroup = async (req, res) => {
+  try {
+    const { roundId, groupId } = req.params;
+    const selections = await RoundCardSelection.findByRoundAndGroup(roundId, groupId);
+    res.json(selections);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error fetching group selections");
+  }
+};
+
+exports.unplaceCard = async (req, res) => {
+  try {
+    const { round_id, group_id, card_id } = req.body;
+    await RoundCardSelection.unplaceCard({ round_id, group_id, card_id });
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error unplacing card");
+  }
+};

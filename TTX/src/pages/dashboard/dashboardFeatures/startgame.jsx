@@ -9,6 +9,7 @@ import CardContainer from "../../../layouts/cardcontainers";
 import ContainerModal from "../../../layouts/containerModal.jsx";
 import Leaderboard from "./leaderboard";
 import { apiUrl } from "../../../config/api";
+import { dropContainers } from "../../../layouts/dropContainers.config";
 
 import Board from "../../../images/lock.png";
 import WorldtechLogo from "../../../images/Worldtech 2.png";
@@ -144,6 +145,39 @@ export default function StartGame() {
     }
   }, []);
 
+  // PERSISTENCE: Fetch existing selections when round/group changes
+  useEffect(() => {
+    if (!activeRoundId || !group) return;
+
+    const fetchSelections = async () => {
+      try {
+        const res = await fetch(
+          apiUrl(
+            `/round-card-selection/round/${activeRoundId}/group/${group.group_id}`,
+          ),
+        );
+        const data = await res.json();
+
+        // Map selections to containers
+        const mapping = {};
+        data.forEach((selection) => {
+          const container = dropContainers.find(
+            (c) => c.category === selection.category,
+          );
+          if (container) {
+            if (!mapping[container.id]) mapping[container.id] = [];
+            mapping[container.id].push(selection);
+          }
+        });
+        setDroppedCards(mapping);
+      } catch (err) {
+        console.error("Failed to fetch selections", err);
+      }
+    };
+
+    fetchSelections();
+  }, [activeRoundId, group]);
+
   // clear containers when new round starts
   useEffect(() => {
     droppedCardsRef.current = droppedCards;
@@ -258,7 +292,7 @@ export default function StartGame() {
         <AnimatedLogoBackground />
 
         {/* Top Action Buttons */}
-        <div className="fixed top-4 md:top-6 left-4 md:left-6 right-4 md:right-6 z-[70] flex justify-between gap-3">
+        <div className="fixed top-4 md:top-6 left-4 md:left-6 right-4 md:right-6 z-[150] flex justify-between gap-3">
           {roundEnded && (
             <button
               onClick={() => navigate("/GameList")}
@@ -272,18 +306,7 @@ export default function StartGame() {
             </button>
           )}
 
-          {roundEnded && (
-            <button
-              onClick={celebrateAndShowLeaderboard}
-              className="flex items-center gap-2 px-3 md:px-5 py-2 rounded-full
-                      bg-indigo-100 hover:bg-indigo-200
-                      text-slate-900 font-semibold shadow-md
-                      transition text-sm md:text-base ml-auto"
-            >
-              <Trophy size={16} className="md:w-5 md:h-5" />
-              <span>Leaderboard</span>
-            </button>
-          )}
+
         </div>
 
         {/* Header Section */}
@@ -392,30 +415,89 @@ export default function StartGame() {
 
         {/* Blocker Modal */}
         {showBlocker && (
-          <div
-            className="fixed inset-0 z-50 bg-black/30 backdrop-blur-md
-                      flex items-center justify-center p-4"
-          >
-            <div className="bg-white rounded-2xl p-6 md:p-8 shadow-xl text-center w-full max-w-sm relative">
-              <h2 className="text-left text-xl md:text-2xl font-bold mb-2">
-                Stop right there!
-              </h2>
+          <div className="fixed inset-0 z-[100] bg-slate-950/80 flex items-center justify-center p-4 animate-in fade-in duration-300">
+            <div className="bg-slate-900 border border-white/10 rounded-3xl p-8 md:p-10 shadow-2xl text-center w-full max-w-md relative overflow-hidden">
+              <div className="relative z-10">
 
-              <p className="text-left text-gray-600 mb-6 text-sm md:text-base">
-                Waiting for the moderator to start the round
-              </p>
+                {roundEnded ? (
+                  <>
+                    <div className="w-16 h-16 bg-amber-500/10 rounded-2xl flex items-center justify-center mx-auto mb-6 border border-amber-500/20">
+                      <svg className="w-8 h-8 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                      </svg>
+                    </div>
+                    <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">Round Complete!</h2>
+                    <p className="text-white/50 mb-8 text-sm md:text-base leading-relaxed">
+                      Time's up! The round has ended. Check the leaderboard to see how your team performed.
+                    </p>
+                    <button
+                      onClick={() => {
+                        setShowBlocker(false);
+                        celebrateAndShowLeaderboard();
+                      }}
+                      className="w-full py-4 rounded-xl font-bold text-base bg-amber-500 hover:bg-amber-400 text-white shadow-lg transition-all duration-200 active:scale-95"
+                    >
+                      VIEW LEADERBOARD
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <div className="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center mx-auto mb-6 border border-white/10">
+                      {activeRoundId && JSON.parse(localStorage.getItem("startedRounds") || "[]").includes(activeRoundId) ? (
+                        <svg className="w-8 h-8 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                      ) : (
+                        <svg className="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                      )}
+                    </div>
 
-              <button
-                disabled={!activeRoundId || roundEnded}
-                onClick={() => {
-                  setShowBlocker(false);
-                  setBoardLocked(false);
-                }}
-                className={`w-full py-3 rounded-full font-semibold transition text-sm md:text-base
-                ${!activeRoundId || roundEnded ? "bg-gray-300 text-gray-500 cursor-not-allowed" : "bg-[#2EE58A] hover:bg-[#23c877] text-white"}`}
-              >
-                Start
-              </button>
+                    <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">
+                      {activeRoundId && JSON.parse(localStorage.getItem("startedRounds") || "[]").includes(activeRoundId)
+                        ? "Resume Round"
+                        : "Ready to Play?"}
+                    </h2>
+
+                    <p className="text-white/50 mb-8 text-sm md:text-base leading-relaxed">
+                      {activeRoundId && JSON.parse(localStorage.getItem("startedRounds") || "[]").includes(activeRoundId)
+                        ? "You were already in the mission. The clock is still running!"
+                        : "Stand by. The moderator will begin shortly."}
+                    </p>
+
+                    <button
+                      disabled={!activeRoundId}
+                      onClick={() => {
+                        setShowBlocker(false);
+                        setBoardLocked(false);
+                        if (activeRoundId) {
+                          const started = JSON.parse(localStorage.getItem("startedRounds") || "[]");
+                          if (!started.includes(activeRoundId)) {
+                            localStorage.setItem("startedRounds", JSON.stringify([...started, activeRoundId]));
+                          }
+                        }
+                      }}
+                      className={`w-full py-4 rounded-xl font-bold text-base transition-all duration-200
+                      ${!activeRoundId
+                        ? "bg-white/5 text-white/20 cursor-not-allowed"
+                        : "bg-emerald-500 hover:bg-emerald-400 text-white shadow-lg active:scale-95"}`}
+                    >
+                      {activeRoundId && JSON.parse(localStorage.getItem("startedRounds") || "[]").includes(activeRoundId)
+                        ? "RESUME MISSION"
+                        : "START MISSION"}
+                    </button>
+
+                    {activeRoundId && JSON.parse(localStorage.getItem("startedRounds") || "[]").includes(activeRoundId) && (
+                      <p className="mt-4 text-xs font-bold uppercase tracking-widest text-amber-500/80 animate-pulse">
+                        Timer is still active
+                      </p>
+                    )}
+                  </>
+                )}
+
+              </div>
             </div>
           </div>
         )}
@@ -469,9 +551,10 @@ export default function StartGame() {
             answerCardIds={answerCardIds}
             locked={isSubmitted}
             onClose={() => setOpenContainer(null)}
-            onRemoveCard={(cardId) => {
+            onRemoveCard={async (cardId) => {
               if (isSubmitted) return;
 
+              // Remove from local state
               setDroppedCards((prev) => ({
                 ...prev,
                 [openContainer.id]: prev[openContainer.id].filter(
@@ -479,6 +562,22 @@ export default function StartGame() {
                 ),
               }));
 
+              // Sync with backend
+              try {
+                await fetch(apiUrl("/round-card-selection/unplace"), {
+                  method: "DELETE",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({
+                    round_id: activeRoundId,
+                    group_id: group.group_id,
+                    card_id: cardId,
+                  }),
+                });
+              } catch (err) {
+                console.error("Failed to unplace card on backend", err);
+              }
+
+              // Notify drawer to show it again
               window.dispatchEvent(
                 new CustomEvent("cardRestore", { detail: cardId }),
               );
