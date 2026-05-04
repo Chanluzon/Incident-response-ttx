@@ -57,11 +57,11 @@ export default function SetUp() {
 
       {/* Foreground */}
       <div
-        className={`relative z-10 w-full h-full flex items-center justify-center p-4 backdrop-blur-sm transition-colors duration-1000 ${isLightMode ? 'bg-white/30' : 'bg-white/10'}`}
+        className={`relative z-10 w-full h-full flex items-center justify-center p-2 sm:p-4 backdrop-blur-sm transition-colors duration-1000 ${isLightMode ? 'bg-white/30' : 'bg-white/10'}`}
       >
-        <div className={`relative backdrop-blur-2xl border rounded-3xl shadow-[0_20px_60px_rgba(0,0,0,0.5)] w-[700px] max-w-[95%] min-h-[550px] p-8 sm:p-10 flex flex-col transition-colors duration-1000 ${isLightMode ? 'bg-white/60 border-white/40' : 'bg-slate-900/60 border-white/10'}`}>
+        <div className={`relative backdrop-blur-2xl border rounded-3xl shadow-[0_20px_60px_rgba(0,0,0,0.5)] w-[700px] max-w-[95%] max-h-[95%] overflow-y-auto hide-scrollbar p-6 sm:p-8 flex flex-col transition-colors duration-1000 ${isLightMode ? 'bg-white/60 border-white/40' : 'bg-slate-900/60 border-white/10'}`}>
           {/* Header */}
-          <div className="text-center pt-2 sm:pt-4 pb-8">
+          <div className="text-center pt-1 sm:pt-2 pb-4 sm:pb-6">
             <h1 className={`text-3xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-br tracking-tight drop-shadow-sm mb-2 transition-colors duration-1000 ${isLightMode ? 'from-slate-800 to-slate-500' : 'from-white to-white/70'}`}>
               Welcome to TTX
             </h1>
@@ -70,38 +70,38 @@ export default function SetUp() {
             </h2>
           </div>
 
-          <div className="flex-1 flex flex-col gap-6 sm:gap-8">
+          <div className="flex-1 flex flex-col gap-4 sm:gap-6">
             {/* Group Name */}
             <div className="text-left relative group">
-              <label className={`block text-sm sm:text-base font-bold mb-2 uppercase tracking-widest pl-1 transition-colors group-focus-within:text-emerald-500 duration-1000 ${isLightMode ? 'text-slate-600' : 'text-white/80'}`}>
+              <label className={`block text-xs sm:text-sm font-bold mb-1 sm:mb-2 uppercase tracking-widest pl-1 transition-colors group-focus-within:text-emerald-500 duration-1000 ${isLightMode ? 'text-slate-600' : 'text-white/80'}`}>
                 Group Name
               </label>
               <input
                 type="text"
                 value={groupName}
                 onChange={(e) => setGroupName(e.target.value)}
-                className={`border-2 focus:border-emerald-400 focus:outline-none focus:ring-4 focus:ring-emerald-400/20 rounded-2xl px-5 w-full h-14 text-lg font-medium transition-all shadow-inner ${isLightMode ? 'bg-white/50 border-slate-300 text-slate-800 placeholder-slate-400' : 'bg-white/5 border-white/10 text-white placeholder-white/30'}`}
+                className={`border-2 focus:border-emerald-400 focus:outline-none focus:ring-4 focus:ring-emerald-400/20 rounded-2xl px-5 w-full h-12 sm:h-14 text-base sm:text-lg font-medium transition-all shadow-inner ${isLightMode ? 'bg-white/50 border-slate-300 text-slate-800 placeholder-slate-400' : 'bg-white/5 border-white/10 text-white placeholder-white/30'}`}
                 placeholder="Enter Group Name"
               />
             </div>
 
             {/* Group Leader */}
             <div className="text-left relative group">
-              <label className={`block text-sm sm:text-base font-bold mb-2 uppercase tracking-widest pl-1 transition-colors group-focus-within:text-emerald-500 duration-1000 ${isLightMode ? 'text-slate-600' : 'text-white/80'}`}>
+              <label className={`block text-xs sm:text-sm font-bold mb-1 sm:mb-2 uppercase tracking-widest pl-1 transition-colors group-focus-within:text-emerald-500 duration-1000 ${isLightMode ? 'text-slate-600' : 'text-white/80'}`}>
                 Group Leader
               </label>
               <input
                 type="text"
                 value={leaderName}
                 onChange={(e) => setLeaderName(e.target.value)}
-                className={`border-2 focus:border-emerald-400 focus:outline-none focus:ring-4 focus:ring-emerald-400/20 rounded-2xl px-5 w-full h-14 text-lg font-medium transition-all shadow-inner ${isLightMode ? 'bg-white/50 border-slate-300 text-slate-800 placeholder-slate-400' : 'bg-white/5 border-white/10 text-white placeholder-white/30'}`}
+                className={`border-2 focus:border-emerald-400 focus:outline-none focus:ring-4 focus:ring-emerald-400/20 rounded-2xl px-5 w-full h-12 sm:h-14 text-base sm:text-lg font-medium transition-all shadow-inner ${isLightMode ? 'bg-white/50 border-slate-300 text-slate-800 placeholder-slate-400' : 'bg-white/5 border-white/10 text-white placeholder-white/30'}`}
                 placeholder="Who's your Group Leader?"
               />
             </div>
           </div>
 
           {/* Footer Area */}
-          <div className={`mt-8 flex flex-col sm:flex-row items-center justify-between gap-6 pt-6 border-t transition-colors duration-1000 ${isLightMode ? 'border-slate-300' : 'border-white/10'}`}>
+          <div className={`mt-4 sm:mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-6 pt-4 sm:pt-6 border-t transition-colors duration-1000 ${isLightMode ? 'border-slate-300' : 'border-white/10'}`}>
             {/* Requirements */}
             <div className="text-left">
               <ul className={`list-disc pl-5 text-sm sm:text-base space-y-1 font-medium transition-colors duration-1000 ${isLightMode ? 'text-slate-500' : 'text-white/40'}`}>
@@ -114,7 +114,7 @@ export default function SetUp() {
             <button
               onClick={enterGame}
               disabled={!groupName.trim() || !leaderName.trim() || loading}
-              className={`rounded-2xl px-10 py-4
+              className={`rounded-2xl px-8 py-3 sm:px-10 sm:py-4
                 text-lg sm:text-xl font-bold flex items-center justify-center transition-all duration-300
                 focus:outline-none
                 ${

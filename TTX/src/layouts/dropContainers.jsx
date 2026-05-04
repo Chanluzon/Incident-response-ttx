@@ -114,7 +114,7 @@ export default function DropContainers({
               }}
               onDrop={(e) => onDrop(e, container)}
               onDragOver={allowDrop}
-              className={`relative  w-44 h-16 sm:w-48 sm:h-20 md:w-52 md:h-20 lg:w-56 lg:h-28 xl:w-60 xl:h-32 rounded-2xl 
+              className={`drop-target relative  w-44 h-16 sm:w-48 sm:h-20 md:w-52 md:h-20 lg:w-56 lg:h-28 xl:w-60 xl:h-32 rounded-2xl 
                 flex items-center justify-center text-center  
                 border shadow-[0_0_20px_rgba(180,180,180,0.55)]
                 transition-all duration-300

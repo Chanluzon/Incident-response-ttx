@@ -46,7 +46,8 @@ export function DropContainerItem({
       onClick={() => onOpenContainer(container)}
       onDrop={(e) => onDrop(e, container)}
       onDragOver={allowDrop}
-      className={`relative w-32 h-14 sm:w-40 sm:h-18 md:w-48 md:h-22 lg:w-56 lg:h-26 rounded-xl 
+      data-container-id={container.id}
+      className={`drop-target relative w-32 h-14 sm:w-40 sm:h-18 md:w-48 md:h-22 lg:w-56 lg:h-26 rounded-xl 
         flex flex-col items-center justify-center text-center p-2
         border shadow-lg transition-all duration-300
         ${locked
@@ -146,15 +147,15 @@ export default function CircularDropContainers({
   // Map containers to positions
   // 1: Prepare, 2: Detect, 3: Respond, 4: Recover, 5: Lessons Learned
   const positions = {
-    1: "top-[9%] right-[0%] sm:right-[5%] md:right-[10%]", // Prepare
-    2: "bottom-[32%] right-[0%] sm:right-[5%] md:right-[10%]", // Detect
-    3: "bottom-[5%] left-1/2 -translate-x-1/2", // Respond
-    4: "bottom-[32%] left-[0%] sm:left-[5%] md:left-[10%]", // Recover
-    5: "top-[9%] left-[0%] sm:left-[5%] md:left-[10%]", // Lessons Learned
+    1: "top-[10%] right-[0%] sm:right-[5%] md:right-[8%]", // Prepare
+    2: "bottom-[35%] right-[0%] sm:right-[5%] md:right-[8%]", // Detect
+    3: "bottom-[8%] left-1/2 -translate-x-1/2", // Respond
+    4: "bottom-[35%] left-[0%] sm:left-[5%] md:left-[8%]", // Recover
+    5: "top-[10%] left-[0%] sm:left-[5%] md:left-[8%]", // Lessons Learned
   };
 
   return (
-    <div className="relative w-full max-w-4xl aspect-[4/3] sm:aspect-video flex items-center justify-center my-4 mx-auto scale-75 sm:scale-85">
+    <div className="relative w-full max-w-4xl aspect-[4/3] sm:aspect-video flex items-center justify-center my-0 sm:my-2 mx-auto scale-[0.6] sm:scale-[0.7] md:scale-[0.8] lg:scale-[0.9]">
       {/* Center Image */}
       <div className="z-10 scale-110 -translate-y-12">
         {centerElement}

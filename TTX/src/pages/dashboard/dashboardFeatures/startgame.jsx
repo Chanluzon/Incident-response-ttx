@@ -425,13 +425,13 @@ export default function StartGame() {
             <div className="fixed bottom-0 left-1/2 -translate-x-1/2 z-[60]">
               <button
                 onClick={() => setIsCardPanelOpen(true)}
-                className={`group flex flex-col items-center justify-center px-12 py-3 md:px-20 md:py-4
+                className={`group flex flex-col items-center justify-center px-8 py-2 sm:px-12 sm:py-2.5 md:px-16 md:py-3 lg:px-20 lg:py-4
                           backdrop-blur-2xl border border-b-0 rounded-t-3xl
                           shadow-[0_-10px_40px_rgba(0,0,0,0.3)]
                           hover:-translate-y-2 transition-all duration-300 cursor-pointer
                           ${isLightMode ? 'bg-white/60 hover:bg-white/80 border-slate-300' : 'bg-white/10 hover:bg-white/20 border-white/20'}`}
               >
-                <div className={`w-16 h-1.5 rounded-full mb-2 transition-all duration-300 ${isLightMode ? 'bg-slate-300 group-hover:bg-emerald-500 group-hover:shadow-[0_0_10px_rgba(16,185,129,0.5)]' : 'bg-white/40 group-hover:bg-yellow-400 group-hover:shadow-[0_0_10px_rgba(250,204,21,0.5)]'}`} />
+                <div className={`w-10 h-1 sm:w-12 sm:h-1.5 md:w-16 md:h-1.5 rounded-full mb-1.5 sm:mb-2 transition-all duration-300 ${isLightMode ? 'bg-slate-300 group-hover:bg-emerald-500 group-hover:shadow-[0_0_10px_rgba(16,185,129,0.5)]' : 'bg-white/40 group-hover:bg-yellow-400 group-hover:shadow-[0_0_10px_rgba(250,204,21,0.5)]'}`} />
                 <span className={`font-bold text-xs md:text-sm tracking-[0.2em] uppercase opacity-80 group-hover:opacity-100 transition-opacity ${isLightMode ? 'text-slate-600' : 'text-white'}`}>
                   Your Cards
                 </span>

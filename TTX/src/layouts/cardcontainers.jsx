@@ -236,92 +236,99 @@ export default function CardContainer({
 
   // TOUCH CARD DRAG - make it work like desktop drag
   const handleCardTouchStart = (e, card) => {
-    e.stopPropagation(); // Prevent container drag
-
     const touch = e.touches[0];
+    const startX = touch.clientX;
+    const startY = touch.clientY;
+    const target = e.currentTarget;
+    const rect = target.getBoundingClientRect();
+    let dragStarted = false;
+
     const cardData = {
       id: preview ? card.id : card.card_id,
       title: preview ? card.title : card.card_name,
       category: card.category,
-      description:
-        card.description || CATEGORY_DESCRIPTIONS[card.category] || "",
+      description: card.description || "",
       image: card.image,
     };
 
-    setTouchDragging(true);
-    setDraggedCardData(cardData);
+    const onTouchMove = (moveEvent) => {
+      const moveTouch = moveEvent.touches[0];
+      const deltaX = Math.abs(moveTouch.clientX - startX);
+      const deltaY = Math.abs(moveTouch.clientY - startY);
 
-    // Create visual feedback - a clone following the finger
-    const target = e.currentTarget;
-    const rect = target.getBoundingClientRect();
-    const clone = target.cloneNode(true);
+      if (!dragStarted && (deltaX > 15 || deltaY > 15)) {
+        dragStarted = true;
+        setTouchDragging(true);
+        setDraggedCardData(cardData);
+        
+        // Visual feedback
+        const clone = target.cloneNode(true);
+        clone.style.position = "fixed";
+        clone.style.pointerEvents = "none";
+        clone.style.opacity = "0.8";
+        clone.style.zIndex = "10000";
+        clone.style.width = `${rect.width}px`;
+        clone.style.height = `${rect.height}px`;
+        clone.style.left = `${moveTouch.clientX - rect.width / 2}px`;
+        clone.style.top = `${moveTouch.clientY - rect.height / 2}px`;
+        clone.style.transform = "scale(1.1)";
+        clone.id = "touch-drag-clone";
+        document.body.appendChild(clone);
 
-    clone.style.position = "fixed";
-    clone.style.pointerEvents = "none";
-    clone.style.opacity = "0.7";
-    clone.style.zIndex = "10000";
-    clone.style.width = `${rect.width}px`;
-    clone.style.height = `${rect.height}px`;
-    clone.style.left = `${touch.clientX - rect.width / 2}px`;
-    clone.style.top = `${touch.clientY - rect.height / 2}px`;
-    clone.style.transform = "scale(1.05)";
-    clone.id = "touch-drag-clone";
-    document.body.appendChild(clone);
+        // Close drawer so we can see the board, just like on desktop
+        if (toggleOpen) toggleOpen();
+      }
 
-    const onTouchMove = (e) => {
-      e.preventDefault(); // Prevent scrolling
-      const touch = e.touches[0];
-      const clone = document.getElementById("touch-drag-clone");
-      if (clone) {
-        clone.style.left = `${touch.clientX - rect.width / 2}px`;
-        clone.style.top = `${touch.clientY - rect.height / 2}px`;
+      if (dragStarted) {
+        moveEvent.preventDefault();
+        const clone = document.getElementById("touch-drag-clone");
+        if (clone) {
+          clone.style.left = `${moveTouch.clientX - rect.width / 2}px`;
+          clone.style.top = `${moveTouch.clientY - rect.height / 2}px`;
+        }
       }
     };
 
-    const onTouchEnd = (e) => {
+    const onTouchEnd = (endEvent) => {
+      document.removeEventListener("touchmove", onTouchMove);
+      document.removeEventListener("touchend", onTouchEnd);
+
+      if (!dragStarted) return;
+
       const clone = document.getElementById("touch-drag-clone");
-      if (clone) {
-        clone.remove();
-      }
+      if (clone) clone.remove();
 
-      const touch = e.changedTouches[0];
+      const endTouch = endEvent.changedTouches[0];
+      
+      // Hide the clone temporarily to get the element underneath if needed
+      // (Though we already removed it)
+      
+      const dropTarget = document.elementFromPoint(endTouch.clientX, endTouch.clientY);
+      const container = dropTarget?.closest(".drop-target");
 
-      // Simulate a drop event that matches the desktop drag-and-drop API
-      const dropTarget = document.elementFromPoint(
-        touch.clientX,
-        touch.clientY,
-      );
-
-      if (dropTarget) {
-        // Create a synthetic drop event
+      if (container) {
+        // Dispatch synthetic drop event
         const dropEvent = new DragEvent("drop", {
           bubbles: true,
           cancelable: true,
-          clientX: touch.clientX,
-          clientY: touch.clientY,
+          clientX: endTouch.clientX,
+          clientY: endTouch.clientY,
         });
 
-        // Add the dataTransfer-like object
         Object.defineProperty(dropEvent, "dataTransfer", {
           value: {
             getData: (type) => {
-              if (type === "application/json") {
-                return JSON.stringify(cardData);
-              }
+              if (type === "application/json") return JSON.stringify(cardData);
               return "";
             },
           },
-          writable: false,
         });
 
-        dropTarget.dispatchEvent(dropEvent);
+        container.dispatchEvent(dropEvent);
       }
 
       setTouchDragging(false);
       setDraggedCardData(null);
-
-      document.removeEventListener("touchmove", onTouchMove);
-      document.removeEventListener("touchend", onTouchEnd);
     };
 
     document.addEventListener("touchmove", onTouchMove, { passive: false });
