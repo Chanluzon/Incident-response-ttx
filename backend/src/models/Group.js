@@ -59,11 +59,32 @@ class Group {
 
   // Delete
   static async delete(group_id) {
-    const { rowCount } = await pool.query(
-      `DELETE FROM groups WHERE group_id = $1`,
-      [group_id]
-    );
-    return rowCount > 0;
+    const client = await pool.connect();
+    try {
+      await client.query("BEGIN");
+
+      // Delete related records to satisfy foreign key constraints
+      await client.query(`DELETE FROM game_group WHERE group_id = $1`, [group_id]);
+      await client.query(`DELETE FROM round_card_selection WHERE group_id = $1`, [group_id]);
+      await client.query(`DELETE FROM round_submission WHERE group_id = $1`, [group_id]);
+      await client.query(`DELETE FROM score WHERE group_id = $1`, [group_id]);
+      await client.query(`DELETE FROM card_usage WHERE group_id = $1`, [group_id]);
+
+      // Delete the group itself
+      const { rowCount } = await client.query(
+        `DELETE FROM groups WHERE group_id = $1`,
+        [group_id]
+      );
+
+      await client.query("COMMIT");
+      return rowCount > 0;
+    } catch (err) {
+      await client.query("ROLLBACK");
+      console.error("DELETE GROUP ERROR:", err);
+      throw err;
+    } finally {
+      client.release();
+    }
   }
 
   // --- Domain actions from the diagram ---
