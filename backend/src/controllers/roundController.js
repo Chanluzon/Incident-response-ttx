@@ -107,6 +107,26 @@ exports.submitAnswers = async (req, res) => {
   }
 };
 
+// check if submitted
+exports.checkSubmission = async (req, res) => {
+  const { id: roundId, group_id: groupId } = req.params;
+
+  try {
+    const result = await pool.query(
+      `
+      SELECT 1 FROM round_submission
+      WHERE round_id = $1 AND group_id = $2
+      `,
+      [roundId, groupId]
+    );
+
+    res.json({ isSubmitted: result.rowCount > 0 });
+  } catch (err) {
+    console.error("Check submission error:", err);
+    res.status(500).send("Check submission failed");
+  }
+};
+
 // finalize round
 exports.finalizeRound = async (req, res) => {
   const { id: roundId } = req.params;

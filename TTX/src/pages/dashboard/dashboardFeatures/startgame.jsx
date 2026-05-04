@@ -177,7 +177,21 @@ export default function StartGame() {
       }
     };
 
+    const checkSubmissionStatus = async () => {
+      try {
+        const res = await fetch(apiUrl(`/round/${activeRoundId}/submission/${group.group_id}`));
+        const data = await res.json();
+        if (data.isSubmitted) {
+          setIsSubmitted(true);
+          setBoardLocked(true);
+        }
+      } catch (err) {
+        console.error("Failed to check submission status", err);
+      }
+    };
+
     fetchSelections();
+    checkSubmissionStatus();
   }, [activeRoundId, group]);
 
   // clear containers when new round starts
@@ -275,6 +289,8 @@ export default function StartGame() {
     const joinedGame = JSON.parse(localStorage.getItem("joinedGame"));
     return joinedGame?.game_id ?? null;
   }, []);
+
+  const hasStartedRound = activeRoundId && group && JSON.parse(localStorage.getItem("startedRounds") || "[]").includes(`${group.group_id}_${activeRoundId}`);
 
   return (
     <div className={`relative w-screen min-h-screen overflow-hidden transition-colors duration-1000 ${isLightMode ? 'bg-slate-50' : 'bg-slate-950'}`}>
@@ -451,7 +467,7 @@ export default function StartGame() {
                 ) : (
                   <>
                     <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6 border ${isLightMode ? 'bg-white/50 border-slate-300' : 'bg-white/5 border-white/10'}`}>
-                      {activeRoundId && JSON.parse(localStorage.getItem("startedRounds") || "[]").includes(activeRoundId) ? (
+                      {hasStartedRound ? (
                         <svg className="w-8 h-8 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
@@ -464,26 +480,35 @@ export default function StartGame() {
                     </div>
 
                     <h2 className={`text-2xl md:text-3xl font-bold mb-3 ${isLightMode ? 'text-slate-800' : 'text-white'}`}>
-                      {activeRoundId && JSON.parse(localStorage.getItem("startedRounds") || "[]").includes(activeRoundId)
-                        ? "Resume Round"
-                        : "Ready to Play?"}
+                      {isSubmitted 
+                        ? "Mission Accomplished"
+                        : activeRoundId 
+                          ? (hasStartedRound ? "Resume Round" : "Round is Active")
+                          : "Ready to Play?"}
                     </h2>
 
                     <p className={`mb-8 text-sm md:text-base leading-relaxed ${isLightMode ? 'text-slate-500' : 'text-white/50'}`}>
-                      {activeRoundId && JSON.parse(localStorage.getItem("startedRounds") || "[]").includes(activeRoundId)
-                        ? "You were already in the mission. The clock is still running!"
-                        : "Stand by. The moderator will begin shortly."}
+                      {isSubmitted
+                        ? "Your team has already submitted answers for this round. You can review your board while waiting for the round to end."
+                        : activeRoundId
+                          ? (hasStartedRound 
+                              ? "You were already in the mission. The clock is still running!" 
+                              : "The round has already started. Click Start Mission to join in!")
+                          : "Stand by. The moderator will begin shortly."}
                     </p>
 
                     <button
                       disabled={!activeRoundId}
                       onClick={() => {
                         setShowBlocker(false);
-                        setBoardLocked(false);
-                        if (activeRoundId) {
+                        if (!isSubmitted) {
+                          setBoardLocked(false);
+                        }
+                        if (activeRoundId && group) {
                           const started = JSON.parse(localStorage.getItem("startedRounds") || "[]");
-                          if (!started.includes(activeRoundId)) {
-                            localStorage.setItem("startedRounds", JSON.stringify([...started, activeRoundId]));
+                          const roundKey = `${group.group_id}_${activeRoundId}`;
+                          if (!started.includes(roundKey)) {
+                            localStorage.setItem("startedRounds", JSON.stringify([...started, roundKey]));
                           }
                         }
                       }}
@@ -492,12 +517,10 @@ export default function StartGame() {
                         ? (isLightMode ? "bg-slate-200 text-slate-400 cursor-not-allowed" : "bg-white/5 text-white/20 cursor-not-allowed")
                         : (isLightMode ? "bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg active:scale-95" : "bg-emerald-500 hover:bg-emerald-400 text-white shadow-lg active:scale-95")}`}
                     >
-                      {activeRoundId && JSON.parse(localStorage.getItem("startedRounds") || "[]").includes(activeRoundId)
-                        ? "RESUME MISSION"
-                        : "START MISSION"}
+                      {isSubmitted ? "REVIEW BOARD" : (hasStartedRound ? "RESUME MISSION" : "START MISSION")}
                     </button>
 
-                    {activeRoundId && JSON.parse(localStorage.getItem("startedRounds") || "[]").includes(activeRoundId) && (
+                    {hasStartedRound && (
                       <p className={`mt-4 text-xs font-bold uppercase tracking-widest animate-pulse ${isLightMode ? 'text-amber-600' : 'text-amber-500/80'}`}>
                         Timer is still active
                       </p>

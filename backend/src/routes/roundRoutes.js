@@ -24,6 +24,9 @@ router.put("/:id/end", roundController.endRound);
 // Submit answers
 router.post("/:id/submit", roundController.submitAnswers);
 
+// Check if group submitted
+router.get("/:id/submission/:group_id", roundController.checkSubmission);
+
 // Finalize answers
 router.post("/:id/finalize", roundController.finalizeRound);
 

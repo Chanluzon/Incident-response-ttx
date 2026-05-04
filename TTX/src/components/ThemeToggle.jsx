@@ -6,7 +6,7 @@ export default function ThemeToggle() {
   const { isLightMode, toggleTheme } = useTheme();
 
   return (
-    <div className="absolute top-6 sm:top-8 md:top-10 right-6 sm:right-8 md:right-10 z-[100]">
+    <div className="absolute bottom-6 sm:bottom-8 md:bottom-10 left-6 sm:left-8 md:left-10 z-[100]">
       <button
         onClick={toggleTheme}
         className={`p-3 rounded-full backdrop-blur-xl border transition-all duration-300 shadow-lg hover:scale-110 active:scale-95 ${
