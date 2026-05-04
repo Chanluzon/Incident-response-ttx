@@ -55,14 +55,66 @@ class Threat {
 
   // Delete threat by ID (with cascade cleanup)
   static async delete(id) {
-    // Delete related records first to avoid foreign key violations
-    await pool.query(`DELETE FROM threat_category WHERE threat_id = $1`, [id]);
-    await pool.query(`DELETE FROM threat_answer WHERE threat_id = $1`, [id]);
-    await pool.query(`DELETE FROM game_threat WHERE threat_id = $1`, [id]);
-    
-    // Now delete the threat itself
-    await pool.query(`DELETE FROM threat WHERE threat_id = $1`, [id]);
-    return true;
+    const client = await pool.connect();
+    try {
+      await client.query("BEGIN");
+
+      // 1. Delete basic associations
+      await client.query(`DELETE FROM threat_category WHERE threat_id = $1`, [id]);
+      await client.query(`DELETE FROM threat_answer WHERE threat_id = $1`, [id]);
+
+      // 2. Handle deep dependencies through game_threat
+      const gameThreats = await client.query(
+        `SELECT game_threat_id FROM game_threat WHERE threat_id = $1`,
+        [id]
+      );
+      const gameThreatIds = gameThreats.rows.map((row) => row.game_threat_id);
+
+      if (gameThreatIds.length > 0) {
+        const rounds = await client.query(
+          `SELECT round_id FROM round WHERE game_threat_id = ANY($1)`,
+          [gameThreatIds]
+        );
+        const roundIds = rounds.rows.map((row) => row.round_id);
+
+        if (roundIds.length > 0) {
+          // Delete all records dependent on these rounds
+          await client.query(
+            `DELETE FROM round_card_selection WHERE round_id = ANY($1)`,
+            [roundIds]
+          );
+          await client.query(
+            `DELETE FROM round_submission WHERE round_id = ANY($1)`,
+            [roundIds]
+          );
+          await client.query(
+            `DELETE FROM score WHERE round_id = ANY($1)`,
+            [roundIds]
+          );
+
+          // Delete the rounds themselves
+          await client.query(
+            `DELETE FROM round WHERE round_id = ANY($1)`,
+            [roundIds]
+          );
+        }
+
+        // Delete the game_threat associations
+        await client.query(`DELETE FROM game_threat WHERE threat_id = $1`, [id]);
+      }
+
+      // 3. Delete the threat itself
+      const result = await client.query(`DELETE FROM threat WHERE threat_id = $1`, [id]);
+
+      await client.query("COMMIT");
+      return result.rowCount > 0;
+    } catch (err) {
+      await client.query("ROLLBACK");
+      console.error("DELETE THREAT ERROR:", err);
+      throw err;
+    } finally {
+      client.release();
+    }
   }
 
 

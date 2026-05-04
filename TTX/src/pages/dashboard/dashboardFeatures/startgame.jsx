@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Trophy } from "lucide-react";
+import { ArrowLeft, Trophy, X, Maximize2 } from "lucide-react";
 import confetti from "canvas-confetti";
 import { useTheme } from "../../../context/ThemeContext";
 
@@ -45,6 +45,7 @@ export default function StartGame() {
 
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [showSubmitConfirm, setShowSubmitConfirm] = useState(false);
+  const [showFullScenario, setShowFullScenario] = useState(false);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
 
   const formatTime = (seconds) => {
@@ -295,9 +296,9 @@ export default function StartGame() {
   return (
     <div className={`relative w-screen min-h-screen overflow-hidden transition-colors duration-1000 ${isLightMode ? 'bg-slate-50' : 'bg-slate-950'}`}>
       <div className={`absolute inset-0 z-0 transition-all duration-1000 bg-gradient-to-br ${isLightMode ? 'from-slate-100 via-blue-50 to-slate-200' : 'from-slate-900 via-blue-900 to-indigo-950'}`} />
-      
+
       {/* Animated Logo Background */}
-      
+
       {/* Animated Blobs */}
       <div className="absolute inset-0 overflow-hidden z-0 opacity-40">
         <div className={`absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full blur-[120px] animate-float transition-colors duration-1000 ${isLightMode ? 'bg-blue-300/40' : 'bg-blue-600/30'}`} />
@@ -316,9 +317,9 @@ export default function StartGame() {
               onClick={() => navigate("/GameList")}
               className={`flex items-center gap-2 px-3 md:px-4 py-2 rounded-full
                       backdrop-blur-xl transition text-sm md:text-base shadow-md
-                      ${isLightMode 
-                        ? 'bg-white/50 hover:bg-white/80 text-slate-600 hover:text-slate-900 border border-slate-300 shadow-[0_0_20px_rgba(0,0,0,0.05)]' 
-                        : 'bg-white/80 hover:bg-white text-slate-700 font-medium'}`}
+                      ${isLightMode
+                  ? 'bg-white/50 hover:bg-white/80 text-slate-600 hover:text-slate-900 border border-slate-300 shadow-[0_0_20px_rgba(0,0,0,0.05)]'
+                  : 'bg-white/80 hover:bg-white text-slate-700 font-medium'}`}
             >
               <ArrowLeft size={16} className="md:w-5 md:h-5" />
               <span className="hidden sm:inline">Back</span>
@@ -345,9 +346,9 @@ export default function StartGame() {
               }}
               disabled={isSubmitted || roundEnded}
               className={`px-4 py-2 rounded-xl font-bold text-sm md:text-base shadow-xl transition-all duration-300 z-20 border
-              ${isSubmitted || roundEnded 
-                ? (isLightMode ? "bg-slate-200 border-slate-300 cursor-not-allowed text-slate-400" : "bg-white/5 backdrop-blur-md border-white/10 cursor-not-allowed text-white/30") 
-                : (isLightMode ? "bg-emerald-600 border-emerald-500 hover:bg-emerald-500 text-white shadow-[0_0_15px_rgba(16,185,129,0.3)] hover:scale-105 active:scale-95" : "bg-emerald-500 border-emerald-400 hover:bg-emerald-400 text-white shadow-[0_0_15px_rgba(16,185,129,0.4)] hover:scale-105 active:scale-95")}`}
+              ${isSubmitted || roundEnded
+                  ? (isLightMode ? "bg-slate-200 border-slate-300 cursor-not-allowed text-slate-400" : "bg-white/5 backdrop-blur-md border-white/10 cursor-not-allowed text-white/30")
+                  : (isLightMode ? "bg-emerald-600 border-emerald-500 hover:bg-emerald-500 text-white shadow-[0_0_15px_rgba(16,185,129,0.3)] hover:scale-105 active:scale-95" : "bg-emerald-500 border-emerald-400 hover:bg-emerald-400 text-white shadow-[0_0_15px_rgba(16,185,129,0.4)] hover:scale-105 active:scale-95")}`}
             >
               {isSubmitted ? "Submitted" : "Submit"}
             </button>
@@ -359,17 +360,15 @@ export default function StartGame() {
             )}
 
             {/* Round Timer */}
-            <div className={`border lg:rounded-2xl md:rounded-xl shadow-2xl z-20 transition-all duration-300 ${
-                  remainingSeconds != null && remainingSeconds <= 10
-                    ? "bg-red-500/20 border-red-500/50 backdrop-blur-xl shadow-[0_0_20px_rgba(255,0,0,0.3)]"
-                    : (isLightMode ? "bg-white/60 border-slate-300 backdrop-blur-xl" : "bg-white/10 border-white/20 backdrop-blur-xl")
-                }`}>
+            <div className={`border lg:rounded-2xl md:rounded-xl shadow-2xl z-20 transition-all duration-300 ${remainingSeconds != null && remainingSeconds <= 10
+              ? "bg-red-500/20 border-red-500/50 backdrop-blur-xl shadow-[0_0_20px_rgba(255,0,0,0.3)]"
+              : (isLightMode ? "bg-white/60 border-slate-300 backdrop-blur-xl" : "bg-white/10 border-white/20 backdrop-blur-xl")
+              }`}>
               <div
-                className={`px-4 py-2 font-mono font-bold lg:text-lg md:text-lg rounded-xl tracking-widest transition-colors ${
-                  remainingSeconds != null && remainingSeconds <= 10
-                    ? "text-red-400 animate-pulse"
-                    : (isLightMode ? "text-slate-800" : "text-amber-400")
-                }`}
+                className={`px-4 py-2 font-mono font-bold lg:text-lg md:text-lg rounded-xl tracking-widest transition-colors ${remainingSeconds != null && remainingSeconds <= 10
+                  ? "text-red-400 animate-pulse"
+                  : (isLightMode ? "text-slate-800" : "text-amber-400")
+                  }`}
               >
                 {formatTime(remainingSeconds)}
               </div>
@@ -379,58 +378,67 @@ export default function StartGame() {
         </div>
 
         <div className="mb-2 mt-0 px-4 flex flex-col items-center">
-          <div className={`backdrop-blur-xl border rounded-2xl shadow-2xl p-2 md:p-3 max-w-lg w-full text-center relative overflow-hidden group transition-colors duration-1000 ${isLightMode ? 'bg-white/60 border-slate-300' : 'bg-white/10 border-white/20'}`}>
+          <div 
+            onClick={() => setShowFullScenario(true)}
+            className={`backdrop-blur-xl border rounded-2xl shadow-xl px-6 py-2 w-fit max-w-md text-center relative overflow-hidden group transition-all duration-300 cursor-pointer hover:scale-[1.02] active:scale-[0.98] ${isLightMode ? 'bg-white/60 border-slate-300 hover:bg-white/80' : 'bg-white/10 border-white/20 hover:bg-white/20'}`}>
             {/* Animated accent border */}
             <div className={`absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r opacity-30 ${isLightMode ? 'from-transparent via-slate-400 to-transparent' : 'from-transparent via-yellow-400 to-transparent'}`} />
             
-            <h3 className={`font-bold text-xs uppercase tracking-[0.2em] mb-1.5 drop-shadow-md transition-colors ${isLightMode ? 'text-slate-500' : 'text-yellow-400'}`}>
+            <h3 className={`font-black text-[10px] uppercase tracking-[0.2em] mb-1 transition-colors ${isLightMode ? 'text-slate-500' : 'text-yellow-400'}`}>
               Target Scenario
             </h3>
-            <p className={`font-bold text-sm md:text-base lg:text-lg leading-relaxed drop-shadow-sm transition-colors ${isLightMode ? 'text-slate-800' : 'text-white'}`}>
-              <span className={!stopThreatAnim ? "threat-zoom" : ""}>
-                {activeThreat?.description ?? "Waiting for threat…"}
-              </span>
+
+            <p 
+              className={`font-bold text-sm md:text-base leading-relaxed transition-colors ${isLightMode ? 'text-slate-800' : 'text-white'}`}
+              style={{
+                display: '-webkit-box',
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: 'vertical',
+                overflow: 'hidden'
+              }}
+            >
+              {activeThreat?.description ?? "Waiting..."}
             </p>
           </div>
         </div>
 
 
-          <div className={`mt-[-50px] md:mt-[-60px] ${boardLocked ? "pointer-events-none opacity-60" : ""}`}>
-            <CircularDropContainers
-              droppedCards={droppedCards}
-              setDroppedCards={setDroppedCards}
-              onOpenContainer={setOpenContainer}
-              locked={isSubmitted}
-              onCardPlaced={placeCardBackend}
-              showToast={(msg, type) => {}} // This should be handled by a proper toast system if needed
-              centerElement={
-                <img
-                  src={Board}
-                  alt="Board"
-                  className="w-full max-w-[50px] sm:max-w-[70px] md:max-w-[90px] lg:max-w-[110px] opacity-80 animate-breath"
-                />
-              }
-            />
+        <div className={`mt-[-50px] md:mt-[-60px] ${boardLocked ? "pointer-events-none opacity-60" : ""}`}>
+          <CircularDropContainers
+            droppedCards={droppedCards}
+            setDroppedCards={setDroppedCards}
+            onOpenContainer={setOpenContainer}
+            locked={isSubmitted}
+            onCardPlaced={placeCardBackend}
+            showToast={(msg, type) => { }} // This should be handled by a proper toast system if needed
+            centerElement={
+              <img
+                src={Board}
+                alt="Board"
+                className="w-full max-w-[50px] sm:max-w-[70px] md:max-w-[90px] lg:max-w-[110px] opacity-80 animate-breath"
+              />
+            }
+          />
 
-            {/* Drawer Handle */}
-            {!isCardPanelOpen && (
-              <div className="fixed bottom-0 left-1/2 -translate-x-1/2 z-[60]">
-                <button
-                  onClick={() => setIsCardPanelOpen(true)}
-                  className={`group flex flex-col items-center justify-center px-12 py-3 md:px-20 md:py-4
+          {/* Drawer Handle */}
+          {!isCardPanelOpen && (
+            <div className="fixed bottom-0 left-1/2 -translate-x-1/2 z-[60]">
+              <button
+                onClick={() => setIsCardPanelOpen(true)}
+                className={`group flex flex-col items-center justify-center px-12 py-3 md:px-20 md:py-4
                           backdrop-blur-2xl border border-b-0 rounded-t-3xl
                           shadow-[0_-10px_40px_rgba(0,0,0,0.3)]
                           hover:-translate-y-2 transition-all duration-300 cursor-pointer
                           ${isLightMode ? 'bg-white/60 hover:bg-white/80 border-slate-300' : 'bg-white/10 hover:bg-white/20 border-white/20'}`}
-                >
-                  <div className={`w-16 h-1.5 rounded-full mb-2 transition-all duration-300 ${isLightMode ? 'bg-slate-300 group-hover:bg-emerald-500 group-hover:shadow-[0_0_10px_rgba(16,185,129,0.5)]' : 'bg-white/40 group-hover:bg-yellow-400 group-hover:shadow-[0_0_10px_rgba(250,204,21,0.5)]'}`} />
-                  <span className={`font-bold text-xs md:text-sm tracking-[0.2em] uppercase opacity-80 group-hover:opacity-100 transition-opacity ${isLightMode ? 'text-slate-600' : 'text-white'}`}>
-                    Your Cards
-                  </span>
-                </button>
-              </div>
-            )}
-          </div>
+              >
+                <div className={`w-16 h-1.5 rounded-full mb-2 transition-all duration-300 ${isLightMode ? 'bg-slate-300 group-hover:bg-emerald-500 group-hover:shadow-[0_0_10px_rgba(16,185,129,0.5)]' : 'bg-white/40 group-hover:bg-yellow-400 group-hover:shadow-[0_0_10px_rgba(250,204,21,0.5)]'}`} />
+                <span className={`font-bold text-xs md:text-sm tracking-[0.2em] uppercase opacity-80 group-hover:opacity-100 transition-opacity ${isLightMode ? 'text-slate-600' : 'text-white'}`}>
+                  Your Cards
+                </span>
+              </button>
+            </div>
+          )}
+        </div>
 
 
 
@@ -480,9 +488,9 @@ export default function StartGame() {
                     </div>
 
                     <h2 className={`text-2xl md:text-3xl font-bold mb-3 ${isLightMode ? 'text-slate-800' : 'text-white'}`}>
-                      {isSubmitted 
+                      {isSubmitted
                         ? "Mission Accomplished"
-                        : activeRoundId 
+                        : activeRoundId
                           ? (hasStartedRound ? "Resume Round" : "Round is Active")
                           : "Ready to Play?"}
                     </h2>
@@ -491,9 +499,9 @@ export default function StartGame() {
                       {isSubmitted
                         ? "Your team has already submitted answers for this round. You can review your board while waiting for the round to end."
                         : activeRoundId
-                          ? (hasStartedRound 
-                              ? "You were already in the mission. The clock is still running!" 
-                              : "The round has already started. Click Start Mission to join in!")
+                          ? (hasStartedRound
+                            ? "You were already in the mission. The clock is still running!"
+                            : "The round has already started. Click Start Mission to join in!")
                           : "Stand by. The moderator will begin shortly."}
                     </p>
 
@@ -514,8 +522,8 @@ export default function StartGame() {
                       }}
                       className={`w-full py-4 rounded-xl font-bold text-base transition-all duration-200
                       ${!activeRoundId
-                        ? (isLightMode ? "bg-slate-200 text-slate-400 cursor-not-allowed" : "bg-white/5 text-white/20 cursor-not-allowed")
-                        : (isLightMode ? "bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg active:scale-95" : "bg-emerald-500 hover:bg-emerald-400 text-white shadow-lg active:scale-95")}`}
+                          ? (isLightMode ? "bg-slate-200 text-slate-400 cursor-not-allowed" : "bg-white/5 text-white/20 cursor-not-allowed")
+                          : (isLightMode ? "bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg active:scale-95" : "bg-emerald-500 hover:bg-emerald-400 text-white shadow-lg active:scale-95")}`}
                     >
                       {isSubmitted ? "REVIEW BOARD" : (hasStartedRound ? "RESUME MISSION" : "START MISSION")}
                     </button>
@@ -561,6 +569,42 @@ export default function StartGame() {
                   Submit
                 </button>
               </div>
+            </div>
+          </div>
+        )}
+
+        {showFullScenario && (
+          <div className={`fixed inset-0 z-[200] flex items-center justify-center p-4 animate-in fade-in duration-300 ${isLightMode ? 'bg-slate-100/60 backdrop-blur-sm' : 'bg-slate-950/80'}`}>
+            <div className={`backdrop-blur-2xl border rounded-3xl p-8 shadow-2xl text-center w-full max-w-2xl relative overflow-hidden transition-all duration-500 animate-[fadeIn_0.3s_ease-out] ${isLightMode ? 'bg-white/95 border-white/60' : 'bg-slate-900/90 border-white/10'}`}>
+
+              <button
+                onClick={() => setShowFullScenario(false)}
+                className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <X size={24} />
+              </button>
+
+              <div className="relative z-10">
+                <h3 className={`font-bold text-xs uppercase tracking-[0.4em] mb-6 drop-shadow-md transition-colors ${isLightMode ? 'text-slate-400' : 'text-yellow-400/60'}`}>
+                  TARGET SCENARIO
+                </h3>
+
+                <div className={`p-6 rounded-2xl mb-8 transition-colors ${isLightMode ? 'bg-slate-50 border border-slate-200' : 'bg-white/5 border border-white/10'}`}>
+                  <p className={`text-lg md:text-xl font-bold leading-relaxed transition-colors ${isLightMode ? 'text-slate-800' : 'text-white'}`}>
+                    {activeThreat?.description ?? "No active scenario detected."}
+                  </p>
+                </div>
+
+                <button
+                  onClick={() => setShowFullScenario(false)}
+                  className={`px-10 py-3 rounded-xl font-black text-sm uppercase tracking-widest shadow-xl transition-all duration-300 active:scale-95 ${isLightMode ? 'bg-slate-800 text-white hover:bg-slate-700' : 'bg-white text-slate-900 hover:bg-slate-200'}`}
+                >
+                  Return
+                </button>
+              </div>
+
+              {/* Decorative accent */}
+              <div className={`absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r ${isLightMode ? 'from-emerald-500 via-blue-500 to-purple-500' : 'from-yellow-500 via-amber-600 to-orange-500'} opacity-50`} />
             </div>
           </div>
         )}

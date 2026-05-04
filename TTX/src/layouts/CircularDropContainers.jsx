@@ -49,18 +49,17 @@ export function DropContainerItem({
       className={`relative w-32 h-14 sm:w-40 sm:h-18 md:w-48 md:h-22 lg:w-56 lg:h-26 rounded-xl 
         flex flex-col items-center justify-center text-center p-2
         border shadow-lg transition-all duration-300
-        ${
-          locked
-            ? "bg-gray-300 text-gray-600 border-gray-400 cursor-not-allowed grayscale opacity-75"
-            : `${container.bg} ${container.text} ${container.border} cursor-pointer hover:scale-105 hover:shadow-2xl`
+        ${locked
+          ? "bg-gray-300 text-gray-600 border-gray-400 cursor-not-allowed grayscale opacity-75"
+          : `${container.bg} ${container.text} ${container.border} cursor-pointer hover:scale-105 hover:shadow-2xl`
         }
       `}
     >
       <span className="font-bold text-[8px] sm:text-[10px] md:text-xs lg:text-sm leading-tight uppercase">
         {container.title}
       </span>
-      <img 
-        src={CATEGORY_ICONS[container.category]} 
+      <img
+        src={CATEGORY_ICONS[container.category]}
         alt={container.title}
         className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 mt-1 object-contain"
       />
@@ -70,10 +69,9 @@ export function DropContainerItem({
       <div
         className={`absolute bottom-2 right-2 w-6 h-6 sm:w-7 sm:h-7 rounded-full
           text-xs font-bold flex items-center justify-center shadow-inner
-          ${
-            locked
-              ? "bg-gray-400 text-gray-700"
-              : LIMIT_BADGE_COLORS[container.category] || "bg-gray-200 text-gray-800"
+          ${locked
+            ? "bg-gray-400 text-gray-700"
+            : LIMIT_BADGE_COLORS[container.category] || "bg-gray-200 text-gray-800"
           }
         `}
       >
@@ -148,17 +146,17 @@ export default function CircularDropContainers({
   // Map containers to positions
   // 1: Prepare, 2: Detect, 3: Respond, 4: Recover, 5: Lessons Learned
   const positions = {
-    1: "top-[12%] right-[0%] sm:right-[5%] md:right-[10%]", // Prepare
-    2: "bottom-[20%] right-[0%] sm:right-[5%] md:right-[10%]", // Detect
-    3: "bottom-[-5%] left-1/2 -translate-x-1/2", // Respond
-    4: "bottom-[20%] left-[0%] sm:left-[5%] md:left-[10%]", // Recover
-    5: "top-[12%] left-[0%] sm:left-[5%] md:left-[10%]", // Lessons Learned
+    1: "top-[9%] right-[0%] sm:right-[5%] md:right-[10%]", // Prepare
+    2: "bottom-[32%] right-[0%] sm:right-[5%] md:right-[10%]", // Detect
+    3: "bottom-[5%] left-1/2 -translate-x-1/2", // Respond
+    4: "bottom-[32%] left-[0%] sm:left-[5%] md:left-[10%]", // Recover
+    5: "top-[9%] left-[0%] sm:left-[5%] md:left-[10%]", // Lessons Learned
   };
 
   return (
     <div className="relative w-full max-w-4xl aspect-[4/3] sm:aspect-video flex items-center justify-center my-4 mx-auto scale-75 sm:scale-85">
       {/* Center Image */}
-      <div className="z-10 scale-110">
+      <div className="z-10 scale-110 -translate-y-12">
         {centerElement}
       </div>
 

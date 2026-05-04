@@ -74,7 +74,7 @@ export default function AddThreatModal({ show, onClose, showToast, logActivity, 
           <X size={20} />
         </button>
 
-        <h2 className="text-xl font-bold mb-2">Add New Threat</h2>
+        <h2 className="text-xl font-bold mb-2">Add New Scenario</h2>
         <p className="text-gray-500 text-sm mb-4">
           Create a new threat and assign it to a category.
         </p>
@@ -82,15 +82,15 @@ export default function AddThreatModal({ show, onClose, showToast, logActivity, 
         {/* Threat Name */}
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Threat Description
+            Scenario Description
           </label>
-          <input
+          <textarea
             value={name}
             onChange={(e) => setName(e.target.value)}
-            type="text"
-            placeholder="Enter threat description"
+            rows={4}
+            placeholder="Enter Scenario description"
             className="w-full border border-gray-300 rounded-md px-3 py-2 
-                       focus:outline-none focus:ring-2 focus:ring-[#2EE58A]"
+                       focus:outline-none focus:ring-2 focus:ring-[#2EE58A] resize-none"
           />
         </div>
 
@@ -122,7 +122,7 @@ export default function AddThreatModal({ show, onClose, showToast, logActivity, 
             className="px-4 py-2 rounded-full bg-[#2EE58A] hover:bg-[#23c877] 
                        text-white font-semibold"
           >
-            Add Threat
+            Add Scenario
           </button>
         </div>
       </div>

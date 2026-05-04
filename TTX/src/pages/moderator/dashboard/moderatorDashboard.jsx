@@ -213,25 +213,25 @@ export default function ModeratorDashboard() {
         prev.map((c) =>
           c.id === id
             ? {
-                ...c,
-                title: updatedCard.card_name,
-                category: updatedCard.category,
-                description: updatedCard.description,
-                pendingCategory: updatedCard.category,
-                color:
-                  updatedCard.category === "prepare"
-                    ? "bg-[#67C2C9]/20 text-[#4DA8AF]"
-                    : updatedCard.category === "detect"
-                      ? "bg-[#FDEE00]/20 text-yellow-700"
-                      : updatedCard.category === "respond"
-                        ? "bg-[#FF9EBD]/20 text-pink-700"
-                        : updatedCard.category === "recover"
-                          ? "bg-[#32CD32]/20 text-green-700"
-                          : updatedCard.category === "lessons learned"
-                            ? "bg-[#FFB347]/20 text-orange-700"
-                            : "bg-gray-100 text-gray-700",
-                isEditing: false,
-              }
+              ...c,
+              title: updatedCard.card_name,
+              category: updatedCard.category,
+              description: updatedCard.description,
+              pendingCategory: updatedCard.category,
+              color:
+                updatedCard.category === "prepare"
+                  ? "bg-[#67C2C9]/20 text-[#4DA8AF]"
+                  : updatedCard.category === "detect"
+                    ? "bg-[#FDEE00]/20 text-yellow-700"
+                    : updatedCard.category === "respond"
+                      ? "bg-[#FF9EBD]/20 text-pink-700"
+                      : updatedCard.category === "recover"
+                        ? "bg-[#32CD32]/20 text-green-700"
+                        : updatedCard.category === "lessons learned"
+                          ? "bg-[#FFB347]/20 text-orange-700"
+                          : "bg-gray-100 text-gray-700",
+              isEditing: false,
+            }
             : c,
         ),
       );
@@ -701,7 +701,7 @@ export default function ModeratorDashboard() {
               {/* Threat Management */}
               <div className="bg-white rounded-2xl p-6 shadow-md hover:shadow-lg transition text-left">
                 <h2 className="text-xl font-bold text-red-500 flex items-center gap-2">
-                  <ShieldAlert size={28} /> Threat Management
+                  <ShieldAlert size={28} /> Scenario Management
                 </h2>
 
                 <p className="text-gray-500 text-sm mb-4 leading-snug">
@@ -821,8 +821,7 @@ export default function ModeratorDashboard() {
                     recentActivity.map((activity, i) => (
                       <div
                         key={i}
-                        className={`bg-white rounded-xl px-5 py-3 flex justify-between items-center shadow-sm hover:shadow-md transition border-l-4 ${
-                          activity.type === "success"
+                        className={`bg-white rounded-xl px-5 py-3 flex justify-between items-center shadow-sm hover:shadow-md transition border-l-4 ${activity.type === "success"
                             ? "border-green-400"
                             : activity.type === "edit"
                               ? "border-blue-400"
@@ -831,7 +830,7 @@ export default function ModeratorDashboard() {
                                 : activity.type === "team"
                                   ? "border-purple-400"
                                   : "border-gray-300"
-                        }`}
+                          }`}
                       >
                         <div>
                           <p className="font-semibold text-gray-800">
@@ -896,7 +895,7 @@ export default function ModeratorDashboard() {
               <label className="block text-xs font-black opacity-80 uppercase tracking-tighter mb-2">
                 Card Image
               </label>
-              <div 
+              <div
                 onClick={() => document.getElementById('new-card-image-input').click()}
                 className="relative group cursor-pointer"
               >
@@ -1066,7 +1065,8 @@ export default function ModeratorDashboard() {
                   </button>
                 )}
               </div>
-              {/* Tabs */}
+
+              {/* Tabs */}
               <div className="flex gap-2 border-b border-gray-200 overflow-x-auto hide-scrollbar">
                 {CARD_TABS.map(({ label, value }) => (
                   <button
@@ -1079,10 +1079,9 @@ export default function ModeratorDashboard() {
                       flex items-center justify-center
                       min-w-[120px] px-4 pb-2 font-semibold transition-all
                       border-b-2 whitespace-nowrap
-                      ${
-                        activeTab === value
-                          ? tabColors[value]
-                          : "text-gray-500 hover:text-gray-700 border-transparent"
+                      ${activeTab === value
+                        ? tabColors[value]
+                        : "text-gray-500 hover:text-gray-700 border-transparent"
                       }
                     `}
                   >
@@ -1131,7 +1130,7 @@ export default function ModeratorDashboard() {
                   Select All
                 </label>
               </div>
-              
+
               <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest bg-slate-200/50 px-2 py-1 rounded-md">
                 Selected: {selectedCardIds.length}
               </div>
@@ -1176,7 +1175,7 @@ export default function ModeratorDashboard() {
                             </div>
                           ) : (
                             <div className="w-[60%] h-[40px] -mt-6 mx-auto mb-2 flex justify-center items-center rounded-xl bg-black/5 border border-dashed border-black/10">
-                              <span className="text-[8px] font-bold uppercase tracking-widest opacity-30 text-center leading-tight">No<br/>Image</span>
+                              <span className="text-[8px] font-bold uppercase tracking-widest opacity-30 text-center leading-tight">No<br />Image</span>
                             </div>
                           )}
 
@@ -1280,11 +1279,10 @@ export default function ModeratorDashboard() {
                       {/* Status + Actions */}
                       <div className="flex items-center gap-3">
                         <span
-                          className={`px-4 py-2 text-xs font-medium rounded-full ${
-                            team.status === "Active"
+                          className={`px-4 py-2 text-xs font-medium rounded-full ${team.status === "Active"
                               ? "bg-green-100 text-green-700"
                               : "bg-yellow-100 text-yellow-700"
-                          }`}
+                            }`}
                         >
                           {team.status}
                         </span>
@@ -1388,7 +1386,7 @@ export default function ModeratorDashboard() {
               <label className="block text-xs font-black opacity-80 uppercase tracking-tighter mb-2">
                 Card Image
               </label>
-              <div 
+              <div
                 onClick={() => document.getElementById('edit-card-image-input').click()}
                 className="relative group cursor-pointer"
               >
@@ -1466,27 +1464,27 @@ export default function ModeratorDashboard() {
                     prev.map((c) =>
                       c.id === editingCard.id
                         ? {
-                            ...c,
-                            title: updatedCard.card_name,
-                            category: updatedCard.category,
-                            description: updatedCard.description,
-                            image: updatedCard.image,
-                            pendingCategory: updatedCard.category,
-                            color:
-                              updatedCard.category === "prepare"
-                                ? "bg-[#67C2C9]/20 text-[#4DA8AF]"
-                                : updatedCard.category === "detect"
-                                  ? "bg-[#FDEE00]/20 text-yellow-700"
-                                  : updatedCard.category === "respond"
-                                    ? "bg-[#FF9EBD]/20 text-pink-700"
-                                    : updatedCard.category === "recover"
-                                      ? "bg-[#32CD32]/20 text-green-700"
-                                      : updatedCard.category ===
-                                          "lessons learned"
-                                        ? "bg-[#FFB347]/20 text-orange-700"
-                                        : "bg-gray-100 text-gray-700",
-                            isEditing: false,
-                          }
+                          ...c,
+                          title: updatedCard.card_name,
+                          category: updatedCard.category,
+                          description: updatedCard.description,
+                          image: updatedCard.image,
+                          pendingCategory: updatedCard.category,
+                          color:
+                            updatedCard.category === "prepare"
+                              ? "bg-[#67C2C9]/20 text-[#4DA8AF]"
+                              : updatedCard.category === "detect"
+                                ? "bg-[#FDEE00]/20 text-yellow-700"
+                                : updatedCard.category === "respond"
+                                  ? "bg-[#FF9EBD]/20 text-pink-700"
+                                  : updatedCard.category === "recover"
+                                    ? "bg-[#32CD32]/20 text-green-700"
+                                    : updatedCard.category ===
+                                      "lessons learned"
+                                      ? "bg-[#FFB347]/20 text-orange-700"
+                                      : "bg-gray-100 text-gray-700",
+                          isEditing: false,
+                        }
                         : c,
                     ),
                   );
@@ -1516,17 +1514,16 @@ export default function ModeratorDashboard() {
           <div
             key={toast.id}
             className={`min-w-[260px] px-4 py-3 rounded-lg shadow-lg text-sm font-medium animate-[fadeIn_0.3s_ease-out_forwards] transition-all duration-300
-                ${
-                  toast.type === "success"
-                    ? "bg-[#3ce28a] text-white"
-                    : toast.type === "error"
-                      ? "bg-[#f05c74] text-white"
-                      : toast.type === "warning"
-                        ? "bg-yellow-500 text-white"
-                        : toast.type === "confirm"
-                          ? "bg-white border border-gray-200 text-gray-800 shadow-xl"
-                          : "bg-[#0d97fb] text-white"
-                }`}
+                ${toast.type === "success"
+                ? "bg-[#3ce28a] text-white"
+                : toast.type === "error"
+                  ? "bg-[#f05c74] text-white"
+                  : toast.type === "warning"
+                    ? "bg-yellow-500 text-white"
+                    : toast.type === "confirm"
+                      ? "bg-white border border-gray-200 text-gray-800 shadow-xl"
+                      : "bg-[#0d97fb] text-white"
+              }`}
           >
             {toast.type === "confirm" ? (
               <div className="flex flex-col items-start">
