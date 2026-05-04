@@ -415,7 +415,7 @@ export default function StartGame() {
             <div className="fixed bottom-0 left-1/2 -translate-x-1/2 z-[60]">
               <button
                 onClick={() => setIsCardPanelOpen(true)}
-                className={`group flex flex-col items-center justify-center px-8 py-2 sm:px-12 sm:py-2.5 md:px-16 md:py-3 lg:px-20 lg:py-4
+                className={`group flex flex-col items-center justify-center px-6 py-2 sm:px-8 sm:py-2.5 md:px-10 md:py-3 lg:px-12 lg:py-4
                           backdrop-blur-2xl border border-b-0 rounded-t-3xl
                           shadow-[0_-10px_40px_rgba(0,0,0,0.3)]
                           hover:-translate-y-2 transition-all duration-300 cursor-pointer

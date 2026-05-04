@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { X } from "lucide-react";
 import { apiUrl } from "../config/api";
+import { useTheme } from "../context/ThemeContext";
 
 // category config
 const CATEGORIES = [
@@ -23,10 +24,10 @@ function CardItem({ card, preview, onTouchStart, onDragStartCallback, onClick })
 
   return (
     <div
-      className={`flex-shrink-0 cursor-pointer rounded-xl
-        w-[140px] sm:w-[150px] md:w-[160px]
-        h-[190px] sm:h-[210px] md:h-[230px]
-        hover:-translate-y-4 transition-transform duration-300 ease-out shadow-md hover:shadow-xl border p-3 sm:p-4 text-xs sm:text-sm select-none ${getCardColor(card.category)}`}
+      className={`flex-shrink-0 cursor-pointer rounded-2xl
+        w-[130px] sm:w-[140px] md:w-[150px]
+        h-[180px] sm:h-[200px] md:h-[220px]
+        hover:-translate-y-6 transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] shadow-lg hover:shadow-2xl border p-4 sm:p-5 text-xs sm:text-sm select-none ${getCardColor(card.category)}`}
       onClick={() => onClick(card)}
       draggable={true}
       onDragStart={(e) => {
@@ -49,15 +50,15 @@ function CardItem({ card, preview, onTouchStart, onDragStartCallback, onClick })
       onTouchStart={(e) => onTouchStart(e, card)}
     >
       {card.image && (
-        <div className="w-[100%] h-[35px] sm:h-[45px] -mt-2 mb-1 mx-auto flex justify-center items-center overflow-hidden">
-          <img src={card.image} alt={title} className="max-w-full max-h-full object-contain" />
+        <div className="w-full h-[40px] sm:h-[55px] -mt-3 mb-2 mx-auto flex justify-center items-center overflow-hidden">
+          <img src={card.image} alt={title} className="max-w-full max-h-full object-contain filter drop-shadow-md" />
         </div>
       )}
-      <div className="px-1.5 py-0.5 rounded-md bg-white/20 border border-white/30 text-[8px] font-black uppercase tracking-widest opacity-70 mb-1 mx-auto w-fit">
+      <div className="px-2 py-0.5 rounded-lg bg-black/10 border border-black/5 text-[9px] font-black uppercase tracking-widest opacity-60 mb-2 mx-auto w-fit">
         {card.category}
       </div>
 
-      <p className="text-[10px] sm:text-[11px] text-center mt-1 opacity-80 line-clamp-2 leading-tight font-medium">
+      <p className="text-[11px] sm:text-[12px] text-center mt-1 opacity-90 line-clamp-3 leading-tight font-bold tracking-tight">
         {description}
       </p>
     </div>
@@ -87,6 +88,7 @@ export default function CardContainer({
   preview = false,
   previewCards = [],
 }) {
+  const { isLightMode } = useTheme();
   const [cards, setCards] = useState([]);
   const [selectedCard, setSelectedCard] = useState(null);
   const [usedCards, setUsedCards] = useState([]);
@@ -339,15 +341,20 @@ export default function CardContainer({
 
   return (
     <div
-      className={`fixed inset-0 z-[100] flex items-end justify-center bg-slate-900/40 backdrop-blur-sm select-none transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0'}`}
+      className={`fixed inset-0 z-[100] flex items-end justify-center backdrop-blur-sm select-none transition-all duration-300 ${isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'} ${isLightMode ? 'bg-slate-900/10' : 'bg-slate-900/40'}`}
       onMouseDown={toggleOpen}
     >
       <div
-        className="bg-white/85 backdrop-blur-2xl border-t border-x border-white/40 rounded-t-3xl shadow-[0_-20px_50px_rgba(0,0,0,0.3)] flex flex-col pointer-events-auto
-                  w-full max-w-4xl
-                  h-[450px] md:h-[500px]"
+        className={`backdrop-blur-3xl border-t border-x rounded-t-[2.5rem] shadow-[0_-20px_60px_rgba(0,0,0,0.4)] flex flex-col pointer-events-auto transition-all duration-700
+                  w-full max-w-2xl
+                  h-[440px] md:h-[500px]
+                  ${isLightMode 
+                    ? 'bg-white/90 border-white/50' 
+                    : 'bg-[#0f172a]/95 border-blue-500/20'}`}
         onMouseDown={(e) => e.stopPropagation()}
-        style={{ animation: isOpen ? "slideUp 0.3s ease-out forwards" : "slideDown 0.3s ease-in forwards" }}
+        style={{ 
+          animation: isOpen ? "slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards" : "slideDown 0.4s cubic-bezier(0.7, 0, 0.84, 0) forwards"
+        }}
       >
 
 
@@ -356,20 +363,21 @@ export default function CardContainer({
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-32 bg-blue-400/20 rounded-full blur-3xl pointer-events-none" />
 
         {/* Header */}
-        <div className="px-6 sm:px-10 pt-4 sm:pt-6 pb-2 relative select-none pointer-events-none">
+        <div className="px-6 sm:px-10 pt-3 sm:pt-4 pb-1 relative select-none pointer-events-none">
           {/* Close button */}
           <button
             onClick={toggleOpen}
-            className="absolute top-4 sm:top-6 right-6 sm:right-10 text-slate-500 hover:text-slate-800 z-10 pointer-events-auto bg-white/50 hover:bg-white rounded-full p-2 transition-colors"
+            className={`absolute top-3 sm:top-4 right-6 sm:right-10 z-10 pointer-events-auto rounded-full p-2 transition-all duration-300
+                      ${isLightMode ? 'text-slate-500 hover:text-slate-800 bg-slate-100/50 hover:bg-slate-200' : 'text-white/60 hover:text-white bg-white/5 hover:bg-white/10'}`}
           >
             <X size={20} />
           </button>
 
           {/* Title, subtitle */}
-          <h2 className="text-xl sm:text-2xl md:text-3xl font-black mb-1 text-left text-slate-900 tracking-tight">
+          <h2 className={`text-xl sm:text-2xl md:text-3xl font-black mb-1 text-left tracking-tight transition-colors duration-1000 ${isLightMode ? 'text-slate-900' : 'text-white'}`}>
             Your Cards
           </h2>
-          <p className="text-slate-600 text-xs sm:text-sm text-left font-medium">
+          <p className={`text-xs sm:text-sm text-left font-medium transition-colors duration-1000 ${isLightMode ? 'text-slate-600' : 'text-white/60'}`}>
             Drag from anywhere to move, search and add cards into the board.
           </p>
         </div>
@@ -377,17 +385,19 @@ export default function CardContainer({
 
 
         {/* Tabs */}
-        <div className="px-3 sm:px-6 pointer-events-auto overflow-x-auto mt-2">
-          <div className="flex justify-start sm:justify-center gap-2 pb-2 flex-nowrap">
+        <div className="px-3 sm:px-6 pointer-events-auto overflow-x-auto mt-1 py-2">
+          <div className="flex justify-start sm:justify-center gap-2 pb-1 flex-nowrap">
             {CATEGORIES.map((cat) => {
               const active = activeCategory === cat.key;
               return (
                 <button
                   key={cat.key}
                   onClick={() => setActiveCategory(cat.key)}
-                  className={`px-4 py-2 rounded-md font-semibold text-xs sm:text-sm whitespace-nowrap border-2 shadow-sm transition-all
-                    ${cat.style}
-                    ${active ? "scale-105 shadow-md ring-2 ring-offset-1 ring-blue-400 opacity-100" : "opacity-70 hover:opacity-100"}
+                  className={`px-4 py-2 rounded-xl font-bold text-xs sm:text-sm whitespace-nowrap border-2 transition-all duration-300 ${cat.style}
+                    ${active 
+                      ? `scale-105 shadow-[0_0_15px_rgba(0,0,0,0.1)] ring-2 ring-offset-2 ${isLightMode ? 'ring-blue-400 ring-offset-white' : 'ring-blue-500 ring-offset-[#0f172a]'} opacity-100` 
+                      : `opacity-50 hover:opacity-80`
+                    }
                   `}
                 >
                   {cat.label}
@@ -404,14 +414,17 @@ export default function CardContainer({
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search cards..."
-            className="w-full bg-white/90 text-slate-900 placeholder-slate-500 border border-white/60 shadow-inner rounded-xl px-4 py-2.5 text-sm font-medium
-              focus:outline-none focus:ring-2 focus:ring-blue-400 focus:bg-white transition-all pointer-events-auto"
+            className={`w-full shadow-inner rounded-xl px-4 py-2.5 text-sm font-medium
+              focus:outline-none focus:ring-2 transition-all pointer-events-auto duration-1000
+              ${isLightMode 
+                ? 'bg-white/90 text-slate-900 placeholder-slate-400 border border-slate-200 focus:ring-blue-400 focus:bg-white' 
+                : 'bg-white/5 text-white placeholder-white/30 border border-white/10 focus:ring-blue-500/50 focus:bg-white/10'}`}
           />
         </div>
 
         {/* Cards Slider */}
-        <div className="px-4 sm:px-6 py-4 overflow-x-auto overflow-y-hidden flex-1 pointer-events-auto hide-scrollbar scroll-smooth">
-          <div className="flex gap-4 sm:gap-6 pt-6 pb-8 w-max min-w-full items-start justify-start px-2">
+        <div className="px-4 sm:px-6 py-1 overflow-x-auto overflow-y-visible flex-1 pointer-events-auto hide-scrollbar scroll-smooth">
+          <div className="flex gap-4 sm:gap-6 pt-10 pb-6 w-max min-w-full items-start justify-start px-2">
             {visibleCards.map((card) => (
 
               <CardItem
@@ -431,7 +444,7 @@ export default function CardContainer({
 
       {selectedCard && (
         <div
-          className="fixed inset-0 bg-slate-900/60 backdrop-blur-md flex items-center justify-center z-[200] transition-opacity duration-200"
+          className={`fixed inset-0 backdrop-blur-md flex items-center justify-center z-[200] transition-all duration-300 ${isLightMode ? 'bg-slate-900/20' : 'bg-slate-950/60'}`}
           onMouseDown={(e) => e.stopPropagation()}
           onClick={(e) => {
             e.stopPropagation();

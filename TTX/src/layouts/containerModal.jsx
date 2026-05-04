@@ -1,5 +1,6 @@
 import React from "react";
 import { X, Trash2 } from "lucide-react";
+import { useTheme } from "../context/ThemeContext";
 
 
 
@@ -34,10 +35,9 @@ function MiniCardItem({ card, locked, onRemoveCard, onClick }) {
           onRemoveCard(card.card_id);
         }}
         className={`absolute bottom-2 right-2 p-2 rounded-full text-xs font-semibold
-          ${
-            locked
-              ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-              : "bg-red-100 hover:bg-red-200 text-red-700"
+          ${locked
+            ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+            : "bg-red-100 hover:bg-red-200 text-red-700"
           }`}
       >
         <Trash2 size={14} />
@@ -72,6 +72,7 @@ export default function ContainerModal({
   onRemoveCard,
   locked = false,
 }) {
+  const { isLightMode } = useTheme();
   const [selectedCard, setSelectedCard] = React.useState(null);
 
   const isInfosecContainer =
@@ -98,28 +99,30 @@ export default function ContainerModal({
       : answerCards.slice(0, MAX_CARDS_PER_CONTAINER);
 
   return (
-    <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[100] flex items-center justify-center p-4"
+    <div className={`fixed inset-0 backdrop-blur-md z-[100] flex items-center justify-center p-4 transition-all duration-300 ${isLightMode ? 'bg-slate-900/20' : 'bg-slate-950/60'}`}
       onMouseDown={onClose}>
-      <div className="bg-white/80 backdrop-blur-2xl border border-white/40 rounded-3xl shadow-2xl w-full max-w-2xl h-[500px] p-6 sm:p-8 relative flex flex-col overflow-hidden"
+      <div className={`backdrop-blur-3xl border rounded-[2.5rem] shadow-2xl w-full max-w-xl h-[500px] p-6 sm:p-8 relative flex flex-col overflow-hidden transition-all duration-500
+        ${isLightMode ? 'bg-white/90 border-white/50' : 'bg-[#0f172a]/95 border-blue-500/20'}`}
         onMouseDown={(e) => e.stopPropagation()}>
-        
+
         {/* Decorative background glow */}
         <div className="absolute -top-24 -right-24 w-48 h-48 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
 
         {/* Close */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+          className={`absolute top-4 right-4 p-2 rounded-full transition-all duration-300
+            ${isLightMode ? 'text-slate-400 hover:text-slate-600 bg-slate-100/50 hover:bg-slate-100' : 'text-white/40 hover:text-white bg-white/5 hover:bg-white/10'}`}
         >
           <X size={20} />
         </button>
 
         {/* Header */}
         <div className="relative z-10 mb-6">
-          <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight leading-none mb-2 uppercase">
+          <h2 className={`text-2xl sm:text-3xl font-black tracking-tight leading-none mb-2 uppercase transition-colors duration-1000 ${isLightMode ? 'text-slate-900' : 'text-white'}`}>
             {container.title}
           </h2>
-          <p className="text-slate-600 text-sm font-medium">
+          <p className={`text-sm font-medium transition-colors duration-1000 ${isLightMode ? 'text-slate-600' : 'text-white/60'}`}>
             Assigned Phase Cards
           </p>
         </div>
@@ -156,9 +159,9 @@ export default function ContainerModal({
       </div>
 
       {selectedCard && (
-        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-md flex items-center justify-center z-[200] transition-opacity duration-200" onMouseDown={(e) => { e.stopPropagation(); setSelectedCard(null); }}>
-          <div 
-            className={`rounded-2xl shadow-2xl w-[320px] sm:w-[400px] min-h-[450px] p-6 sm:p-8 relative transform transition-all duration-300 scale-95 opacity-0 animate-[fadeIn_0.25s_ease-out_forwards] text-center flex flex-col justify-center items-center border-4 ${getCardColor(selectedCard.category)}`}
+        <div className={`fixed inset-0 backdrop-blur-md flex items-center justify-center z-[200] transition-all duration-300 ${isLightMode ? 'bg-slate-900/20' : 'bg-slate-950/60'}`} onMouseDown={(e) => { e.stopPropagation(); setSelectedCard(null); }}>
+          <div
+            className={`rounded-3xl shadow-2xl w-[320px] sm:w-[400px] min-h-[450px] p-6 sm:p-8 relative transform transition-all duration-500 scale-95 opacity-0 animate-[fadeIn_0.3s_ease-out_forwards] text-center flex flex-col justify-center items-center border-4 ${getCardColor(selectedCard.category)}`}
             onMouseDown={(e) => e.stopPropagation()}
           >
             <button
@@ -167,7 +170,7 @@ export default function ContainerModal({
             >
               <X size={24} />
             </button>
-            
+
             {selectedCard.image && (
               <div className="w-[calc(100%+3rem)] sm:w-[calc(100%+4rem)] h-[80px] sm:h-[100px] -mt-6 sm:-mt-8 -mx-6 sm:-mx-8 mb-6 flex justify-center items-center overflow-hidden rounded-t-2xl">
                 <img src={selectedCard.image} alt={selectedCard.card_name} className="max-w-full max-h-full object-contain" />
@@ -179,7 +182,7 @@ export default function ContainerModal({
             </div>
 
 
-            
+
             <div className="mt-auto w-full p-4 bg-white/20 backdrop-blur-sm border border-white/20 rounded-xl">
               <p className="text-sm sm:text-base font-semibold italic leading-relaxed drop-shadow-sm">
                 {selectedCard.description || ""}
