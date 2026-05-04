@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { apiUrl } from "../../../config/api";
 import { useTheme } from "../../../context/ThemeContext";
+import PageBackground from "../../../components/PageBackground";
 
 export default function SetUp() {
   const navigate = useNavigate();
@@ -44,18 +45,7 @@ export default function SetUp() {
   };
 
   return (
-    <div className={`relative w-screen h-screen overflow-hidden transition-colors duration-1000 ${isLightMode ? 'bg-slate-50' : 'bg-slate-950'}`}>
-      {/* Background to match startgame */}
-      <div className={`absolute inset-0 z-0 transition-all duration-1000 bg-gradient-to-br ${isLightMode ? 'from-slate-100 via-blue-50 to-slate-200' : 'from-slate-900 via-blue-900 to-indigo-950'}`} />
-      
-      {/* Animated Blobs */}
-      <div className="absolute inset-0 overflow-hidden z-0 opacity-40 pointer-events-none">
-        <div className={`absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full blur-[120px] animate-float transition-colors duration-1000 ${isLightMode ? 'bg-blue-300/40' : 'bg-blue-600/30'}`} />
-        <div className={`absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] rounded-full blur-[150px] animate-morph transition-colors duration-1000 ${isLightMode ? 'bg-indigo-300/30' : 'bg-indigo-600/20'}`} />
-        <div className={`absolute top-[20%] right-[10%] w-[30%] h-[30%] rounded-full blur-[100px] animate-float [animation-delay:2s] transition-colors duration-1000 ${isLightMode ? 'bg-cyan-300/20' : 'bg-cyan-600/20'}`} />
-      </div>
-
-      {/* Foreground */}
+    <PageBackground>
       <div
         className={`relative z-10 w-full h-full flex items-center justify-center p-2 sm:p-4 backdrop-blur-sm transition-colors duration-1000 ${isLightMode ? 'bg-white/30' : 'bg-white/10'}`}
       >
@@ -73,28 +63,28 @@ export default function SetUp() {
           <div className="flex-1 flex flex-col gap-4 sm:gap-6">
             {/* Group Name */}
             <div className="text-left relative group">
-              <label className={`block text-xs sm:text-sm font-bold mb-1 sm:mb-2 uppercase tracking-widest pl-1 transition-colors group-focus-within:text-emerald-500 duration-1000 ${isLightMode ? 'text-slate-600' : 'text-white/80'}`}>
+              <label className={`block text-xs sm:text-sm font-bold mb-1 sm:mb-2 uppercase tracking-widest pl-1 transition-colors group-focus-within:text-blue-500 duration-1000 ${isLightMode ? 'text-slate-600' : 'text-white/80'}`}>
                 Group Name
               </label>
               <input
                 type="text"
                 value={groupName}
                 onChange={(e) => setGroupName(e.target.value)}
-                className={`border-2 focus:border-emerald-400 focus:outline-none focus:ring-4 focus:ring-emerald-400/20 rounded-2xl px-5 w-full h-12 sm:h-14 text-base sm:text-lg font-medium transition-all shadow-inner ${isLightMode ? 'bg-white/50 border-slate-300 text-slate-800 placeholder-slate-400' : 'bg-white/5 border-white/10 text-white placeholder-white/30'}`}
+                className={`border-2 focus:border-blue-400 focus:outline-none focus:ring-4 focus:ring-blue-400/20 rounded-2xl px-5 w-full h-12 sm:h-14 text-base sm:text-lg font-medium transition-all shadow-inner ${isLightMode ? 'bg-white/50 border-slate-300 text-slate-800 placeholder-slate-400' : 'bg-white/5 border-white/10 text-white placeholder-white/30'}`}
                 placeholder="Enter Group Name"
               />
             </div>
 
             {/* Group Leader */}
             <div className="text-left relative group">
-              <label className={`block text-xs sm:text-sm font-bold mb-1 sm:mb-2 uppercase tracking-widest pl-1 transition-colors group-focus-within:text-emerald-500 duration-1000 ${isLightMode ? 'text-slate-600' : 'text-white/80'}`}>
+              <label className={`block text-xs sm:text-sm font-bold mb-1 sm:mb-2 uppercase tracking-widest pl-1 transition-colors group-focus-within:text-blue-500 duration-1000 ${isLightMode ? 'text-slate-600' : 'text-white/80'}`}>
                 Group Leader
               </label>
               <input
                 type="text"
                 value={leaderName}
                 onChange={(e) => setLeaderName(e.target.value)}
-                className={`border-2 focus:border-emerald-400 focus:outline-none focus:ring-4 focus:ring-emerald-400/20 rounded-2xl px-5 w-full h-12 sm:h-14 text-base sm:text-lg font-medium transition-all shadow-inner ${isLightMode ? 'bg-white/50 border-slate-300 text-slate-800 placeholder-slate-400' : 'bg-white/5 border-white/10 text-white placeholder-white/30'}`}
+                className={`border-2 focus:border-blue-400 focus:outline-none focus:ring-4 focus:ring-blue-400/20 rounded-2xl px-5 w-full h-12 sm:h-14 text-base sm:text-lg font-medium transition-all shadow-inner ${isLightMode ? 'bg-white/50 border-slate-300 text-slate-800 placeholder-slate-400' : 'bg-white/5 border-white/10 text-white placeholder-white/30'}`}
                 placeholder="Who's your Group Leader?"
               />
             </div>
@@ -120,7 +110,7 @@ export default function SetUp() {
                 ${
                   !groupName.trim() || !leaderName.trim() || loading
                     ? (isLightMode ? "bg-slate-200 text-slate-400 border border-slate-300 cursor-not-allowed" : "bg-white/5 text-white/20 border border-white/5 cursor-not-allowed")
-                    : (isLightMode ? "bg-emerald-500 hover:bg-emerald-600 text-white shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:-translate-y-1 active:scale-95" : "bg-emerald-500 hover:bg-emerald-400 text-white shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_30px_rgba(16,185,129,0.5)] hover:-translate-y-1 active:scale-95")
+                    : (isLightMode ? "bg-blue-600 hover:bg-blue-700 text-white shadow-[0_0_20px_rgba(37,99,235,0.3)] hover:-translate-y-1 active:scale-95" : "bg-blue-500 hover:bg-blue-400 text-white shadow-[0_0_20px_rgba(37,99,235,0.3)] hover:shadow-[0_0_30px_rgba(37,99,235,0.5)] hover:-translate-y-1 active:scale-95")
                 }`}
             >
               {loading ? "Creating..." : "Next Step"}
@@ -128,6 +118,7 @@ export default function SetUp() {
           </div>
         </div>
       </div>
-    </div>
+    </PageBackground>
   );
 }
+

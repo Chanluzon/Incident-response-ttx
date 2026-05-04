@@ -82,7 +82,7 @@ export default function Leaderboard({ isOpen, onClose, gameId }) {
         {/* Banner Section - Now at the absolute top */}
         {showBanner && currentLevel > 0 && (
           <div className="sticky top-0 z-20 w-full bg-white">
-            <div className="relative overflow-hidden bg-emerald-600 p-3 sm:p-6 shadow-[0_4px_20px_rgba(16,185,129,0.2)] animate-[celebratePop_0.8s_cubic-bezier(0.34,1.56,0.64,1)]">
+            <div className="relative overflow-hidden bg-blue-600 p-3 sm:p-6 shadow-[0_4px_20px_rgba(37,99,235,0.2)] animate-[celebratePop_0.8s_cubic-bezier(0.34,1.56,0.64,1)]">
               {/* Shimmer Effect */}
               <div className="absolute inset-0 w-[200%] h-full bg-linear-to-r from-transparent via-white/20 to-transparent -translate-x-full animate-[shimmer_3s_infinite]" />
 
@@ -131,7 +131,7 @@ export default function Leaderboard({ isOpen, onClose, gameId }) {
                         flex items-center justify-between p-2 sm:p-4 rounded-xl sm:rounded-2xl transition-all duration-300
                         ${
                           isUserTeam
-                            ? "bg-emerald-500/10 border-2 border-emerald-500/50 shadow-md ring-2 ring-emerald-500/20"
+                            ? "bg-blue-500/10 border-2 border-blue-500/50 shadow-md ring-2 ring-blue-500/20"
                             : "bg-white/60 border-2 border-white/40 hover:border-white/80 hover:bg-white/80 shadow-sm"
                         }
                       `}
@@ -152,14 +152,14 @@ export default function Leaderboard({ isOpen, onClose, gameId }) {
                         <div className="flex flex-col">
                           <p
                             className={`text-base sm:text-xl font-black leading-tight ${
-                              isUserTeam ? "text-emerald-900" : "text-gray-800"
+                              isUserTeam ? "text-blue-900" : "text-gray-800"
                             }`}
                           >
                             {team.group_name}
                           </p>
 
                           {isUserTeam && (
-                            <span className="text-[7px] sm:text-[9px] bg-emerald-500 text-white px-1.5 py-0.5 rounded-full uppercase tracking-[0.1em] font-black self-start mt-0.5 shadow-sm">
+                            <span className="text-[7px] sm:text-[9px] bg-blue-500 text-white px-1.5 py-0.5 rounded-full uppercase tracking-[0.1em] font-black self-start mt-0.5 shadow-sm">
                               Your Team
                             </span>
                           )}
@@ -167,7 +167,7 @@ export default function Leaderboard({ isOpen, onClose, gameId }) {
                       </div>
                       <div className="text-right">
                         <p
-                          className={`text-lg sm:text-2xl font-black ${isUserTeam ? "text-emerald-600" : "text-gray-900"}`}
+                          className={`text-lg sm:text-2xl font-black ${isUserTeam ? "text-blue-600" : "text-gray-900"}`}
                         >
                           {team.total_points}{" "}
                           <span className="text-[9px] sm:text-xs font-bold uppercase text-gray-400">
@@ -229,11 +229,11 @@ export default function Leaderboard({ isOpen, onClose, gameId }) {
                               key={i}
                               className={`
                               flex justify-between items-center p-2 sm:p-3 rounded-xl transition-colors
-                              ${isUserTeam ? "bg-emerald-500/10 border border-emerald-500/30" : "hover:bg-white/60"}
+                              ${isUserTeam ? "bg-blue-500/10 border border-blue-500/30" : "hover:bg-white/60"}
                             `}
                             >
                               <span
-                                className={`text-sm sm:text-base font-bold ${isUserTeam ? "text-emerald-900" : "text-gray-700"} truncate max-w-[100px] sm:max-w-none`}
+                                className={`text-sm sm:text-base font-bold ${isUserTeam ? "text-blue-900" : "text-gray-700"} truncate max-w-[100px] sm:max-w-none`}
                               >
                                 {r.group_name}
                               </span>
@@ -248,10 +248,10 @@ export default function Leaderboard({ isOpen, onClose, gameId }) {
                                 </div>
                                 {r.bonus_points > 0 && (
                                   <div className="flex flex-col items-end">
-                                    <span className="text-[7px] sm:text-[10px] font-bold text-emerald-400 uppercase leading-none mb-0.5">
+                                    <span className="text-[7px] sm:text-[10px] font-bold text-blue-400 uppercase leading-none mb-0.5">
                                       Bonus
                                     </span>
-                                    <span className="px-1 py-0.5 rounded-md bg-emerald-500 text-white text-[9px] sm:text-xs font-black">
+                                    <span className="px-1 py-0.5 rounded-md bg-blue-500 text-white text-[9px] sm:text-xs font-black">
                                       +{r.bonus_points}
                                     </span>
                                   </div>
@@ -262,7 +262,7 @@ export default function Leaderboard({ isOpen, onClose, gameId }) {
                                     Total
                                   </span>
                                   <span
-                                    className={`text-base sm:text-lg font-black ${isUserTeam ? "text-emerald-600" : "text-gray-900"}`}
+                                    className={`text-base sm:text-lg font-black ${isUserTeam ? "text-blue-600" : "text-gray-900"}`}
                                   >
                                     {r.total_points}
                                   </span>

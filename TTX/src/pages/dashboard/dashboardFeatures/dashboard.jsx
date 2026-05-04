@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { useTheme } from "../../../context/ThemeContext";
+import PageBackground from "../../../components/PageBackground";
 
 import Book from "../../../images/book.png";
 import Flash from "../../../images/flash.png";
@@ -28,17 +29,7 @@ export default function Dashboard() {
   };
 
   return (
-    <div className={`relative w-screen min-h-screen overflow-hidden transition-colors duration-1000 ${isLightMode ? 'bg-slate-50' : 'bg-slate-950'}`}>
-      {/* Background to match startgame */}
-      <div className={`absolute inset-0 z-0 transition-all duration-1000 bg-gradient-to-br ${isLightMode ? 'from-slate-100 via-blue-50 to-slate-200' : 'from-slate-900 via-blue-900 to-indigo-950'}`} />
-      
-      {/* Animated Blobs */}
-      <div className="absolute inset-0 overflow-hidden z-0 opacity-40">
-        <div className={`absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full blur-[120px] animate-float transition-colors duration-1000 ${isLightMode ? 'bg-blue-300/40' : 'bg-blue-600/30'}`} />
-        <div className={`absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] rounded-full blur-[150px] animate-morph transition-colors duration-1000 ${isLightMode ? 'bg-indigo-300/30' : 'bg-indigo-600/20'}`} />
-        <div className={`absolute top-[20%] right-[10%] w-[30%] h-[30%] rounded-full blur-[100px] animate-float [animation-delay:2s] transition-colors duration-1000 ${isLightMode ? 'bg-cyan-300/20' : 'bg-cyan-600/20'}`} />
-      </div>
-
+    <PageBackground>
       <div className={`relative z-10 min-h-screen p-3 sm:p-4 md:p-5 lg:p-10 overflow-hidden backdrop-blur-md flex flex-col transition-colors duration-1000 ${isLightMode ? 'bg-white/30 text-slate-800' : 'bg-white/10 text-white'}`}>
         {/* Back Button */}
         <button
@@ -99,10 +90,10 @@ export default function Dashboard() {
             {/* Game Instructions */}
             <button
               onClick={instructionsHandler}
-              className={`group backdrop-blur-2xl border rounded-[2rem] w-full shadow-[0_8px_30px_rgb(0,0,0,0.12)] text-left flex items-center p-4 sm:p-5 lg:p-6 transition-all duration-500 ease-out hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(16,185,129,0.2)] ${isLightMode ? 'bg-white/60 hover:bg-white/90 border-slate-300' : 'bg-white/5 hover:bg-white/10 border-white/10 hover:border-white/20'}`}
+              className={`group backdrop-blur-2xl border rounded-[2rem] w-full shadow-[0_8px_30px_rgb(0,0,0,0.12)] text-left flex items-center p-4 sm:p-5 lg:p-6 transition-all duration-500 ease-out hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(6,182,212,0.2)] ${isLightMode ? 'bg-white/60 hover:bg-white/90 border-slate-300' : 'bg-white/5 hover:bg-white/10 border-white/10 hover:border-white/20'}`}
             >
               <div
-                className="bg-emerald-500/10 border border-emerald-500/30 group-hover:bg-emerald-500/20 group-hover:border-emerald-500/50 flex items-center justify-center 
+                className="bg-cyan-500/10 border border-cyan-500/30 group-hover:bg-cyan-500/20 group-hover:border-cyan-500/50 flex items-center justify-center 
                   rounded-2xl lg:rounded-[1.5rem]
                   w-14 h-14 sm:w-16 sm:h-16 lg:w-20 lg:h-20 
                   flex-shrink-0 transition-colors duration-500"
@@ -110,7 +101,7 @@ export default function Dashboard() {
                 <img
                   src={Book}
                   alt="Book"
-                  className={`w-7 h-7 sm:w-8 sm:h-8 lg:w-10 lg:h-10 opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500 drop-shadow-[0_0_8px_rgba(16,185,129,0.5)] ${isLightMode ? 'filter-none drop-shadow-md' : 'brightness-0 invert'}`}
+                  className={`w-7 h-7 sm:w-8 sm:h-8 lg:w-10 lg:h-10 opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500 drop-shadow-[0_0_8px_rgba(6,182,212,0.5)] ${isLightMode ? 'filter-none drop-shadow-md' : 'brightness-0 invert'}`}
                 />
               </div>
               <div className="flex flex-col justify-center pl-4 sm:pl-6 lg:pl-8 min-w-0">
@@ -132,10 +123,10 @@ export default function Dashboard() {
             {/* Join Game */}
             <button
               onClick={joinGameHandler}
-              className={`group backdrop-blur-2xl border rounded-[2rem] w-full shadow-[0_8px_30px_rgb(0,0,0,0.12)] text-left flex items-center p-4 sm:p-5 lg:p-6 transition-all duration-500 ease-out hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(244,63,94,0.2)] ${isLightMode ? 'bg-white/60 hover:bg-white/90 border-slate-300' : 'bg-white/5 hover:bg-white/10 border-white/10 hover:border-white/20'}`}
+              className={`group backdrop-blur-2xl border rounded-[2rem] w-full shadow-[0_8px_30px_rgb(0,0,0,0.12)] text-left flex items-center p-4 sm:p-5 lg:p-6 transition-all duration-500 ease-out hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(37,99,235,0.2)] ${isLightMode ? 'bg-white/60 hover:bg-white/90 border-slate-300' : 'bg-white/5 hover:bg-white/10 border-white/10 hover:border-white/20'}`}
             >
               <div
-                className="bg-rose-500/10 border border-rose-500/30 group-hover:bg-rose-500/20 group-hover:border-rose-500/50 flex items-center justify-center 
+                className="bg-blue-500/10 border border-blue-500/30 group-hover:bg-blue-500/20 group-hover:border-blue-500/50 flex items-center justify-center 
                   rounded-2xl lg:rounded-[1.5rem]
                   w-14 h-14 sm:w-16 sm:h-16 lg:w-20 lg:h-20 
                   flex-shrink-0 transition-colors duration-500"
@@ -143,7 +134,7 @@ export default function Dashboard() {
                 <img
                   src={Flash}
                   alt="Flash"
-                  className={`w-7 h-7 sm:w-8 sm:h-8 lg:w-10 lg:h-10 opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500 drop-shadow-[0_0_8px_rgba(244,63,94,0.5)] ${isLightMode ? 'filter-none drop-shadow-md' : 'brightness-0 invert'}`}
+                  className={`w-7 h-7 sm:w-8 sm:h-8 lg:w-10 lg:h-10 opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500 drop-shadow-[0_0_8px_rgba(37,99,235,0.5)] ${isLightMode ? 'filter-none drop-shadow-md' : 'brightness-0 invert'}`}
                 />
               </div>
               <div className="flex flex-col justify-center pl-4 sm:pl-6 lg:pl-8 min-w-0">
@@ -164,6 +155,7 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
-    </div>
+    </PageBackground>
   );
 }
+

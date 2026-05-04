@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import authBg from "../../images/auth-background.png";
 import Toast from "./toast/toast";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, ShieldCheck, Mail, Lock, User } from "lucide-react";
 import { apiUrl } from "../../config/api";
+import { useTheme } from "../../context/ThemeContext";
+import PageBackground from "../../components/PageBackground";
 
 export default function RegisterPage() {
   const navigate = useNavigate();
+  const { isLightMode } = useTheme();
+  
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -55,18 +58,15 @@ export default function RegisterPage() {
     const { name, email, password, confirmPassword } = formData;
 
     // Validations
-    // name
     if (!name.trim()) return showToast("Name is required.", "error");
     if (name.length < 2)
       return showToast("Name must be at least 2 characters long.", "error");
 
-    // email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!email.trim()) return showToast("Email is required.", "error");
     if (!emailRegex.test(email))
       return showToast("Please enter a valid email address.", "error");
 
-    // password
     if (
       !passwordChecks.length ||
       !passwordChecks.upper ||
@@ -77,7 +77,6 @@ export default function RegisterPage() {
       return;
     }
 
-    // confirm password
     if (password !== confirmPassword)
       return showToast("Passwords do not match!", "error");
 
@@ -107,157 +106,152 @@ export default function RegisterPage() {
   const handleLogin = () => navigate("/moderator");
 
   return (
-    <div className="relative flex h-screen w-screen bg-cover bg-center overflow-hidden">
-      <div
-        className="absolute inset-0 bg-cover bg-center filter blur-sm scale-105"
-        style={{ backgroundImage: `url(${authBg})` }}
-      ></div>
+    <PageBackground>
+      <div className={`relative z-10 w-full h-full flex items-center justify-center p-4 backdrop-blur-sm transition-colors duration-1000 ${isLightMode ? 'bg-white/30' : 'bg-white/5'}`}>
+        <div className={`backdrop-blur-2xl border p-8 sm:p-10 rounded-3xl shadow-2xl w-full max-w-[480px] transition-colors duration-1000 ${isLightMode ? 'bg-white/60 border-white/40' : 'bg-slate-900/60 border-white/10'}`}>
+          <div className="text-center mb-8">
+            <div className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4 transition-colors duration-1000 ${isLightMode ? 'bg-blue-50' : 'bg-blue-500/10'}`}>
+              <ShieldCheck className="text-blue-500 w-10 h-10" />
+            </div>
+            <h1 className={`text-3xl font-black tracking-tight mb-2 transition-colors duration-1000 ${isLightMode ? 'text-slate-800' : 'text-white'}`}>
+              Join the TTX
+            </h1>
+            <p className={`text-sm font-medium transition-colors duration-1000 ${isLightMode ? 'text-slate-500' : 'text-white/50'}`}>
+              Create a moderator account to manage simulations
+            </p>
+          </div>
 
-      <div className="flex flex-1 items-center justify-center">
-        <div className="bg-white bg-opacity-60 backdrop-blur-md p-10 rounded-3xl shadow-2xl w-[450px] text-left">
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Name */}
-            <div>
-              <label className="block text-sm font-medium mb-1 text-gray-700">
-                Name
+            <div className="relative group">
+              <label className={`block text-xs font-bold uppercase tracking-widest pl-1 mb-2 transition-colors group-focus-within:text-blue-500 ${isLightMode ? 'text-slate-500' : 'text-white/40'}`}>
+                Full Name
               </label>
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                placeholder="Name"
-                className="w-full px-3 py-3 rounded-md border border-gray-300 text-green-800 text-left focus:outline-none focus:ring-2 focus:ring-green-400"
-                required
-              />
+              <div className="relative">
+                <User className={`absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 transition-colors ${isLightMode ? 'text-slate-400' : 'text-white/20'}`} />
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  placeholder="Moderator Name"
+                  className={`w-full pl-12 pr-4 py-3 rounded-xl border-2 focus:outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-400/10 transition-all font-medium ${isLightMode ? 'bg-white/50 border-slate-200 text-slate-800 placeholder-slate-400' : 'bg-white/5 border-white/10 text-white placeholder-white/20'}`}
+                  required
+                />
+              </div>
             </div>
 
             {/* Email */}
-            <div>
-              <label className="block text-sm font-medium mb-1 text-gray-700">
-                Email
+            <div className="relative group">
+              <label className={`block text-xs font-bold uppercase tracking-widest pl-1 mb-2 transition-colors group-focus-within:text-blue-500 ${isLightMode ? 'text-slate-500' : 'text-white/40'}`}>
+                Email Address
               </label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="Email"
-                className="w-full px-3 py-3 rounded-md border border-gray-300 text-green-800 text-left focus:outline-none focus:ring-2 focus:ring-green-400"
-                required
-              />
+              <div className="relative">
+                <Mail className={`absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 transition-colors ${isLightMode ? 'text-slate-400' : 'text-white/20'}`} />
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  placeholder="name@company.com"
+                  className={`w-full pl-12 pr-4 py-3 rounded-xl border-2 focus:outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-400/10 transition-all font-medium ${isLightMode ? 'bg-white/50 border-slate-200 text-slate-800 placeholder-slate-400' : 'bg-white/5 border-white/10 text-white placeholder-white/20'}`}
+                  required
+                />
+              </div>
             </div>
 
             {/* Password */}
-            <div>
-              <label className="block text-sm font-medium mb-1 text-gray-700">
+            <div className="relative group">
+              <label className={`block text-xs font-bold uppercase tracking-widest pl-1 mb-2 transition-colors group-focus-within:text-blue-500 ${isLightMode ? 'text-slate-500' : 'text-white/40'}`}>
                 Password
               </label>
-
               <div className="relative">
+                <Lock className={`absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 transition-colors ${isLightMode ? 'text-slate-400' : 'text-white/20'}`} />
                 <input
                   type={showPassword ? "text" : "password"}
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
-                  placeholder="Password"
-                  className="w-full px-3 py-3 rounded-md border border-gray-300 text-green-800 focus:outline-none focus:ring-2 focus:ring-green-400 pr-10"
+                  placeholder="••••••••"
+                  className={`w-full pl-12 pr-12 py-3 rounded-xl border-2 focus:outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-400/10 transition-all font-medium ${isLightMode ? 'bg-white/50 border-slate-200 text-slate-800 placeholder-slate-400' : 'bg-white/5 border-white/10 text-white placeholder-white/20'}`}
                 />
-
-                <span
-                  onClick={() => setShowPassword((prev) => !prev)}
-                  className="absolute right-3 top-3 cursor-pointer text-gray-600"
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className={`absolute right-4 top-1/2 -translate-y-1/2 transition-colors hover:text-blue-500 ${isLightMode ? 'text-slate-400' : 'text-white/20'}`}
                 >
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                </span>
+                </button>
               </div>
 
               {/* Password Checklist */}
-              <div className="mt-2 space-y-1 text-sm">
-                <p
-                  className={
-                    passwordChecks.length ? "text-green-600" : "text-gray-600"
-                  }
-                >
-                  {passwordChecks.length ? "✓" : "•"} At least 8 characters
-                </p>
-                <p
-                  className={
-                    passwordChecks.upper ? "text-green-600" : "text-gray-600"
-                  }
-                >
-                  {passwordChecks.upper ? "✓" : "•"} Contains uppercase letter
-                </p>
-                <p
-                  className={
-                    passwordChecks.lower ? "text-green-600" : "text-gray-600"
-                  }
-                >
-                  {passwordChecks.lower ? "✓" : "•"} Contains lowercase letter
-                </p>
-                <p
-                  className={
-                    passwordChecks.number ? "text-green-600" : "text-gray-600"
-                  }
-                >
-                  {passwordChecks.number ? "✓" : "•"} Contains a number
-                </p>
+              <div className="mt-3 grid grid-cols-2 gap-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider">
+                <div className={`flex items-center gap-1.5 transition-colors ${passwordChecks.length ? 'text-blue-500' : (isLightMode ? 'text-slate-400' : 'text-white/20')}`}>
+                  <div className={`w-1 h-1 rounded-full ${passwordChecks.length ? 'bg-blue-500' : (isLightMode ? 'bg-slate-300' : 'bg-white/10')}`} />
+                  8+ Characters
+                </div>
+                <div className={`flex items-center gap-1.5 transition-colors ${passwordChecks.upper ? 'text-blue-500' : (isLightMode ? 'text-slate-400' : 'text-white/20')}`}>
+                  <div className={`w-1 h-1 rounded-full ${passwordChecks.upper ? 'bg-blue-500' : (isLightMode ? 'bg-slate-300' : 'bg-white/10')}`} />
+                  Uppercase
+                </div>
+                <div className={`flex items-center gap-1.5 transition-colors ${passwordChecks.lower ? 'text-blue-500' : (isLightMode ? 'text-slate-400' : 'text-white/20')}`}>
+                  <div className={`w-1 h-1 rounded-full ${passwordChecks.lower ? 'bg-blue-500' : (isLightMode ? 'bg-slate-300' : 'bg-white/10')}`} />
+                  Lowercase
+                </div>
+                <div className={`flex items-center gap-1.5 transition-colors ${passwordChecks.number ? 'text-blue-500' : (isLightMode ? 'text-slate-400' : 'text-white/20')}`}>
+                  <div className={`w-1 h-1 rounded-full ${passwordChecks.number ? 'bg-blue-500' : (isLightMode ? 'bg-slate-300' : 'bg-white/10')}`} />
+                  Number
+                </div>
               </div>
             </div>
 
             {/* Confirm Password */}
-            <div>
-              <label className="block text-sm font-medium mb-1 text-gray-700">
+            <div className="relative group">
+              <label className={`block text-xs font-bold uppercase tracking-widest pl-1 mb-2 transition-colors group-focus-within:text-blue-500 ${isLightMode ? 'text-slate-500' : 'text-white/40'}`}>
                 Confirm Password
               </label>
-
               <div className="relative">
+                <Lock className={`absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 transition-colors ${isLightMode ? 'text-slate-400' : 'text-white/20'}`} />
                 <input
                   type={showConfirmPassword ? "text" : "password"}
                   name="confirmPassword"
                   value={formData.confirmPassword}
                   onChange={handleChange}
-                  placeholder="Confirm Password"
-                  className="w-full px-3 py-3 rounded-md border border-gray-300 text-green-800 focus:outline-none focus:ring-2 focus:ring-green-400 pr-10"
+                  placeholder="••••••••"
+                  className={`w-full pl-12 pr-12 py-3 rounded-xl border-2 focus:outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-400/10 transition-all font-medium ${isLightMode ? 'bg-white/50 border-slate-200 text-slate-800 placeholder-slate-400' : 'bg-white/5 border-white/10 text-white placeholder-white/20'}`}
                 />
-
-                <span
-                  onClick={() => setShowConfirmPassword((prev) => !prev)}
-                  className="absolute right-3 top-3 cursor-pointer text-gray-600"
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className={`absolute right-4 top-1/2 -translate-y-1/2 transition-colors hover:text-blue-500 ${isLightMode ? 'text-slate-400' : 'text-white/20'}`}
                 >
-                  {showConfirmPassword ? (
-                    <EyeOff size={20} />
-                  ) : (
-                    <Eye size={20} />
-                  )}
-                </span>
+                  {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                </button>
               </div>
             </div>
 
-            {/* Register Button */}
-            <div className="w-full flex justify-center">
-              <button
-                type="submit"
-                className="min-w-[160px] appearance-none bg-[green] hover:bg-[#55AA55] active:bg-[#1EB46E] text-white font-bold text-lg py-3 rounded-full shadow-[0_4px_12px_rgba(46,229,138,0.4)] transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-[#2EE58A]/50"
-              >
-                Register
-              </button>
-            </div>
+            <button
+              type="submit"
+              className="w-full bg-blue-600 hover:bg-blue-500 text-white font-black text-lg py-4 rounded-xl shadow-lg shadow-blue-500/20 hover:shadow-blue-500/40 hover:-translate-y-0.5 active:scale-95 transition-all duration-200"
+            >
+              CREATE ACCOUNT
+            </button>
           </form>
 
-          <div className="text-center mt-6 text-gray-700">
+          <div className={`text-center mt-8 text-sm font-medium transition-colors duration-1000 ${isLightMode ? 'text-slate-500' : 'text-white/40'}`}>
             Already have an account?{" "}
-            <a
+            <button
               onClick={handleLogin}
-              className="text-green-500 hover:text-green-600 hover:underline font-semibold cursor-pointer"
+              className="text-blue-500 hover:text-blue-400 font-bold hover:underline transition-colors"
             >
-              Login
-            </a>
+              Sign In
+            </button>
           </div>
         </div>
       </div>
 
       <Toast toasts={toasts} />
-    </div>
+    </PageBackground>
   );
 }
+

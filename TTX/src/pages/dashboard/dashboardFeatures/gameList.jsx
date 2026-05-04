@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { ArrowLeft, X } from "lucide-react";
 import { apiUrl } from "../../../config/api";
 import { useTheme } from "../../../context/ThemeContext";
+import PageBackground from "../../../components/PageBackground";
 
 export default function GameList({ showToast }) {
   const navigate = useNavigate();
@@ -94,17 +95,7 @@ export default function GameList({ showToast }) {
 
 
   return (
-    <div className={`relative w-screen min-h-screen overflow-hidden transition-colors duration-1000 ${isLightMode ? 'bg-slate-50' : 'bg-slate-950'}`}>
-      {/* Background to match startgame */}
-      <div className={`absolute inset-0 z-0 transition-all duration-1000 bg-gradient-to-br ${isLightMode ? 'from-slate-100 via-blue-50 to-slate-200' : 'from-slate-900 via-blue-900 to-indigo-950'}`} />
-      
-      {/* Animated Blobs */}
-      <div className="absolute inset-0 overflow-hidden z-0 opacity-40 pointer-events-none">
-        <div className={`absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full blur-[120px] animate-float transition-colors duration-1000 ${isLightMode ? 'bg-blue-300/40' : 'bg-blue-600/30'}`} />
-        <div className={`absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] rounded-full blur-[150px] animate-morph transition-colors duration-1000 ${isLightMode ? 'bg-indigo-300/30' : 'bg-indigo-600/20'}`} />
-        <div className={`absolute top-[20%] right-[10%] w-[30%] h-[30%] rounded-full blur-[100px] animate-float [animation-delay:2s] transition-colors duration-1000 ${isLightMode ? 'bg-cyan-300/20' : 'bg-cyan-600/20'}`} />
-      </div>
-
+    <PageBackground>
       <div 
         className={`relative z-10 min-h-screen p-4 sm:p-6 md:p-8 lg:p-10 backdrop-blur-md transition-colors duration-1000 ${isLightMode ? 'bg-white/30 text-slate-800' : 'bg-white/10 text-white'}`}
       >
@@ -191,9 +182,9 @@ export default function GameList({ showToast }) {
                     px-6 lg:px-8 
                     py-2.5 sm:py-3
                     rounded-full
-                    bg-emerald-500 hover:bg-emerald-400
+                    bg-blue-600 hover:bg-blue-500
                     text-white font-bold text-sm sm:text-base
-                    shadow-[0_0_15px_rgba(16,185,129,0.3)] hover:shadow-[0_0_25px_rgba(16,185,129,0.5)] hover:scale-105 active:scale-95
+                    shadow-[0_0_15px_rgba(37,99,235,0.3)] hover:shadow-[0_0_25px_rgba(37,99,235,0.5)] hover:scale-105 active:scale-95
                     transition-all duration-300
                   "
                 >
@@ -203,65 +194,66 @@ export default function GameList({ showToast }) {
             ))}
           </div>
         )}
-      </div>
 
-      {/* Join modal */}
-      {showJoinModal && (
-        <div className={`fixed inset-0 z-[1000] backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-300 ${isLightMode ? 'bg-slate-100/60' : 'bg-slate-950/80'}`}>
-          <div className={`backdrop-blur-2xl border p-6 sm:p-8 md:p-10 rounded-3xl shadow-2xl w-full max-w-[320px] sm:max-w-[350px] md:max-w-[400px] relative overflow-hidden transition-colors duration-1000 ${isLightMode ? 'bg-white/70 border-white/60' : 'bg-slate-900/60 border-white/10'}`}>
-            <button
-              onClick={() => setShowJoinModal(false)}
-              className={`absolute top-4 sm:top-6 right-4 sm:right-6 transition-colors ${isLightMode ? 'text-slate-400 hover:text-slate-800' : 'text-white/40 hover:text-white'}`}
-            >
-              <X size={20} className="sm:w-[24px] sm:h-[24px]" />
-            </button>
+        {/* Join modal */}
+        {showJoinModal && (
+          <div className={`fixed inset-0 z-[1000] backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-300 ${isLightMode ? 'bg-slate-100/60' : 'bg-slate-950/80'}`}>
+            <div className={`backdrop-blur-2xl border p-6 sm:p-8 md:p-10 rounded-3xl shadow-2xl w-full max-w-[320px] sm:max-w-[350px] md:max-w-[400px] relative overflow-hidden transition-colors duration-1000 ${isLightMode ? 'bg-white/70 border-white/60' : 'bg-slate-900/60 border-white/10'}`}>
+              <button
+                onClick={() => setShowJoinModal(false)}
+                className={`absolute top-4 sm:top-6 right-4 sm:right-6 transition-colors ${isLightMode ? 'text-slate-400 hover:text-slate-800' : 'text-white/40 hover:text-white'}`}
+              >
+                <X size={20} className="sm:w-[24px] sm:h-[24px]" />
+              </button>
 
-            <h2 className={`text-left text-2xl sm:text-3xl font-bold mb-2 tracking-tight transition-colors duration-1000 ${isLightMode ? 'text-slate-800' : 'text-white'}`}>
-              Join Game
-            </h2>
-            <p className={`text-left text-sm sm:text-base mb-6 sm:mb-8 font-medium transition-colors duration-1000 ${isLightMode ? 'text-slate-500' : 'text-white/50'}`}>
-              Enter the game code provided by the moderator
-            </p>
+              <h2 className={`text-left text-2xl sm:text-3xl font-bold mb-2 tracking-tight transition-colors duration-1000 ${isLightMode ? 'text-slate-800' : 'text-white'}`}>
+                Join Game
+              </h2>
+              <p className={`text-left text-sm sm:text-base mb-6 sm:mb-8 font-medium transition-colors duration-1000 ${isLightMode ? 'text-slate-500' : 'text-white/50'}`}>
+                Enter the game code provided by the moderator
+              </p>
 
-            <div className="relative group">
-              <input
-                value={gameCode}
-                onChange={(e) => setGameCode(e.target.value)}
-                placeholder="GAME CODE"
-                className={`
-                  w-full text-center
-                  border-2
-                  rounded-2xl 
-                  px-4 sm:px-5 
-                  py-3 sm:py-4 
-                  mb-6 sm:mb-8
-                  text-lg sm:text-xl font-bold
-                  tracking-[0.2em]
-                  focus:outline-none focus:border-emerald-400 focus:ring-4 focus:ring-emerald-400/20
-                  transition-all shadow-inner
-                  ${isLightMode ? 'bg-white/50 border-slate-300 text-slate-800 placeholder-slate-400' : 'bg-white/5 border-white/10 text-white placeholder-white/20'}
-                `}
-              />
+              <div className="relative group">
+                <input
+                  value={gameCode}
+                  onChange={(e) => setGameCode(e.target.value)}
+                  placeholder="GAME CODE"
+                  className={`
+                    w-full text-center
+                    border-2
+                    rounded-2xl 
+                    px-4 sm:px-5 
+                    py-3 sm:py-4 
+                    mb-6 sm:mb-8
+                    text-lg sm:text-xl font-bold
+                    tracking-[0.2em]
+                    focus:outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-400/20
+                    transition-all shadow-inner
+                    ${isLightMode ? 'bg-white/50 border-slate-300 text-slate-800 placeholder-slate-400' : 'bg-white/5 border-white/10 text-white placeholder-white/20'}
+                  `}
+                />
+              </div>
+
+              <button
+                onClick={joinGame}
+                disabled={joining}
+                className="
+                  w-full 
+                  py-3 sm:py-4
+                  rounded-2xl
+                  bg-blue-600 hover:bg-blue-500
+                  text-white font-bold text-base sm:text-lg
+                  disabled:opacity-50 disabled:hover:scale-100 disabled:cursor-not-allowed
+                  shadow-[0_0_15px_rgba(37,99,235,0.3)] hover:shadow-[0_0_25px_rgba(37,99,235,0.5)] hover:scale-[1.02] active:scale-95
+                  transition-all duration-300
+                "
+              >
+                {joining ? "Joining…" : "Join Game"}
+              </button>
             </div>
-
-            <button
-              onClick={joinGame}
-              disabled={joining}
-              className="
-                w-full 
-                py-3 sm:py-4
-                rounded-2xl
-                bg-emerald-500 hover:bg-emerald-400
-                text-white font-bold text-base sm:text-lg
-                disabled:opacity-50 disabled:hover:scale-100 disabled:cursor-not-allowed
-                shadow-[0_0_15px_rgba(16,185,129,0.3)] hover:shadow-[0_0_25px_rgba(16,185,129,0.5)] hover:scale-[1.02] active:scale-95
-                transition-all duration-300
-              "
-            >
-              {joining ? "Joining…" : "Join Game"}
-            </button>
           </div>
-        </div>
-      )}
-    </div>
-  );}
+        )}
+      </div>
+    </PageBackground>
+  );
+}

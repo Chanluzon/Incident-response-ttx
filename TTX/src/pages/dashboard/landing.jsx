@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { ChevronRight } from "lucide-react";
 import WorldtechLogo from "../../images/Worldtech 2.png";
 import { useTheme } from "../../context/ThemeContext";
+import PageBackground from "../../components/PageBackground";
 
 export default function Landing() {
   const navigate = useNavigate();
@@ -12,33 +13,20 @@ export default function Landing() {
   };
 
   return (
-    <div className={`relative w-screen h-screen overflow-hidden transition-colors duration-1000 ${isLightMode ? 'bg-slate-50' : 'bg-slate-950'}`}>
-      {/* Background to match the rest of the app */}
-      <div className={`absolute inset-0 z-0 transition-all duration-1000 bg-gradient-to-br ${isLightMode ? 'from-slate-100 via-blue-50 to-slate-200' : 'from-slate-900 via-blue-900 to-indigo-950'}`} />
-
-      {/* Animated Blobs */}
-      <div className="absolute inset-0 overflow-hidden z-0 opacity-50 pointer-events-none">
-        <div className={`absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full blur-[150px] animate-float transition-colors duration-1000 ${isLightMode ? 'bg-blue-300/40' : 'bg-blue-600/40'}`} />
-        <div className={`absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] rounded-full blur-[150px] animate-morph transition-colors duration-1000 ${isLightMode ? 'bg-indigo-300/30' : 'bg-indigo-600/30'}`} />
-        <div className={`absolute top-[20%] right-[10%] w-[30%] h-[30%] rounded-full blur-[100px] animate-float [animation-delay:2s] transition-colors duration-1000 ${isLightMode ? 'bg-cyan-300/20' : 'bg-cyan-600/20'}`} />
-      </div>
-
-      {/* Decorative Sci-Fi Elements */}
+    <PageBackground>
+      {/* Decorative Sci-Fi Elements - Keep these as they are unique to Landing */}
       <div className="absolute inset-0 pointer-events-none z-20 overflow-hidden">
         {/* Horizontal Scanning Lines */}
         <div className={`absolute top-[15%] left-0 w-full h-[1px] bg-gradient-to-r from-transparent to-transparent animate-pulse transition-colors duration-1000 ${isLightMode ? 'via-slate-800/10' : 'via-white/10'}`} />
-        <div className={`absolute bottom-[20%] left-0 w-full h-[1px] bg-gradient-to-r from-transparent to-transparent animate-pulse transition-colors duration-1000 ${isLightMode ? 'via-emerald-500/40' : 'via-emerald-500/20'}`} />
+        <div className={`absolute bottom-[20%] left-0 w-full h-[1px] bg-gradient-to-r from-transparent to-transparent animate-pulse transition-colors duration-1000 ${isLightMode ? 'via-blue-500/40' : 'via-blue-500/20'}`} />
 
         {/* Tech Corner Text */}
-        <div className={`absolute top-8 sm:top-10 right-24 sm:right-28 font-mono text-xs sm:text-sm tracking-[0.4em] animate-[fadeIn_1s_ease-out_forwards] transition-colors duration-1000 ${isLightMode ? 'text-emerald-600/60' : 'text-emerald-400/40'}`}>
+        <div className={`absolute top-8 sm:top-10 right-24 sm:right-28 font-mono text-xs sm:text-sm tracking-[0.4em] animate-[fadeIn_1s_ease-out_forwards] transition-colors duration-1000 ${isLightMode ? 'text-blue-600/60' : 'text-blue-400/40'}`}>
           SYS.SEC.OK // v2.0.4
         </div>
         <div className={`absolute bottom-8 sm:bottom-10 left-8 sm:left-10 font-mono text-xs sm:text-sm tracking-[0.4em] animate-[fadeIn_1s_ease-out_forwards] transition-colors duration-1000 ${isLightMode ? 'text-slate-800/30' : 'text-white/20'}`}>
           NODE: OMEGA-01
         </div>
-
-        {/* Grid pattern overlay */}
-        <div className={`absolute inset-0 bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_50%,#000_20%,transparent_100%)] transition-colors duration-1000 ${isLightMode ? 'bg-[linear-gradient(rgba(0,0,0,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.03)_1px,transparent_1px)]' : 'bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)]'}`} />
       </div>
 
       <div className={`relative z-30 w-full h-full flex flex-col items-center justify-center p-6 backdrop-blur-sm transition-colors duration-1000 ${isLightMode ? 'bg-white/30' : 'bg-white/5'}`}>
@@ -60,7 +48,7 @@ export default function Landing() {
               INCIDENT
             </h1>
           </div>
-          <h1 className={`relative z-20 text-transparent bg-clip-text bg-gradient-to-br text-4xl sm:text-5xl md:text-6xl lg:text-[5rem] font-black tracking-tight animate-[fadeIn_1.5s_ease-out_forwards] hover:scale-105 transition-all duration-1000 ease-out mt-2 sm:mt-4 ${isLightMode ? 'from-emerald-500 via-emerald-600 to-teal-700 drop-shadow-[0_0_15px_rgba(16,185,129,0.3)]' : 'from-emerald-300 via-emerald-400 to-teal-600 drop-shadow-[0_0_20px_rgba(16,185,129,0.5)]'}`}>
+          <h1 className={`relative z-20 text-transparent bg-clip-text bg-gradient-to-br text-4xl sm:text-5xl md:text-6xl lg:text-[5rem] font-black tracking-tight animate-[fadeIn_1.5s_ease-out_forwards] hover:scale-105 transition-all duration-1000 ease-out mt-2 sm:mt-4 ${isLightMode ? 'from-blue-500 via-indigo-600 to-cyan-700 drop-shadow-[0_0_15px_rgba(59,130,246,0.3)]' : 'from-blue-300 via-indigo-400 to-cyan-600 drop-shadow-[0_0_20px_rgba(59,130,246,0.5)]'}`}>
             RESPONSE TTX
           </h1>
 
@@ -90,8 +78,8 @@ export default function Landing() {
               px-6 sm:px-8
               
               ${isLightMode
-                ? 'bg-emerald-600 hover:bg-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_40px_rgba(16,185,129,0.5)] border-emerald-500/50 hover:border-emerald-400/80'
-                : 'bg-emerald-500/90 hover:bg-emerald-400 backdrop-blur-xl shadow-[0_0_30px_rgba(16,185,129,0.4)] hover:shadow-[0_0_50px_rgba(16,185,129,0.7)] border-emerald-300/50 hover:border-white/50'}
+                ? 'bg-blue-600 hover:bg-blue-500 shadow-[0_0_20px_rgba(37,99,235,0.3)] hover:shadow-[0_0_40px_rgba(37,99,235,0.5)] border-blue-500/50 hover:border-blue-400/80'
+                : 'bg-blue-600/90 hover:bg-blue-500 backdrop-blur-xl shadow-[0_0_30px_rgba(37,99,235,0.4)] hover:shadow-[0_0_50px_rgba(37,99,235,0.7)] border-blue-300/50 hover:border-white/50'}
             `}
           >
             {/* Tech scanning line inside button */}
@@ -103,6 +91,7 @@ export default function Landing() {
           </button>
         </div>
       </div>
-    </div>
+    </PageBackground>
   );
 }
+

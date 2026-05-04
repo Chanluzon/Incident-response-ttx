@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Trophy, X, Maximize2 } from "lucide-react";
 import confetti from "canvas-confetti";
 import { useTheme } from "../../../context/ThemeContext";
+import PageBackground from "../../../components/PageBackground";
 
 import CircularDropContainers from "../../../layouts/CircularDropContainers";
 import DropContainers from "../../../layouts/dropContainers";
@@ -294,18 +295,7 @@ export default function StartGame() {
   const hasStartedRound = activeRoundId && group && JSON.parse(localStorage.getItem("startedRounds") || "[]").includes(`${group.group_id}_${activeRoundId}`);
 
   return (
-    <div className={`relative w-screen min-h-screen overflow-hidden transition-colors duration-1000 ${isLightMode ? 'bg-slate-50' : 'bg-slate-950'}`}>
-      <div className={`absolute inset-0 z-0 transition-all duration-1000 bg-gradient-to-br ${isLightMode ? 'from-slate-100 via-blue-50 to-slate-200' : 'from-slate-900 via-blue-900 to-indigo-950'}`} />
-
-      {/* Animated Logo Background */}
-
-      {/* Animated Blobs */}
-      <div className="absolute inset-0 overflow-hidden z-0 opacity-40">
-        <div className={`absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full blur-[120px] animate-float transition-colors duration-1000 ${isLightMode ? 'bg-blue-300/40' : 'bg-blue-600/30'}`} />
-        <div className={`absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] rounded-full blur-[150px] animate-morph transition-colors duration-1000 ${isLightMode ? 'bg-indigo-300/30' : 'bg-indigo-600/20'}`} />
-        <div className={`absolute top-[20%] right-[10%] w-[30%] h-[30%] rounded-full blur-[100px] animate-float [animation-delay:2s] transition-colors duration-1000 ${isLightMode ? 'bg-cyan-300/20' : 'bg-cyan-600/20'}`} />
-      </div>
-
+    <PageBackground>
       <div className={`relative z-10 min-h-screen backdrop-blur-md transition-colors duration-1000 ${isLightMode ? 'bg-white/30 text-slate-800' : 'bg-white/10 text-white'}`}>
         {/* Animated Logo Background — above blur layers */}
         <AnimatedLogoBackground />
@@ -348,7 +338,7 @@ export default function StartGame() {
               className={`px-4 py-2 rounded-xl font-bold text-sm md:text-base shadow-xl transition-all duration-300 z-20 border
               ${isSubmitted || roundEnded
                   ? (isLightMode ? "bg-slate-200 border-slate-300 cursor-not-allowed text-slate-400" : "bg-white/5 backdrop-blur-md border-white/10 cursor-not-allowed text-white/30")
-                  : (isLightMode ? "bg-emerald-600 border-emerald-500 hover:bg-emerald-500 text-white shadow-[0_0_15px_rgba(16,185,129,0.3)] hover:scale-105 active:scale-95" : "bg-emerald-500 border-emerald-400 hover:bg-emerald-400 text-white shadow-[0_0_15px_rgba(16,185,129,0.4)] hover:scale-105 active:scale-95")}`}
+                  : (isLightMode ? "bg-blue-600 border-blue-500 hover:bg-blue-500 text-white shadow-[0_0_15px_rgba(37,99,235,0.3)] hover:scale-105 active:scale-95" : "bg-blue-500 border-blue-400 hover:bg-blue-400 text-white shadow-[0_0_15px_rgba(37,99,235,0.4)] hover:scale-105 active:scale-95")}`}
             >
               {isSubmitted ? "Submitted" : "Submit"}
             </button>
@@ -431,7 +421,7 @@ export default function StartGame() {
                           hover:-translate-y-2 transition-all duration-300 cursor-pointer
                           ${isLightMode ? 'bg-white/60 hover:bg-white/80 border-slate-300' : 'bg-white/10 hover:bg-white/20 border-white/20'}`}
               >
-                <div className={`w-10 h-1 sm:w-12 sm:h-1.5 md:w-16 md:h-1.5 rounded-full mb-1.5 sm:mb-2 transition-all duration-300 ${isLightMode ? 'bg-slate-300 group-hover:bg-emerald-500 group-hover:shadow-[0_0_10px_rgba(16,185,129,0.5)]' : 'bg-white/40 group-hover:bg-yellow-400 group-hover:shadow-[0_0_10px_rgba(250,204,21,0.5)]'}`} />
+                <div className={`w-10 h-1 sm:w-12 sm:h-1.5 md:w-16 md:h-1.5 rounded-full mb-1.5 sm:mb-2 transition-all duration-300 ${isLightMode ? 'bg-slate-300 group-hover:bg-blue-500 group-hover:shadow-[0_0_10px_rgba(37,99,235,0.5)]' : 'bg-white/40 group-hover:bg-yellow-400 group-hover:shadow-[0_0_10px_rgba(250,204,21,0.5)]'}`} />
                 <span className={`font-bold text-xs md:text-sm tracking-[0.2em] uppercase opacity-80 group-hover:opacity-100 transition-opacity ${isLightMode ? 'text-slate-600' : 'text-white'}`}>
                   Your Cards
                 </span>
@@ -439,10 +429,6 @@ export default function StartGame() {
             </div>
           )}
         </div>
-
-
-
-
 
 
         {/* Blocker Modal */}
@@ -480,7 +466,7 @@ export default function StartGame() {
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                       ) : (
-                        <svg className="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
@@ -523,7 +509,7 @@ export default function StartGame() {
                       className={`w-full py-4 rounded-xl font-bold text-base transition-all duration-200
                       ${!activeRoundId
                           ? (isLightMode ? "bg-slate-200 text-slate-400 cursor-not-allowed" : "bg-white/5 text-white/20 cursor-not-allowed")
-                          : (isLightMode ? "bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg active:scale-95" : "bg-emerald-500 hover:bg-emerald-400 text-white shadow-lg active:scale-95")}`}
+                          : (isLightMode ? "bg-blue-600 hover:bg-blue-500 text-white shadow-lg active:scale-95" : "bg-blue-500 hover:bg-blue-400 text-white shadow-lg active:scale-95")}`}
                     >
                       {isSubmitted ? "REVIEW BOARD" : (hasStartedRound ? "RESUME MISSION" : "START MISSION")}
                     </button>
@@ -543,7 +529,7 @@ export default function StartGame() {
 
         {showSubmitConfirm && (
           <div className={`fixed inset-0 z-[100] flex items-center justify-center p-4 animate-in fade-in duration-300 ${isLightMode ? 'bg-slate-100/60 backdrop-blur-sm' : 'bg-slate-950/80'}`}>
-            <div className={`backdrop-blur-2xl border rounded-3xl p-6 md:p-8 w-full max-w-sm shadow-2xl text-center relative overflow-hidden transition-colors duration-1000 ${isLightMode ? 'bg-white/70 border-white/60' : 'bg-slate-900/60 border-white/10'}`}>
+            <div className={`backdrop-blur-2xl border rounded-3xl p-6 md:p-8 w-full max-w-[420px] shadow-2xl text-center relative overflow-hidden transition-colors duration-1000 ${isLightMode ? 'bg-white/70 border-white/60' : 'bg-slate-900/60 border-white/10'}`}>
               <h2 className={`text-left text-xl md:text-2xl font-bold mb-3 ${isLightMode ? 'text-slate-800' : 'text-white'}`}>
                 Submit your answers?
               </h2>
@@ -564,7 +550,7 @@ export default function StartGame() {
                 <button
                   onClick={submitAnswers}
                   className={`flex-1 py-3 rounded-xl font-bold text-sm md:text-base shadow-lg transition-all duration-200 active:scale-95
-                          ${isLightMode ? 'bg-emerald-600 hover:bg-emerald-500 text-white' : 'bg-emerald-500 hover:bg-emerald-400 text-white'}`}
+                          ${isLightMode ? 'bg-blue-600 hover:bg-blue-500 text-white' : 'bg-blue-500 hover:bg-blue-400 text-white'}`}
                 >
                   Submit
                 </button>
@@ -604,7 +590,7 @@ export default function StartGame() {
               </div>
 
               {/* Decorative accent */}
-              <div className={`absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r ${isLightMode ? 'from-emerald-500 via-blue-500 to-purple-500' : 'from-yellow-500 via-amber-600 to-orange-500'} opacity-50`} />
+              <div className={`absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r ${isLightMode ? 'from-blue-500 via-indigo-500 to-cyan-500' : 'from-blue-500 via-indigo-600 to-cyan-500'} opacity-50`} />
             </div>
           </div>
         )}
@@ -665,6 +651,6 @@ export default function StartGame() {
         onClose={() => setShowLeaderboard(false)}
         gameId={leaderboardGameId}
       />
-    </div>
+    </PageBackground>
   );
 }
