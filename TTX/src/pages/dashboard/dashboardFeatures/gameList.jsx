@@ -97,7 +97,7 @@ export default function GameList({ showToast }) {
   return (
     <PageBackground>
       <div 
-        className={`relative z-10 min-h-screen p-4 sm:p-6 md:p-8 lg:p-10 backdrop-blur-md transition-colors duration-1000 ${isLightMode ? 'bg-white/30 text-slate-800' : 'bg-white/10 text-white'}`}
+        className={`relative z-10 min-h-screen p-4 sm:p-6 md:p-8 lg:p-10 transition-colors duration-1000 ${isLightMode ? 'text-slate-800' : 'text-white'}`}
       >
         {/* Back Button */}
         <button

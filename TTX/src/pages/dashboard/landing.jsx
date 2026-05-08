@@ -14,22 +14,7 @@ export default function Landing() {
 
   return (
     <PageBackground>
-      {/* Decorative Sci-Fi Elements - Keep these as they are unique to Landing */}
-      <div className="absolute inset-0 pointer-events-none z-20 overflow-hidden">
-        {/* Horizontal Scanning Lines */}
-        <div className={`absolute top-[15%] left-0 w-full h-[1px] bg-gradient-to-r from-transparent to-transparent animate-pulse transition-colors duration-1000 ${isLightMode ? 'via-slate-800/10' : 'via-white/10'}`} />
-        <div className={`absolute bottom-[20%] left-0 w-full h-[1px] bg-gradient-to-r from-transparent to-transparent animate-pulse transition-colors duration-1000 ${isLightMode ? 'via-blue-500/40' : 'via-blue-500/20'}`} />
-
-        {/* Tech Corner Text */}
-        <div className={`absolute top-8 sm:top-10 right-24 sm:right-28 font-mono text-xs sm:text-sm tracking-[0.4em] animate-[fadeIn_1s_ease-out_forwards] transition-colors duration-1000 ${isLightMode ? 'text-blue-600/60' : 'text-blue-400/40'}`}>
-          SYS.SEC.OK // v2.0.4
-        </div>
-        <div className={`absolute bottom-8 sm:bottom-10 left-8 sm:left-10 font-mono text-xs sm:text-sm tracking-[0.4em] animate-[fadeIn_1s_ease-out_forwards] transition-colors duration-1000 ${isLightMode ? 'text-slate-800/30' : 'text-white/20'}`}>
-          NODE: OMEGA-01
-        </div>
-      </div>
-
-      <div className={`relative z-30 w-full h-full flex flex-col items-center justify-center p-6 backdrop-blur-sm transition-colors duration-1000 ${isLightMode ? 'bg-white/30' : 'bg-white/5'}`}>
+      <div className="relative z-30 w-full h-full flex flex-col items-center justify-center p-6">
         {/* Worldtech Logo */}
         <div className="absolute top-6 sm:top-8 md:top-10 left-6 sm:left-8 md:left-10 z-40 animate-breath">
           <img

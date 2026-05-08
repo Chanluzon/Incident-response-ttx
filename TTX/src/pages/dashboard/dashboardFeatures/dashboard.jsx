@@ -30,7 +30,7 @@ export default function Dashboard() {
 
   return (
     <PageBackground>
-      <div className={`relative z-10 min-h-screen p-3 sm:p-4 md:p-5 lg:p-10 overflow-hidden backdrop-blur-md flex flex-col transition-colors duration-1000 ${isLightMode ? 'bg-white/30 text-slate-800' : 'bg-white/10 text-white'}`}>
+      <div className={`relative z-10 min-h-screen p-3 sm:p-4 md:p-5 lg:p-10 flex flex-col transition-colors duration-1000 ${isLightMode ? 'text-slate-800' : 'text-white'}`}>
         {/* Back Button */}
         <button
           onClick={() => navigate("/SetUp")}

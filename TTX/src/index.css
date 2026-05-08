@@ -202,3 +202,40 @@ body {
 .animate-shimmer {
   animation: shimmer 2s infinite linear;
 }
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+.animate-twinkle {
+  animation: twinkle 3s ease-in-out infinite;
+}
+
+@keyframes stars-move {
+  from { transform: translateY(0); }
+  to { transform: translateY(-100px); }
+}
+
+.animate-stars {
+  animation: stars-move 100s linear infinite;
+}
+
+@keyframes shooting-star {
+  0% { transform: translateX(0) translateY(0) rotate(-45deg) scale(0); opacity: 0; }
+  10% { transform: translateX(-100px) translateY(100px) rotate(-45deg) scale(1); opacity: 1; }
+  30% { transform: translateX(-400px) translateY(400px) rotate(-45deg) scale(0.5); opacity: 0; }
+  100% { transform: translateX(-400px) translateY(400px) rotate(-45deg) scale(0); opacity: 0; }
+}
+
+.animate-shooting-star {
+  animation: shooting-star 5s linear infinite;
+}
+@keyframes scanline {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+.animate-scanline {
+  animation: scanline 8s linear infinite;
+}

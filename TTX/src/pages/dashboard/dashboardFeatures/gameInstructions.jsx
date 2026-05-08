@@ -22,7 +22,7 @@ export default function GameInstructions() {
 
   return (
     <PageBackground>
-      <div className={`relative z-10 w-full min-h-screen overflow-auto p-4 sm:p-6 md:p-8 lg:p-10 backdrop-blur-md flex flex-col items-center transition-colors duration-1000 ${isLightMode ? 'bg-white/30' : 'bg-white/10'}`}>
+      <div className="relative z-10 w-full min-h-screen overflow-auto p-4 sm:p-6 md:p-8 lg:p-10 flex flex-col items-center">
         {/* Back Button */}
         <div className="w-full max-w-5xl relative z-20">
           <button

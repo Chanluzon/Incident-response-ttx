@@ -61,7 +61,7 @@ export default function PreviewBoard() {
 
   return (
     <PageBackground>
-      <div className={`relative z-10 min-h-screen backdrop-blur-md flex flex-col transition-colors duration-1000 ${isLightMode ? 'bg-white/30 text-slate-800' : 'bg-white/10 text-white'}`}>
+      <div className={`relative z-10 min-h-screen flex flex-col transition-colors duration-1000 ${isLightMode ? 'text-slate-800' : 'text-white'}`}>
         {/* Animated Logo Background — above blur layers */}
         <AnimatedLogoBackground />
 

@@ -107,8 +107,8 @@ export default function RegisterPage() {
 
   return (
     <PageBackground>
-      <div className={`relative z-10 w-full h-full flex items-center justify-center p-4 backdrop-blur-sm transition-colors duration-1000 ${isLightMode ? 'bg-white/30' : 'bg-white/5'}`}>
-        <div className={`backdrop-blur-2xl border p-8 sm:p-10 rounded-3xl shadow-2xl w-full max-w-[480px] transition-colors duration-1000 ${isLightMode ? 'bg-white/60 border-white/40' : 'bg-slate-900/60 border-white/10'}`}>
+      <div className="relative z-10 w-full h-full flex items-center justify-center p-4">
+        <div className={`backdrop-blur-2xl border p-8 sm:p-10 rounded-[2rem] shadow-2xl w-full max-w-[480px] transition-all duration-500 ${isLightMode ? 'bg-white/70 border-white/40' : 'bg-slate-900/40 border-white/10'}`}>
           <div className="text-center mb-8">
             <div className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4 transition-colors duration-1000 ${isLightMode ? 'bg-blue-50' : 'bg-blue-500/10'}`}>
               <ShieldCheck className="text-blue-500 w-10 h-10" />

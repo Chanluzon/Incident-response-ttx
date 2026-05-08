@@ -47,9 +47,9 @@ export default function SetUp() {
   return (
     <PageBackground>
       <div
-        className={`relative z-10 w-full h-full flex items-center justify-center p-2 sm:p-4 backdrop-blur-sm transition-colors duration-1000 ${isLightMode ? 'bg-white/30' : 'bg-white/10'}`}
+        className="relative z-10 w-full h-full flex items-center justify-center p-2 sm:p-4"
       >
-        <div className={`relative backdrop-blur-2xl border rounded-3xl shadow-[0_20px_60px_rgba(0,0,0,0.5)] w-[700px] max-w-[95%] max-h-[95%] overflow-y-auto hide-scrollbar p-6 sm:p-8 flex flex-col transition-colors duration-1000 ${isLightMode ? 'bg-white/60 border-white/40' : 'bg-slate-900/60 border-white/10'}`}>
+        <div className={`relative backdrop-blur-2xl border rounded-[2rem] shadow-[0_20px_60px_rgba(0,0,0,0.3)] w-[700px] max-w-[95%] max-h-[95%] overflow-y-auto hide-scrollbar p-8 sm:p-10 flex flex-col transition-all duration-500 ${isLightMode ? 'bg-white/60 border-slate-300' : 'bg-slate-900/40 border-white/10'}`}>
           {/* Header */}
           <div className="text-center pt-1 sm:pt-2 pb-4 sm:pb-6">
             <h1 className={`text-3xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-br tracking-tight drop-shadow-sm mb-2 transition-colors duration-1000 ${isLightMode ? 'from-slate-800 to-slate-500' : 'from-white to-white/70'}`}>
