@@ -148,11 +148,8 @@ export default function ContainerModal({
           </p>
         </div>
 
-        {isInfosecFull && (
-          <p className="text-sm text-purple-600 mb-3 text-left">
-            Only one InfoSec Pillar card is allowed in this container.
-          </p>
-        )}
+
+
 
         {/* Cards */}
         {cards.length === 0 ? (

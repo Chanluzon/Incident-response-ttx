@@ -368,15 +368,15 @@ export default function StartGame() {
           </div>
         </div>
 
-        <div className="mb-4 mt-0 px-4 flex flex-col items-center">
+        <div className="mb-4 mt-[-40px] px-4 flex flex-col items-center relative z-20">
           <div
             onClick={() => setShowFullScenario(true)}
-            className={`backdrop-blur-3xl border-2 rounded-[2rem] shadow-[0_20px_60px_rgba(0,0,0,0.15)] px-8 py-4 w-fit max-w-lg text-center relative overflow-hidden group transition-all duration-700 cursor-pointer hover:scale-[1.03] active:scale-[0.97] ${isLightMode ? 'bg-white/70 border-white/60 hover:bg-white/90' : 'bg-white/5 border-white/10 hover:bg-white/15'}`}>
+            className={`backdrop-blur-3xl border-2 rounded-[2rem] shadow-[0_20px_60px_rgba(239,68,68,0.2)] px-6 py-3 w-[300px] h-[100px] flex flex-col justify-center items-center text-center relative overflow-hidden group transition-all duration-700 cursor-pointer hover:scale-[1.03] active:scale-[0.97] ${isLightMode ? 'bg-red-50/90 border-red-200 hover:bg-red-100/95' : 'bg-red-500/10 border-red-500/40 hover:bg-red-500/20'}`}>
 
             {/* Liquid Glow Accent */}
-            <div className={`absolute top-0 left-0 w-full h-1 bg-gradient-to-r ${isLightMode ? 'from-transparent via-blue-400/40 to-transparent' : 'from-transparent via-amber-400/40 to-transparent'} opacity-50`} />
+            <div className={`absolute top-0 left-0 w-full h-1 bg-gradient-to-r ${isLightMode ? 'from-transparent via-red-400/40 to-transparent' : 'from-transparent via-red-400/40 to-transparent'} opacity-50`} />
 
-            <h3 className={`font-black text-xs uppercase tracking-[0.4em] mb-2 transition-colors ${isLightMode ? 'text-slate-400' : 'text-amber-400/80'}`}>
+            <h3 className={`font-black text-xs uppercase tracking-[0.4em] mb-2 transition-colors ${isLightMode ? 'text-red-600' : 'text-red-400'}`}>
               Target Scenario
             </h3>
 
@@ -463,7 +463,7 @@ export default function StartGame() {
                     </div>
                     <h2 className={`text-3xl md:text-4xl font-black mb-4 tracking-tighter ${isLightMode ? 'text-slate-800' : 'text-white'}`}>ROUND COMPLETE</h2>
                     <p className={`mb-10 text-base md:text-lg font-medium leading-relaxed tracking-tight ${isLightMode ? 'text-slate-500' : 'text-white/50'}`}>
-                      Mission parameters finalized. Review your strategic performance on the battlefield leaderboard.
+                      Review your strategic performance on the leaderboard.
                     </p>
                     <button
                       onClick={() => {
@@ -592,17 +592,17 @@ export default function StartGame() {
 
         {showFullScenario && (
           <div className={`fixed inset-0 z-[400] flex items-center justify-center p-4 animate-in fade-in duration-500 ${isLightMode ? 'bg-slate-100/70 backdrop-blur-md' : 'bg-slate-950/90'}`}>
-            <div className={`backdrop-blur-[50px] border-2 rounded-[3rem] p-10 shadow-[0_50px_120px_rgba(0,0,0,0.6)] text-center w-full max-w-3xl relative overflow-hidden transition-all duration-700 ${isLightMode ? 'bg-white/95 border-white/80' : 'bg-slate-900/90 border-white/10'}`}>
+            <div className={`backdrop-blur-[50px] border-2 rounded-[3rem] p-10 shadow-[0_50px_120px_rgba(0,0,0,0.6)] text-center w-full max-w-4xl relative overflow-hidden transition-all duration-700 ${isLightMode ? 'bg-white/95 border-white/80' : 'bg-slate-900/90 border-white/10'}`}>
 
 
 
-              <div className={`relative z-10 ${activeThreat?.description?.length < 120 ? 'text-center' : 'text-left'}`}>
+              <div className={`relative z-10 w-full ${activeThreat?.description?.length < 120 ? 'text-center' : 'text-left'}`}>
                 <h3 className={`font-black text-xs uppercase tracking-[0.6em] mb-8 transition-colors ${isLightMode ? 'text-slate-400' : 'text-amber-400/60'} ${activeThreat?.description?.length < 120 ? 'text-center' : 'text-left'}`}>
                   TARGET SCENARIO
                 </h3>
 
-                <div className={`p-8 rounded-[2rem] mb-10 transition-all duration-500 shadow-inner ${isLightMode ? 'bg-slate-50 border-2 border-slate-100' : 'bg-white/5 border-2 border-white/10'}`}>
-                  <p className={`text-xl md:text-2xl font-black leading-relaxed tracking-tight transition-colors ${isLightMode ? 'text-slate-800' : 'text-white'} ${activeThreat?.description?.length < 120 ? 'text-center' : 'text-left'}`}>
+                <div className={`p-8 rounded-[2rem] mb-10 transition-all duration-500 shadow-inner h-[450px] overflow-y-auto custom-scrollbar ${isLightMode ? 'bg-slate-50 border-2 border-slate-100' : 'bg-white/5 border-2 border-white/10'}`}>
+                  <p className={`text-xl md:text-2xl font-black leading-relaxed tracking-tight break-all transition-colors ${isLightMode ? 'text-slate-800' : 'text-white'} ${activeThreat?.description?.length < 120 ? 'text-center' : 'text-left'}`}>
                     <FormattedDescription
                       description={activeThreat?.description ?? "Awaiting mission data injection..."}
                     />

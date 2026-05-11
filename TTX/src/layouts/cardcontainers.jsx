@@ -58,7 +58,7 @@ function CardItem({ card, preview, onTouchStart, onDragStartCallback, onClick })
       <div className="px-2 py-0.5 rounded-lg bg-black/10 border border-black/5 text-[8px] font-black uppercase tracking-widest opacity-60 mb-1 mx-auto w-fit mt-1">
         {card.category}
       </div>
- 
+
       {/* Description Box Shadow Background - Expanded to edges and filling space */}
       <div className="flex-1 flex flex-col mb-[-1rem] sm:mb-[-1.25rem] mx-[-0.85rem] sm:mx-[-1.15rem] min-h-0">
         <div className={`
@@ -289,7 +289,7 @@ export default function CardContainer({
         dragStarted = true;
         setTouchDragging(true);
         setDraggedCardData(cardData);
-        
+
         // Visual feedback
         const clone = target.cloneNode(true);
         clone.style.position = "fixed";
@@ -328,10 +328,10 @@ export default function CardContainer({
       if (clone) clone.remove();
 
       const endTouch = endEvent.changedTouches[0];
-      
+
       // Hide the clone temporarily to get the element underneath if needed
       // (Though we already removed it)
-      
+
       const dropTarget = document.elementFromPoint(endTouch.clientX, endTouch.clientY);
       const container = dropTarget?.closest(".drop-target");
 
@@ -375,11 +375,11 @@ export default function CardContainer({
         className={`backdrop-blur-3xl border-t border-x rounded-t-[2.5rem] shadow-[0_-20px_60px_rgba(0,0,0,0.4)] flex flex-col pointer-events-auto transition-all duration-700
                   w-full max-w-2xl
                   h-[440px] md:h-[500px]
-                  ${isLightMode 
-                    ? 'bg-white/90 border-white/50' 
-                    : 'bg-[#0f172a]/95 border-blue-500/20'}`}
+                  ${isLightMode
+            ? 'bg-white/90 border-white/50'
+            : 'bg-[#0f172a]/95 border-blue-500/20'}`}
         onMouseDown={(e) => e.stopPropagation()}
-        style={{ 
+        style={{
           animation: isOpen ? "slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards" : "slideDown 0.4s cubic-bezier(0.7, 0, 0.84, 0) forwards"
         }}
       >
@@ -402,7 +402,7 @@ export default function CardContainer({
 
           {/* Title, subtitle */}
           <h2 className={`text-xl sm:text-2xl md:text-3xl font-black mb-1 text-left tracking-tight transition-colors duration-1000 ${isLightMode ? 'text-slate-900' : 'text-white'}`}>
-            Your Cards
+            Your E-Cards
           </h2>
           <p className={`text-xs sm:text-sm text-left font-medium transition-colors duration-1000 ${isLightMode ? 'text-slate-600' : 'text-white/60'}`}>
             Drag from anywhere to move, search and add cards into the board.
@@ -421,8 +421,8 @@ export default function CardContainer({
                   key={cat.key}
                   onClick={() => setActiveCategory(cat.key)}
                   className={`px-4 py-2 rounded-xl font-bold text-xs sm:text-sm whitespace-nowrap border-2 transition-all duration-300 ${cat.style}
-                    ${active 
-                      ? `scale-105 shadow-[0_0_15px_rgba(0,0,0,0.1)] ring-2 ring-offset-2 ${isLightMode ? 'ring-blue-400 ring-offset-white' : 'ring-blue-500 ring-offset-[#0f172a]'} opacity-100` 
+                    ${active
+                      ? `scale-105 shadow-[0_0_15px_rgba(0,0,0,0.1)] ring-2 ring-offset-2 ${isLightMode ? 'ring-blue-400 ring-offset-white' : 'ring-blue-500 ring-offset-[#0f172a]'} opacity-100`
                       : `opacity-50 hover:opacity-80`
                     }
                   `}
@@ -443,8 +443,8 @@ export default function CardContainer({
             placeholder="Search cards..."
             className={`w-full shadow-inner rounded-xl px-4 py-2.5 text-sm font-medium
               focus:outline-none focus:ring-2 transition-all pointer-events-auto duration-1000
-              ${isLightMode 
-                ? 'bg-white/90 text-slate-900 placeholder-slate-400 border border-slate-200 focus:ring-blue-400 focus:bg-white' 
+              ${isLightMode
+                ? 'bg-white/90 text-slate-900 placeholder-slate-400 border border-slate-200 focus:ring-blue-400 focus:bg-white'
                 : 'bg-white/5 text-white placeholder-white/30 border border-white/10 focus:ring-blue-500/50 focus:bg-white/10'}`}
           />
         </div>
@@ -509,9 +509,9 @@ export default function CardContainer({
                 ${getCardInnerStyle(selectedCard.category)}
               `}>
                 <div className="flex-1 overflow-y-auto min-h-0 pr-2 custom-scrollbar">
-                  <FormattedDescription 
-                    description={selectedCard.description} 
-                    className="text-base sm:text-lg font-semibold italic leading-relaxed drop-shadow-sm" 
+                  <FormattedDescription
+                    description={selectedCard.description}
+                    className="text-base sm:text-lg font-semibold italic leading-relaxed drop-shadow-sm"
                   />
                 </div>
               </div>

@@ -67,30 +67,32 @@ export default function PreviewBoard() {
 
         {/* Top Navigation */}
         <div className="flex justify-between items-center pt-2 px-6 sm:px-12 pb-2">
-          {/* Logo Section */}
-          <div className="flex items-center">
+          {/* Logo + Back Button Section */}
+          <div className="flex items-center gap-4">
             <img src={WorldtechLogo} alt="Worldtech" className="h-8 md:h-12 lg:h-16 object-contain hover:scale-110 hover:-rotate-2 transition-all duration-300 cursor-pointer hover:drop-shadow-[0_0_15px_rgba(255,255,255,0.4)]" />
+
+            {/* Back button — beside logo */}
+            <button
+              onClick={() => navigate(-1)}
+              className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full
+                backdrop-blur-xl border transition-all duration-300 group shadow-lg hover:-translate-x-1
+                ${isLightMode
+                  ? 'bg-white/50 hover:bg-white/80 border-slate-300 text-slate-600 hover:text-slate-900 shadow-[0_0_20px_rgba(0,0,0,0.05)]'
+                  : 'bg-white/5 hover:bg-white/15 border-white/10 hover:border-white/30 text-white/80 hover:text-white hover:shadow-[0_0_20px_rgba(255,255,255,0.1)]'
+                }`}
+            >
+              <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform duration-300" />
+              Back
+            </button>
           </div>
 
           <div className="flex items-center gap-4">
-            {/* Back button */}
-            <button
-              onClick={() => navigate(-1)}
-              className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full shadow-md transition-all duration-300
-                      ${isLightMode 
-                        ? 'bg-white/50 hover:bg-white/80 text-slate-600 hover:text-slate-900 border border-slate-300 shadow-[0_0_20px_rgba(0,0,0,0.05)]' 
-                        : 'bg-white/80 hover:bg-white text-slate-700'}`}
-            >
-              <ArrowLeft size={18} />
-              Back
-            </button>
-
             {/* Header */}
             <h1
               className={`text-sm lg:text-lg font-bold tracking-tight px-4 py-2 rounded-xl shadow-[0_10px_30px_rgba(0,0,0,0.15)] backdrop-blur-xl border transition-colors duration-1000
-                    ${isLightMode 
-                      ? 'bg-white/60 text-slate-800 border-white/40' 
-                      : 'bg-slate-900/40 text-white border-white/10'}`}
+                    ${isLightMode
+                  ? 'bg-white/60 text-slate-800 border-white/40'
+                  : 'bg-slate-900/40 text-white border-white/10'}`}
             >
               Preview Mode — No actions are saved
             </h1>
@@ -101,9 +103,9 @@ export default function PreviewBoard() {
         {/* Scenario Info */}
         <div className="mb-2 mt-[-30px] md:mt-[-40px] flex flex-col items-center">
           <div className={`rounded-xl shadow-md p-3 max-w-2xl w-full text-center border-2 transition-colors duration-1000
-                        ${isLightMode 
-                          ? 'bg-amber-50 border-amber-200' 
-                          : 'bg-white/10 border-white/20 backdrop-blur-xl'}`}>
+                        ${isLightMode
+              ? 'bg-amber-50 border-amber-200'
+              : 'bg-white/10 border-white/20 backdrop-blur-xl'}`}>
             <h3 className={`font-bold text-xs uppercase tracking-wider mb-1 transition-colors duration-1000 ${isLightMode ? 'text-amber-700' : 'text-amber-400'}`}>
               Scenario
             </h3>
@@ -120,7 +122,7 @@ export default function PreviewBoard() {
             droppedCards={droppedCards}
             setDroppedCards={setDroppedCards}
             onOpenContainer={setOpenContainer}
-            showToast={() => {}}
+            showToast={() => { }}
             centerElement={
               <img
                 src={Board}
@@ -143,7 +145,7 @@ export default function PreviewBoard() {
               >
                 <div className={`w-16 h-1.5 rounded-full mb-2 transition-all duration-300 ${isLightMode ? 'bg-slate-300 group-hover:bg-blue-500 group-hover:shadow-[0_0_10px_rgba(37,99,235,0.5)]' : 'bg-white/40 group-hover:bg-yellow-400 group-hover:shadow-[0_0_10px_rgba(250,204,21,0.5)]'}`} />
                 <span className={`font-bold text-xs md:text-sm tracking-[0.2em] uppercase opacity-80 group-hover:opacity-100 transition-opacity ${isLightMode ? 'text-slate-600' : 'text-white'}`}>
-                  Your Cards
+                  Your E-Cards
                 </span>
               </button>
             </div>
