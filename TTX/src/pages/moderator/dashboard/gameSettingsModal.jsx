@@ -375,8 +375,8 @@ export default function GameSettingsModal({
               }}
               className="cursor-pointer flex justify-between items-center bg-gray-50 border border-gray-200 rounded-xl p-4 hover:shadow-md transition"
             >
-              <div>
-                <h3 className="font-semibold text-gray-800">
+              <div className="text-left min-w-0 flex-1 pr-4">
+                <h3 className="font-semibold text-gray-800 truncate">
                   {game.game_name}
                 </h3>
 
@@ -409,7 +409,8 @@ export default function GameSettingsModal({
                                 bg-green-100 text-green-700
                                 text-xs font-mono font-semibold
                                 border border-green-200
-                                flex items-center justify-center"
+                                flex items-center justify-center
+                                truncate max-w-[120px]"
                     >
                       {game.game_code}
                     </span>
@@ -463,10 +464,12 @@ export default function GameSettingsModal({
       </div>
 
       {/* Header */}
-      <div className="flex justify-between items-start mb-4">
-        <div>
-          <h2 className="text-3xl font-bold">{activeGame.game_name}</h2>
-          <p className="text-gray-500 text-sm capitalize">
+      <div className="flex justify-between items-start mb-4 gap-4">
+        <div className="min-w-0 flex-1">
+          <h2 className="text-3xl font-bold truncate" title={activeGame.game_name}>
+            {activeGame.game_name}
+          </h2>
+          <p className="text-gray-500 text-sm capitalize truncate">
             {activeGame.game_type}
           </p>
         </div>
@@ -479,7 +482,8 @@ export default function GameSettingsModal({
                         bg-green-100 text-green-700
                         text-sm font-mono font-semibold
                         select-all
-                        flex items-center justify-center"
+                        flex items-center justify-center
+                        truncate max-w-[180px]"
               title="Game Code"
             >
               {activeGame.game_code}
@@ -568,12 +572,12 @@ export default function GameSettingsModal({
               key={r.round_id}
               className="flex justify-between items-center bg-gray-50 border border-gray-200 rounded-xl p-4 hover:shadow-md transition"
             >
-              <div className="text-left">
-                <h3 className="font-semibold text-gray-800">
+              <div className="text-left min-w-0 flex-1 pr-4">
+                <h3 className="font-semibold text-gray-800 truncate">
                   Round {r.round_number}
                 </h3>
 
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-gray-500 truncate" title={r.threat_description}>
                   Threat: {r.threat_description}
                 </p>
 
@@ -665,7 +669,7 @@ export default function GameSettingsModal({
   return (
     <div className="fixed inset-0 bg-white/30 backdrop-blur-md flex items-center justify-center z-[9999]">
       <div
-        className="bg-white rounded-2xl shadow-2xl w-[850px] h-[650px] p-8 relative text-left 
+        className="bg-white rounded-2xl shadow-2xl w-[95%] max-w-[850px] max-h-[90vh] p-8 relative text-left 
             transform transition-all duration-300 scale-95 opacity-0 
             animate-[fadeIn_0.25s_ease-out_forwards]"
       >

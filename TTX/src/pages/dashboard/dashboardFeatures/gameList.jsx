@@ -163,11 +163,11 @@ export default function GameList({ showToast }) {
                   ${isLightMode ? 'bg-white/60 hover:bg-white/80 border-slate-300' : 'bg-white/5 hover:bg-white/10 border-white/10'}
                 `}
               >
-                <div className="w-full sm:w-auto">
-                  <h2 className={`text-left text-lg sm:text-xl lg:text-2xl font-bold mb-1 transition-colors duration-1000 ${isLightMode ? 'text-slate-800' : 'text-white'}`}>
+                <div className="min-w-0 flex-1">
+                  <h2 className={`text-left text-lg sm:text-xl lg:text-2xl font-bold mb-1 truncate transition-colors duration-1000 ${isLightMode ? 'text-slate-800' : 'text-white'}`} title={game.game_name}>
                     {game.game_name}
                   </h2>
-                  <p className={`text-left text-xs sm:text-sm capitalize tracking-wider font-medium transition-colors duration-1000 ${isLightMode ? 'text-slate-500' : 'text-white/50'}`}>
+                  <p className={`text-left text-xs sm:text-sm capitalize tracking-wider font-medium truncate transition-colors duration-1000 ${isLightMode ? 'text-slate-500' : 'text-white/50'}`}>
                     {game.game_type}
                   </p>
                 </div>
