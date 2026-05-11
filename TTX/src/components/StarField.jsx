@@ -6,7 +6,7 @@ const StarField = () => {
 
   const stars = useMemo(() => {
     const colors = isLightMode 
-      ? ['#0f172a', '#1e293b', '#334155', '#475569', '#020617'] // Even darker stars for light mode
+      ? ['#3b82f6', '#2563eb', '#60a5fa', '#1d4ed8', '#1e40af'] // Vibrant Blue stars for light mode
       : ['#ffffff', '#bfdbfe', '#fef9c3', '#fed7aa', '#fecca3']; // Bright stars for dark mode
 
     return Array.from({ length: 250 }).map((_, i) => ({

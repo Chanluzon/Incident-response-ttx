@@ -12,37 +12,40 @@ function MiniCardItem({ card, locked, onRemoveCard, onClick }) {
 
   return (
     <div
-      className={`relative flex-shrink-0 cursor-pointer rounded-xl
-        w-[140px] h-[160px] hover:scale-[1.02] transition-transform duration-300 ease-out shadow-md hover:shadow-lg border p-4 text-xs select-none overflow-hidden ${getCardColor(card.category)}`}
+      className={`flex flex-col flex-shrink-0 cursor-pointer rounded-2xl
+        w-[130px] h-[200px] hover:-translate-y-2 transition-all duration-300 ease-out shadow-lg hover:shadow-xl border p-4 text-xs select-none overflow-hidden ${getCardColor(card.category)}`}
       onClick={() => onClick(card)}
     >
       {card.image && (
-        <div className="w-[calc(100%+2rem)] h-[35px] -mt-6 -mx-4 mb-0 flex justify-center items-end overflow-hidden rounded-t-xl">
-          <img src={card.image} alt={card.card_name} className="max-w-full max-h-full object-contain" />
+        <div className="w-[calc(100%+2rem)] h-[40px] -mt-6 -mx-4 mb-0 flex justify-center items-end overflow-hidden rounded-t-xl">
+          <img src={card.image} alt={card.card_name} className="max-w-full max-h-full object-contain filter drop-shadow-md" />
         </div>
       )}
-      <div className="px-1.5 py-0.5 rounded-md bg-white/20 border border-white/30 text-[8px] font-black uppercase tracking-widest opacity-70 mb-1 mx-auto w-fit">
+      <div className="px-2 py-0.5 rounded-lg bg-black/10 border border-black/5 text-[8px] font-black uppercase tracking-widest opacity-60 mb-1 mx-auto w-fit mt-1">
         {card.category}
       </div>
 
-      <div className="mt-1 opacity-80 line-clamp-2 leading-tight">
-        <FormattedDescription description={description} isCard={true} />
+      {/* Shadow Box Description */}
+      <div className="flex-1 flex flex-col mb-[-1rem] mx-[-0.85rem] min-h-0">
+        <div className={`flex-1 p-2.5 rounded-xl shadow-[0_10px_30px_rgba(0,0,0,0.25)] border backdrop-blur-[8px] overflow-hidden flex flex-col ${getCardInnerStyle(card.category)}`}>
+          <div className="opacity-95 line-clamp-6 leading-tight font-bold tracking-tight text-[10px]">
+            <FormattedDescription description={description} isCard={true} />
+          </div>
+        </div>
       </div>
 
-      <button
-        disabled={locked}
-        onClick={(e) => {
-          e.stopPropagation();
-          onRemoveCard(card.card_id);
-        }}
-        className={`absolute bottom-2 right-2 p-2 rounded-full text-xs font-semibold
-          ${locked
-            ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-            : "bg-red-100 hover:bg-red-200 text-red-700"
-          }`}
-      >
-        <Trash2 size={14} />
-      </button>
+      {/* Remove button */}
+      {!locked && (
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onRemoveCard(card.card_id);
+          }}
+          className="absolute top-2 right-2 p-1.5 rounded-full bg-red-100/80 hover:bg-red-200 text-red-700 z-10"
+        >
+          <Trash2 size={12} />
+        </button>
+      )}
     </div>
   );
 }
@@ -50,17 +53,34 @@ function MiniCardItem({ card, locked, onRemoveCard, onClick }) {
 const getCardColor = (cat) => {
   switch (cat) {
     case "prepare":
-      return "bg-[#67C2C9] text-white border-white/20 shadow-cyan-500/20";
+      return "border-2 bg-[#67C2C9]/80 backdrop-blur-sm text-slate-900 border-[#4DA8AF]/50 shadow-lg shadow-cyan-500/20";
     case "detect":
-      return "bg-[#FDEE00] text-yellow-900 border-white/20 shadow-yellow-500/20";
+      return "border-2 bg-[#FDEE00]/80 backdrop-blur-sm text-yellow-900 border-[#D4C800]/50 shadow-lg shadow-yellow-500/20";
     case "respond":
-      return "bg-[#FF9EBD] text-white border-white/20 shadow-pink-500/20";
+      return "border-2 bg-[#FF9EBD]/80 backdrop-blur-sm text-pink-900 border-[#E87EA1]/50 shadow-lg shadow-pink-500/20";
     case "recover":
-      return "bg-[#32CD32] text-white border-white/20 shadow-green-500/20";
+      return "border-2 bg-[#32CD32]/80 backdrop-blur-sm text-green-900 border-[#28A428]/50 shadow-lg shadow-green-500/20";
     case "lessons learned":
-      return "bg-[#FFB347] text-white border-white/20 shadow-orange-500/20";
+      return "border-2 bg-[#FFB347]/80 backdrop-blur-sm text-orange-900 border-[#E6952D]/50 shadow-lg shadow-orange-500/20";
     default:
-      return "bg-gray-100 text-gray-700 border-gray-300";
+      return "border-2 bg-gray-200/80 backdrop-blur-sm text-gray-700 border-gray-300/50";
+  }
+};
+
+const getCardInnerStyle = (cat) => {
+  switch (cat) {
+    case "prepare":
+      return "bg-white/20 border-white/30 text-slate-900";
+    case "detect":
+      return "bg-black/5 border-black/10 text-yellow-950";
+    case "respond":
+      return "bg-white/20 border-white/30 text-pink-950";
+    case "recover":
+      return "bg-white/20 border-white/30 text-green-950";
+    case "lessons learned":
+      return "bg-white/20 border-white/30 text-orange-950";
+    default:
+      return "bg-black/5 border-black/10 text-gray-800";
   }
 };
 
@@ -173,22 +193,27 @@ export default function ContainerModal({
             </button>
 
             {selectedCard.image && (
-              <div className="w-[calc(100%+3rem)] sm:w-[calc(100%+4rem)] h-[80px] sm:h-[100px] -mt-6 sm:-mt-8 -mx-6 sm:-mx-8 mb-6 flex justify-center items-center overflow-hidden rounded-t-2xl">
+              <div className="w-[calc(100%+3rem)] sm:w-[calc(100%+4rem)] h-[80px] sm:h-[100px] -mt-6 sm:-mt-8 -mx-6 sm:-mx-8 mb-1 flex justify-center items-center overflow-hidden rounded-t-2xl">
                 <img src={selectedCard.image} alt={selectedCard.card_name} className="max-w-full max-h-full object-contain" />
               </div>
             )}
 
-            <div className="inline-block px-4 py-1 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider mb-4 bg-white/30 border border-white/20">
+            <div className="inline-block px-5 py-2 rounded-full text-sm sm:text-base font-black uppercase tracking-[0.25em] mb-4 bg-white/30 border border-white/20 shadow-md">
               {selectedCard.category}
             </div>
 
 
 
-            <div className="flex-1 w-full overflow-y-auto pr-2 custom-scrollbar">
-              <FormattedDescription 
-                description={selectedCard.description} 
-                className="text-sm sm:text-base font-semibold italic leading-relaxed drop-shadow-sm" 
-              />
+            {/* Shadow Box Description */}
+            <div className="flex-1 flex flex-col mb-[-2rem] mx-[-2rem] min-h-0">
+              <div className={`flex-1 p-6 rounded-t-3xl shadow-[0_20px_50px_rgba(0,0,0,0.3)] border backdrop-blur-[10px] flex flex-col min-h-0 ${getCardInnerStyle(selectedCard.category)}`}>
+                <div className="flex-1 overflow-y-auto min-h-0 pr-2 custom-scrollbar">
+                  <FormattedDescription 
+                    description={selectedCard.description} 
+                    className="text-base sm:text-lg font-semibold italic leading-relaxed drop-shadow-sm" 
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>

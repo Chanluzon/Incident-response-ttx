@@ -25,9 +25,9 @@ function CardItem({ card, preview, onTouchStart, onDragStartCallback, onClick })
 
   return (
     <div
-      className={`flex-shrink-0 cursor-pointer rounded-2xl
+      className={`flex flex-col flex-shrink-0 cursor-pointer rounded-2xl
         w-[130px] sm:w-[140px] md:w-[150px]
-        h-[180px] sm:h-[200px] md:h-[220px] overflow-hidden
+        h-[200px] sm:h-[220px] md:h-[240px] overflow-hidden
         hover:-translate-y-6 transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] shadow-lg hover:shadow-2xl border p-4 sm:p-5 text-xs sm:text-sm select-none ${getCardColor(card.category)}`}
       onClick={() => onClick(card)}
       draggable={true}
@@ -55,12 +55,21 @@ function CardItem({ card, preview, onTouchStart, onDragStartCallback, onClick })
           <img src={card.image} alt={title} className="max-w-full max-h-full object-contain filter drop-shadow-md" />
         </div>
       )}
-      <div className="px-2 py-0.5 rounded-lg bg-black/10 border border-black/5 text-[8px] font-black uppercase tracking-widest opacity-60 mb-2 mx-auto w-fit">
+      <div className="px-2 py-0.5 rounded-lg bg-black/10 border border-black/5 text-[8px] font-black uppercase tracking-widest opacity-60 mb-1 mx-auto w-fit mt-1">
         {card.category}
       </div>
-
-      <div className="mt-1 opacity-90 line-clamp-3 leading-tight font-bold tracking-tight">
-        <FormattedDescription description={description} isCard={true} />
+ 
+      {/* Description Box Shadow Background - Expanded to edges and filling space */}
+      <div className="flex-1 flex flex-col mb-[-1rem] sm:mb-[-1.25rem] mx-[-0.85rem] sm:mx-[-1.15rem] min-h-0">
+        <div className={`
+          flex-1 p-2.5 sm:p-3 rounded-b-xl rounded-t-xl shadow-[0_10px_30px_rgba(0,0,0,0.25)] border backdrop-blur-[8px]
+          overflow-hidden flex flex-col
+          ${getCardInnerStyle(card.category)}
+        `}>
+          <div className="opacity-95 line-clamp-6 sm:line-clamp-8 leading-tight font-bold tracking-tight text-[10px] sm:text-[11px]">
+            <FormattedDescription description={description} isCard={true} />
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -80,6 +89,23 @@ const getCardColor = (cat) => {
       return "border-2 bg-[#FFB347]/80 backdrop-blur-sm text-orange-900 border-[#E6952D]/50 shadow-lg shadow-orange-500/20";
     default:
       return "border-2 bg-gray-200/80 backdrop-blur-sm text-gray-700 border-gray-300/50";
+  }
+};
+
+const getCardInnerStyle = (cat) => {
+  switch (cat) {
+    case "prepare":
+      return "bg-white/20 border-white/30 text-slate-900";
+    case "detect":
+      return "bg-black/5 border-black/10 text-yellow-950";
+    case "respond":
+      return "bg-white/20 border-white/30 text-pink-950";
+    case "recover":
+      return "bg-white/20 border-white/30 text-green-950";
+    case "lessons learned":
+      return "bg-white/20 border-white/30 text-orange-950";
+    default:
+      return "bg-black/5 border-black/10 text-gray-800";
   }
 };
 
@@ -464,22 +490,31 @@ export default function CardContainer({
             </button>
 
             {selectedCard.image && (
-              <div className="w-[calc(100%+3rem)] sm:w-[calc(100%+4rem)] h-[80px] sm:h-[100px] -mt-6 sm:-mt-8 -mx-6 sm:-mx-8 mb-6 flex justify-center items-center overflow-hidden rounded-t-2xl">
+              <div className="w-[calc(100%+3rem)] sm:w-[calc(100%+4rem)] h-[80px] sm:h-[100px] -mt-6 sm:-mt-8 -mx-6 sm:-mx-8 mb-1 flex justify-center items-center overflow-hidden rounded-t-2xl">
                 <img src={selectedCard.image} alt={preview ? selectedCard.title : selectedCard.card_name} className="max-w-full max-h-full object-contain" />
               </div>
             )}
 
-            <div className="inline-block px-3 py-0.5 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-wider mb-3 bg-white/30 border border-black/10">
+            <div className="inline-block px-5 py-2 rounded-full text-sm sm:text-base font-black uppercase tracking-[0.25em] mb-3 bg-white/30 border border-black/10 shadow-md">
               {selectedCard.category}
             </div>
 
 
 
-            <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar">
-              <FormattedDescription 
-                description={selectedCard.description} 
-                className="text-sm sm:text-base font-semibold italic leading-relaxed drop-shadow-sm" 
-              />
+            {/* Full View Description Shadow Box */}
+            <div className="flex-1 flex flex-col mb-[-1.5rem] sm:mb-[-2rem] mx-[-1.5rem] sm:mx-[-2rem] min-h-0">
+              <div className={`
+                flex-1 p-6 sm:p-8 rounded-t-3xl shadow-[0_20px_50px_rgba(0,0,0,0.3)] border backdrop-blur-[10px]
+                flex flex-col min-h-0
+                ${getCardInnerStyle(selectedCard.category)}
+              `}>
+                <div className="flex-1 overflow-y-auto min-h-0 pr-2 custom-scrollbar">
+                  <FormattedDescription 
+                    description={selectedCard.description} 
+                    className="text-base sm:text-lg font-semibold italic leading-relaxed drop-shadow-sm" 
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>
