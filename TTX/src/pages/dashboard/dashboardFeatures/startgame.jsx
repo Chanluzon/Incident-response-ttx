@@ -4,6 +4,7 @@ import { ArrowLeft, Trophy, X, Maximize2 } from "lucide-react";
 import confetti from "canvas-confetti";
 import { useTheme } from "../../../context/ThemeContext";
 import PageBackground from "../../../components/PageBackground";
+import FormattedDescription from "../../../components/FormattedDescription";
 
 import CircularDropContainers from "../../../layouts/CircularDropContainers";
 import DropContainers from "../../../layouts/dropContainers";
@@ -577,7 +578,9 @@ export default function StartGame() {
 
                 <div className={`p-6 rounded-2xl mb-8 transition-colors ${isLightMode ? 'bg-slate-50 border border-slate-200' : 'bg-white/5 border border-white/10'}`}>
                   <p className={`text-lg md:text-xl font-bold leading-relaxed transition-colors ${isLightMode ? 'text-slate-800' : 'text-white'}`}>
-                    {activeThreat?.description ?? "No active scenario detected."}
+                    <FormattedDescription 
+                      description={activeThreat?.description ?? "No active scenario detected."} 
+                    />
                   </p>
                 </div>
 

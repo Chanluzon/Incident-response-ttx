@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { X, Trash2, Plus } from "lucide-react";
 import { apiUrl } from "../../../config/api";
+import FormattedDescription from "../../../components/FormattedDescription";
 
 export default function ManageThreatsModal({
   show,
@@ -164,39 +165,39 @@ export default function ManageThreatsModal({
 
         <h2 className="text-2xl font-bold mb-1">Manage Threats</h2>
         <p className="text-gray-500 text-sm mb-6">
-          Manage threats and threat categories.
+          Manage Scenario and Scenario categories.
         </p>
 
         {/* Tabs */}
         <div className="flex gap-4 mb-6">
           <button
             className={`pb-2 font-semibold ${activeTab === "threats"
-                ? "border-b-2 border-[#2EE58A]"
-                : "text-gray-500 hover:text-gray-700 border-b-2 border-transparent"
+              ? "border-b-2 border-[#2EE58A]"
+              : "text-gray-500 hover:text-gray-700 border-b-2 border-transparent"
               }`}
             onClick={() => setActiveTab("threats")}
           >
-            Threats
+            Scenarios
           </button>
 
           <button
             className={`pb-2 font-semibold ${activeTab === "categories"
-                ? "border-b-2 border-purple-500"
-                : "text-gray-500 hover:text-gray-700 border-b-2 border-transparent"
+              ? "border-b-2 border-purple-500"
+              : "text-gray-500 hover:text-gray-700 border-b-2 border-transparent"
               }`}
             onClick={() => setActiveTab("categories")}
           >
-            Threat Categories
+            Scenario Categories
           </button>
 
           <button
             className={`pb-2 font-semibold ${activeTab === "answers"
-                ? "border-b-2 border-yellow-500"
-                : "text-gray-500 hover:text-gray-700 border-b-2 border-transparent"
+              ? "border-b-2 border-yellow-500"
+              : "text-gray-500 hover:text-gray-700 border-b-2 border-transparent"
               }`}
             onClick={() => setActiveTab("answers")}
           >
-            Threat Answers
+            Scenario Answers
           </button>
         </div>
 
@@ -207,7 +208,7 @@ export default function ManageThreatsModal({
               <div className="flex justify-between items-center mb-4">
                 <input
                   type="text"
-                  placeholder="Search threats"
+                  placeholder="Search Scenarios"
                   value={searchThreat}
                   onChange={(e) => setSearchThreat(e.target.value)}
                   className="border border-gray-300 rounded-md px-4 py-2 w-1/2 
@@ -356,7 +357,9 @@ export default function ManageThreatsModal({
                                 key={t.threat_id}
                                 className="flex justify-between items-center bg-gray-100 rounded-lg px-3 py-2"
                               >
-                                <span>{t.description}</span>
+                                <div className="text-sm">
+                                  <FormattedDescription description={t.description} isCard={true} />
+                                </div>
 
                                 <button
                                   onClick={async () => {
@@ -428,7 +431,7 @@ export default function ManageThreatsModal({
               <div className="flex justify-between items-center mb-4">
                 <input
                   type="text"
-                  placeholder="Search threats"
+                  placeholder="Search Scenarios"
                   value={searchThreat}
                   onChange={(e) => setSearchThreat(e.target.value)}
                   className="border border-gray-300 rounded-md px-4 py-2 w-1/2 
@@ -507,8 +510,10 @@ function ThreatRow({
       className="flex justify-between items-center bg-gray-50 border 
                       border-gray-200 rounded-xl p-4"
     >
-      <div>
-        <p className="font-semibold">{threat.description}</p>
+      <div className="flex-1 min-w-0 pr-4 text-left">
+        <div className="font-semibold text-sm line-clamp-2 leading-tight">
+          <FormattedDescription description={threat.description} isCard={true} />
+        </div>
 
         {editing ? (
           <select
@@ -700,10 +705,10 @@ function ThreatAnswerRow({ threat, categories, showToast }) {
     <div className=" bg-gray-100 rounded-2xl shadow-md p-5 mb-4">
       {/* Header */}
       <div className="flex justify-between items-start">
-        <div>
-          <h3 className="text-lg font-semibold text-gray-800 leading-tight">
-            {threat.description}
-          </h3>
+        <div className="flex-1 min-w-0 pr-4 text-left">
+          <div className="line-clamp-2 leading-tight">
+            <FormattedDescription description={threat.description} isCard={true} />
+          </div>
 
           <p className="text-sm text-gray-500 mt-1">
             Category:{" "}
@@ -810,7 +815,12 @@ function AssignAnswersModal({
             <X size={20} />
           </button>
 
-          <h2 className="text-xl font-bold pr-10 mb-4">{threat.description}</h2>
+          <h2 className="text-lg font-black pr-10 mb-1 truncate text-indigo-950 uppercase tracking-tight">
+            {threat.description.split('\n')[0].replace(/^[-\u2022]\s*/, '')}
+          </h2>
+          <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-4">
+            Assigning Card Answers to Scenario
+          </p>
 
           {/* CATEGORY TABS */}
           <div className="border-b border-gray-200 pb-0 mb-2">
@@ -846,8 +856,8 @@ function AssignAnswersModal({
                     key={cat}
                     onClick={() => setActiveCategory(cat)}
                     className={`pb-3 text-sm font-medium relative ${active
-                        ? "text-gray-900 font-semibold"
-                        : "text-gray-500 hover:text-gray-700"
+                      ? "text-gray-900 font-semibold"
+                      : "text-gray-500 hover:text-gray-700"
                       }`}
                   >
                     {prettyLabel}

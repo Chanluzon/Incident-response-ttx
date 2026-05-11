@@ -99,7 +99,7 @@ export default function GameInstructions() {
                 </p>
                 <p className={`text-sm sm:text-base lg:text-lg font-medium leading-relaxed max-w-3xl transition-colors duration-1000 ${isLightMode ? 'text-slate-600' : 'text-white/70'}`}>
                   Choose the leader that you think has more knowledge on how to
-                  assess, defend and identify threats.
+                  assess, defend and identify Scenarios.
                 </p>
               </div>
             </div>

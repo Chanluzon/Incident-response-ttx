@@ -1,6 +1,7 @@
 import React from "react";
 import { X, Trash2 } from "lucide-react";
 import { useTheme } from "../context/ThemeContext";
+import FormattedDescription from "../components/FormattedDescription";
 
 
 
@@ -12,11 +13,11 @@ function MiniCardItem({ card, locked, onRemoveCard, onClick }) {
   return (
     <div
       className={`relative flex-shrink-0 cursor-pointer rounded-xl
-        w-[140px] h-[160px] hover:scale-[1.02] transition-transform duration-300 ease-out shadow-md hover:shadow-lg border p-4 text-xs select-none ${getCardColor(card.category)}`}
+        w-[140px] h-[160px] hover:scale-[1.02] transition-transform duration-300 ease-out shadow-md hover:shadow-lg border p-4 text-xs select-none overflow-hidden ${getCardColor(card.category)}`}
       onClick={() => onClick(card)}
     >
       {card.image && (
-        <div className="w-[60%] h-[30px] -mt-1 mb-1 mx-auto flex justify-center items-center overflow-hidden">
+        <div className="w-[calc(100%+2rem)] h-[35px] -mt-6 -mx-4 mb-0 flex justify-center items-end overflow-hidden rounded-t-xl">
           <img src={card.image} alt={card.card_name} className="max-w-full max-h-full object-contain" />
         </div>
       )}
@@ -24,9 +25,9 @@ function MiniCardItem({ card, locked, onRemoveCard, onClick }) {
         {card.category}
       </div>
 
-      <p className="text-[10px] text-center mt-1 opacity-80 line-clamp-2 leading-tight">
-        {description}
-      </p>
+      <div className="mt-1 opacity-80 line-clamp-2 leading-tight">
+        <FormattedDescription description={description} isCard={true} />
+      </div>
 
       <button
         disabled={locked}
@@ -161,8 +162,8 @@ export default function ContainerModal({
       {selectedCard && (
         <div className={`fixed inset-0 backdrop-blur-md flex items-center justify-center z-[200] transition-all duration-300 ${isLightMode ? 'bg-slate-900/20' : 'bg-slate-950/60'}`} onMouseDown={(e) => { e.stopPropagation(); setSelectedCard(null); }}>
           <div
-            className={`rounded-3xl shadow-2xl w-[320px] sm:w-[400px] min-h-[450px] p-6 sm:p-8 relative transform transition-all duration-500 scale-95 opacity-0 animate-[fadeIn_0.3s_ease-out_forwards] text-center flex flex-col justify-center items-center border-4 ${getCardColor(selectedCard.category)}`}
-            onMouseDown={(e) => e.stopPropagation()}
+            className={`relative w-full max-w-md h-[600px] flex flex-col overflow-hidden rounded-3xl p-8 shadow-2xl animate-in zoom-in-95 duration-200 border transition-colors duration-1000 ${getCardColor(selectedCard.category)}`}
+            onClick={(e) => e.stopPropagation()}
           >
             <button
               onClick={() => setSelectedCard(null)}
@@ -183,10 +184,11 @@ export default function ContainerModal({
 
 
 
-            <div className="mt-auto w-full p-4 bg-white/20 backdrop-blur-sm border border-white/20 rounded-xl">
-              <p className="text-sm sm:text-base font-semibold italic leading-relaxed drop-shadow-sm">
-                {selectedCard.description || ""}
-              </p>
+            <div className="flex-1 w-full overflow-y-auto pr-2 custom-scrollbar">
+              <FormattedDescription 
+                description={selectedCard.description} 
+                className="text-sm sm:text-base font-semibold italic leading-relaxed drop-shadow-sm" 
+              />
             </div>
           </div>
         </div>

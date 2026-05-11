@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import { X } from "lucide-react";
 import { apiUrl } from "../config/api";
 import { useTheme } from "../context/ThemeContext";
+import FormattedDescription from "../components/FormattedDescription";
 
 // category config
 const CATEGORIES = [
@@ -26,7 +27,7 @@ function CardItem({ card, preview, onTouchStart, onDragStartCallback, onClick })
     <div
       className={`flex-shrink-0 cursor-pointer rounded-2xl
         w-[130px] sm:w-[140px] md:w-[150px]
-        h-[180px] sm:h-[200px] md:h-[220px]
+        h-[180px] sm:h-[200px] md:h-[220px] overflow-hidden
         hover:-translate-y-6 transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] shadow-lg hover:shadow-2xl border p-4 sm:p-5 text-xs sm:text-sm select-none ${getCardColor(card.category)}`}
       onClick={() => onClick(card)}
       draggable={true}
@@ -50,17 +51,17 @@ function CardItem({ card, preview, onTouchStart, onDragStartCallback, onClick })
       onTouchStart={(e) => onTouchStart(e, card)}
     >
       {card.image && (
-        <div className="w-full h-[40px] sm:h-[55px] -mt-3 mb-2 mx-auto flex justify-center items-center overflow-hidden">
+        <div className="w-[calc(100%+2rem)] sm:w-[calc(100%+2.5rem)] h-[40px] sm:h-[50px] -mt-6 sm:-mt-7 -mx-4 sm:-mx-5 mb-0 flex justify-center items-end overflow-hidden rounded-t-xl">
           <img src={card.image} alt={title} className="max-w-full max-h-full object-contain filter drop-shadow-md" />
         </div>
       )}
-      <div className="px-2 py-0.5 rounded-lg bg-black/10 border border-black/5 text-[9px] font-black uppercase tracking-widest opacity-60 mb-2 mx-auto w-fit">
+      <div className="px-2 py-0.5 rounded-lg bg-black/10 border border-black/5 text-[8px] font-black uppercase tracking-widest opacity-60 mb-2 mx-auto w-fit">
         {card.category}
       </div>
 
-      <p className="text-[11px] sm:text-[12px] text-center mt-1 opacity-90 line-clamp-3 leading-tight font-bold tracking-tight">
-        {description}
-      </p>
+      <div className="mt-1 opacity-90 line-clamp-3 leading-tight font-bold tracking-tight">
+        <FormattedDescription description={description} isCard={true} />
+      </div>
     </div>
   );
 }
@@ -452,7 +453,7 @@ export default function CardContainer({
           }}
         >
           <div
-            className={`rounded-2xl shadow-2xl w-[320px] sm:w-[400px] min-h-[450px] p-6 sm:p-8 relative transform transition-all duration-300 scale-95 opacity-0 animate-[fadeIn_0.25s_ease-out_forwards] text-center flex flex-col justify-center items-center border-4 ${getCardColor(selectedCard.category)}`}
+            className={`relative w-full max-w-sm h-[600px] flex flex-col overflow-hidden rounded-3xl p-6 sm:p-8 shadow-2xl animate-in zoom-in-95 duration-200 border transition-colors duration-1000 ${getCardColor(selectedCard.category)}`}
             onClick={(e) => e.stopPropagation()}
           >
             <button
@@ -468,16 +469,17 @@ export default function CardContainer({
               </div>
             )}
 
-            <div className="inline-block px-4 py-1 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider mb-4 bg-white/30 border border-black/10">
+            <div className="inline-block px-3 py-0.5 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-wider mb-3 bg-white/30 border border-black/10">
               {selectedCard.category}
             </div>
 
 
 
-            <div className="mt-auto w-full p-4 bg-white/20 backdrop-blur-sm border border-black/10 rounded-xl">
-              <p className="text-sm sm:text-base font-semibold italic leading-relaxed drop-shadow-sm">
-                {selectedCard.description || ""}
-              </p>
+            <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar">
+              <FormattedDescription 
+                description={selectedCard.description} 
+                className="text-sm sm:text-base font-semibold italic leading-relaxed drop-shadow-sm" 
+              />
             </div>
           </div>
         </div>

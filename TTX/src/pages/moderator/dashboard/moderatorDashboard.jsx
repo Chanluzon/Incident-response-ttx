@@ -16,6 +16,7 @@ import CreateGameModal from "./createGameModal";
 import AddThreatModal from "./threatModal";
 import ManageThreatsModal from "./manageThreatsModal";
 import { apiUrl } from "../../../config/api";
+import FormattedDescription from "../../../components/FormattedDescription";
 
 export default function ModeratorDashboard() {
   const [stats, setStats] = useState({
@@ -705,7 +706,7 @@ export default function ModeratorDashboard() {
                 </h2>
 
                 <p className="text-gray-500 text-sm mb-4 leading-snug">
-                  View, create, and manage threats.
+                  View, create, and manage scenarios.
                 </p>
 
                 <div className="flex gap-3 text-sm font-semibold">
@@ -719,7 +720,7 @@ export default function ModeratorDashboard() {
                     onClick={() => setShowAddThreat(true)}
                     className="flex-1 bg-[#f05c74] hover:bg-[#ef2541] text-white text-xs py-2 rounded-full font-semibold transition flex items-center justify-center gap-2"
                   >
-                    <Plus size={16} /> Add Threat
+                    <Plus size={16} /> Add Scenario
                   </button>
 
                   <button
@@ -822,14 +823,14 @@ export default function ModeratorDashboard() {
                       <div
                         key={i}
                         className={`bg-white rounded-xl px-5 py-3 flex justify-between items-center shadow-sm hover:shadow-md transition border-l-4 ${activity.type === "success"
-                            ? "border-green-400"
-                            : activity.type === "edit"
-                              ? "border-blue-400"
-                              : activity.type === "delete"
-                                ? "border-red-400"
-                                : activity.type === "team"
-                                  ? "border-purple-400"
-                                  : "border-gray-300"
+                          ? "border-green-400"
+                          : activity.type === "edit"
+                            ? "border-blue-400"
+                            : activity.type === "delete"
+                              ? "border-red-400"
+                              : activity.type === "team"
+                                ? "border-purple-400"
+                                : "border-gray-300"
                           }`}
                       >
                         <div>
@@ -1151,7 +1152,7 @@ export default function ModeratorDashboard() {
                                     border-2 rounded-2xl shadow-sm p-4
                                     transition-all duration-300 cursor-pointer group relative
                                     ${isSelected ? 'ring-2 ring-indigo-500/50 border-indigo-500 scale-[1.03] shadow-lg ' + card.color : 'hover:scale-[1.02] hover:shadow-md border-transparent ' + card.color}
-                                    w-full h-[240px]`}
+                                    w-full h-[240px] overflow-hidden`}
                       >
                         {/* Custom Selection Indicator */}
                         {isSelected && (
@@ -1161,7 +1162,7 @@ export default function ModeratorDashboard() {
                         )}
 
                         {/* Title and Category */}
-                        <div className="relative">
+                        <div className="relative flex-1 overflow-hidden">
                           <div className="flex justify-between items-start mb-2">
                             <div className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-colors ${isSelected ? 'bg-indigo-500 border-indigo-500' : 'bg-white/50 border-slate-300'}`}>
                               {isSelected && <div className="w-2 h-2 bg-white rounded-sm" />}
@@ -1170,22 +1171,22 @@ export default function ModeratorDashboard() {
 
                           {/* Card Image */}
                           {card.image ? (
-                            <div className="w-[60%] h-[40px] -mt-6 mx-auto mb-2 flex justify-center items-center overflow-hidden rounded-xl">
+                            <div className="w-[calc(100%+2rem)] h-[45px] -mt-6 -mx-4 mb-0 flex justify-center items-end overflow-hidden rounded-t-xl">
                               <img src={card.image} alt="card" className="max-w-full max-h-full object-contain" />
                             </div>
                           ) : (
-                            <div className="w-[60%] h-[40px] -mt-6 mx-auto mb-2 flex justify-center items-center rounded-xl bg-black/5 border border-dashed border-black/10">
+                            <div className="w-[calc(100%+2rem)] h-[45px] -mt-6 -mx-4 mb-0 flex justify-center items-end rounded-t-xl border-b border-dashed border-black/10">
                               <span className="text-[8px] font-bold uppercase tracking-widest opacity-30 text-center leading-tight">No<br />Image</span>
                             </div>
                           )}
 
-                          <div className="px-2 py-0.5 rounded-md bg-black/5 border border-black/10 text-[8px] uppercase font-black tracking-widest opacity-70 mb-2 mx-auto w-fit">
+                          <div className="px-2 py-0.5 rounded-md bg-black/5 border border-black/10 text-[7px] uppercase font-black tracking-widest opacity-70 mb-1.5 mx-auto w-fit">
                             {card.category}
                           </div>
 
-                          <p className="text-[11px] text-slate-600 line-clamp-3 leading-relaxed font-medium">
-                            {card.description || "No description provided"}
-                          </p>
+                          <div className="text-[11px] text-slate-600 line-clamp-3 leading-relaxed font-medium">
+                            <FormattedDescription description={card.description} isCard={true} />
+                          </div>
                         </div>
 
                         {/* Action Buttons */}
@@ -1280,8 +1281,8 @@ export default function ModeratorDashboard() {
                       <div className="flex items-center gap-3">
                         <span
                           className={`px-4 py-2 text-xs font-medium rounded-full ${team.status === "Active"
-                              ? "bg-green-100 text-green-700"
-                              : "bg-yellow-100 text-yellow-700"
+                            ? "bg-green-100 text-green-700"
+                            : "bg-yellow-100 text-yellow-700"
                             }`}
                         >
                           {team.status}
