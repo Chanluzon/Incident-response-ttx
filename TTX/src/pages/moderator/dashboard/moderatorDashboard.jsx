@@ -67,7 +67,26 @@ export default function ModeratorDashboard() {
         return "bg-gray-100 text-gray-700";
     }
   };
+
+  const getCategoryGlowStyle = (cat) => {
+    switch (cat) {
+      case "prepare":
+        return { "--glow-color": "#67C2C9", background: "rgba(103, 194, 201, 0.9)", color: "#0f172a", borderColor: "#4DA8AF" };
+      case "detect":
+        return { "--glow-color": "#FDEE00", background: "rgba(253, 238, 0, 0.9)", color: "#422006", borderColor: "#D4C800" };
+      case "respond":
+        return { "--glow-color": "#FF9EBD", background: "rgba(255, 158, 189, 0.9)", color: "#500724", borderColor: "#E87EA1" };
+      case "recover":
+        return { "--glow-color": "#32CD32", background: "rgba(50, 205, 50, 0.9)", color: "#052e16", borderColor: "#28A428" };
+      case "lessons learned":
+        return { "--glow-color": "#FFB347", background: "rgba(255, 179, 71, 0.9)", color: "#431407", borderColor: "#E6952D" };
+      default:
+        return { "--glow-color": "#94a3b8", background: "rgba(148, 163, 184, 0.9)", color: "#1e293b", borderColor: "#cbd5e1" };
+    }
+  };
+
   const [teams, setTeams] = useState([]);
+
   const infosecCount = cards.filter(
     (c) => c.category === "lessons learned",
   ).length;
@@ -1172,17 +1191,27 @@ export default function ModeratorDashboard() {
                           {/* Card Image */}
                           {card.image ? (
                             <div className="w-[calc(100%+2rem)] h-[45px] -mt-6 -mx-4 mb-0 flex justify-center items-end overflow-hidden rounded-t-xl">
-                              <img src={card.image} alt="card" className="max-w-full max-h-full object-contain" />
+                              <img
+                                src={card.image}
+                                alt="card"
+                                className="max-w-full max-h-full object-contain filter drop-shadow-md"
+                              />
+
                             </div>
                           ) : (
+
                             <div className="w-[calc(100%+2rem)] h-[45px] -mt-6 -mx-4 mb-0 flex justify-center items-end rounded-t-xl border-b border-dashed border-black/10">
                               <span className="text-[8px] font-bold uppercase tracking-widest opacity-30 text-center leading-tight">No<br />Image</span>
                             </div>
                           )}
 
-                          <div className="px-2 py-0.5 rounded-md bg-black/5 border border-black/10 text-[7px] uppercase font-black tracking-widest opacity-70 mb-1.5 mx-auto w-fit">
+                          <div
+                            className="category-glow px-2 py-0.5 rounded-full border text-[8px] uppercase font-black tracking-widest mb-1.5 mx-auto w-fit shadow-sm"
+                            style={getCategoryGlowStyle(card.category)}
+                          >
                             {card.category}
                           </div>
+
 
                           <div className="text-[11px] text-slate-600 line-clamp-3 leading-relaxed font-medium">
                             <FormattedDescription description={card.description} isCard={true} />

@@ -22,8 +22,9 @@ export default function Landing() {
           <img
             src={WorldtechLogo}
             alt="Worldtech Logo"
-            className={`h-10 sm:h-12 md:h-16 lg:h-18 object-contain transition-all duration-500 cursor-pointer ${isLightMode ? 'brightness-0 opacity-80' : ''}`}
+            className={`h-10 sm:h-12 md:h-16 lg:h-18 object-contain transition-all duration-500 cursor-pointer ${isLightMode ? 'brightness-0 opacity-80 logo-glow-light' : 'logo-glow'}`}
           />
+
         </div>
 
         {/* Title Container */}

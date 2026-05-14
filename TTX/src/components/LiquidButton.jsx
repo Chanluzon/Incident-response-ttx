@@ -7,8 +7,9 @@ export default function LiquidButton({
   label, 
   icon: Icon, 
   showArrow = true, 
-  showPulse = true,
+  showPulse = false,
   disabled = false,
+
   className = "",
   variant = "primary" // primary, secondary
 }) {

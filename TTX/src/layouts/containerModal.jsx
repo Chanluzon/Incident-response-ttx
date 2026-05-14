@@ -18,12 +18,22 @@ function MiniCardItem({ card, locked, onRemoveCard, onClick }) {
     >
       {card.image && (
         <div className="w-[calc(100%+2rem)] h-[40px] -mt-6 -mx-4 mb-0 flex justify-center items-end overflow-hidden rounded-t-xl">
-          <img src={card.image} alt={card.card_name} className="max-w-full max-h-full object-contain filter drop-shadow-md" />
+          <img 
+            src={card.image} 
+            alt={card.card_name} 
+            className="max-w-full max-h-full object-contain" 
+            style={getCategoryImageGlow(card.category)}
+          />
         </div>
       )}
-      <div className="px-2 py-0.5 rounded-lg bg-black/10 border border-black/5 text-[8px] font-black uppercase tracking-widest opacity-60 mb-1 mx-auto w-fit mt-1">
+
+      <div 
+        className="category-glow self-center px-2.5 py-0.5 rounded-full border text-[9px] font-black uppercase tracking-[0.12em] mb-1.5 w-fit mt-1 shadow-sm whitespace-nowrap"
+        style={getCategoryGlowStyle(card.category)}
+      >
         {card.category}
       </div>
+
 
       {/* Shadow Box Description */}
       <div className="flex-1 flex flex-col mb-[-1rem] mx-[-0.85rem] min-h-0">
@@ -83,6 +93,37 @@ const getCardInnerStyle = (cat) => {
       return "bg-black/5 border-black/10 text-gray-800";
   }
 };
+
+const getCategoryGlowStyle = (cat) => {
+  switch (cat) {
+    case "prepare":
+      return { "--glow-color": "#67C2C9", background: "rgba(103, 194, 201, 0.9)", color: "#0f172a", borderColor: "#4DA8AF" };
+    case "detect":
+      return { "--glow-color": "#FDEE00", background: "rgba(253, 238, 0, 0.9)", color: "#422006", borderColor: "#D4C800" };
+    case "respond":
+      return { "--glow-color": "#FF9EBD", background: "rgba(255, 158, 189, 0.9)", color: "#500724", borderColor: "#E87EA1" };
+    case "recover":
+      return { "--glow-color": "#32CD32", background: "rgba(50, 205, 50, 0.9)", color: "#052e16", borderColor: "#28A428" };
+    case "lessons learned":
+      return { "--glow-color": "#FFB347", background: "rgba(255, 179, 71, 0.9)", color: "#431407", borderColor: "#E6952D" };
+    default:
+      return { "--glow-color": "#94a3b8", background: "rgba(148, 163, 184, 0.9)", color: "#1e293b", borderColor: "#cbd5e1" };
+  }
+};
+
+const getCategoryImageGlow = (cat) => {
+  const colors = {
+    prepare: "#67C2C9",
+    detect: "#FDEE00",
+    respond: "#FF9EBD",
+    recover: "#32CD32",
+    "lessons learned": "#FFB347",
+  };
+  const color = colors[cat] || "#ffffff";
+  return { filter: `drop-shadow(0 0 5px ${color}) drop-shadow(0 0 12px ${color}66)` };
+};
+
+
 
 
 export default function ContainerModal({
@@ -191,13 +232,23 @@ export default function ContainerModal({
 
             {selectedCard.image && (
               <div className="w-[calc(100%+3rem)] sm:w-[calc(100%+4rem)] h-[80px] sm:h-[100px] -mt-6 sm:-mt-8 -mx-6 sm:-mx-8 mb-1 flex justify-center items-center overflow-hidden rounded-t-2xl">
-                <img src={selectedCard.image} alt={selectedCard.card_name} className="max-w-full max-h-full object-contain" />
+                <img 
+                  src={selectedCard.image} 
+                  alt={selectedCard.card_name} 
+                  className="max-w-full max-h-full object-contain" 
+                  style={getCategoryImageGlow(selectedCard.category)}
+                />
               </div>
             )}
 
-            <div className="inline-block px-5 py-2 rounded-full text-sm sm:text-base font-black uppercase tracking-[0.25em] mb-4 bg-white/30 border border-white/20 shadow-md">
+
+            <div 
+              className="category-glow self-center px-6 py-2 rounded-full text-sm sm:text-base font-black uppercase tracking-[0.25em] mb-4 border shadow-xl whitespace-nowrap"
+              style={getCategoryGlowStyle(selectedCard.category)}
+            >
               {selectedCard.category}
             </div>
+
 
 
 

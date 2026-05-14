@@ -325,7 +325,12 @@ export default function StartGame() {
         <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 px-6 md:px-10 pt-4 pb-4">
           {/* Logo Section */}
           <div className="flex items-center">
-            <img src={WorldtechLogo} alt="Worldtech" className="h-10 md:h-14 lg:h-20 object-contain hover:scale-110 hover:-rotate-2 transition-all duration-500 cursor-pointer hover:drop-shadow-[0_0_20px_rgba(255,255,255,0.4)]" />
+            <img 
+              src={WorldtechLogo} 
+              alt="Worldtech" 
+              className={`h-10 md:h-14 lg:h-20 object-contain hover:scale-110 hover:-rotate-2 transition-all duration-500 cursor-pointer ${isLightMode ? 'logo-glow-light' : 'logo-glow'} hover:drop-shadow-[0_0_20px_rgba(255,255,255,0.4)]`} 
+            />
+
           </div>
 
           {/* Round, Submit & Timer Section */}
